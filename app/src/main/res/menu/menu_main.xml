@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/profilo_menu"
+        android:checkable="true"
+        android:title="@string/profilo_menu_text" />
+
+    <item
+        android:id="@+id/contattami_menu"
+        android:checkable="true"
+        android:title="@string/contattami_menu_text" />
+
+    <item
+        android:id="@+id/informazioni_menu"
+        android:checkable="true"
+        android:title="@string/informazioni_menu_text" />
+
+</menu>

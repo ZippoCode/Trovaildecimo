@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Trova Il Decimo</string>
+
+    <!-- String Menu -->
+    <string name="profilo_menu_text">Profilo</string>
+    <string name="informazioni_menu_text">Informazioni</string>
+    <string name="contattami_menu_text">Contattami</string>
+
+    <!-- String Toolbar -->
+    <string name="profilo_toolbar_text">Profilo</string>
+    <string name="infomazioni_toolbar_text">Informazioni</string>
+    <string name="contattami_toolbar_text">Contattami</string>
+</resources>
