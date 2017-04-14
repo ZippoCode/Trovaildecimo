@@ -1,13 +1,26 @@
 <resources>
     <string name="app_name">Trova Il Decimo</string>
 
-    <!-- String Menu -->
+    <!-- String Navigaton Drawer -->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="home_text">Home</string>
     <string name="profilo_menu_text">Profilo</string>
+    <string name="area_messaggi_text">Area Messaggi</string>
+    <string name="amici_menu_text">Amici</string>
+    <string name="impostazioni_text">Impostazioni</string>
     <string name="informazioni_menu_text">Informazioni</string>
     <string name="contattami_menu_text">Contattami</string>
 
-    <!-- String Toolbar -->
-    <string name="profilo_toolbar_text">Profilo</string>
-    <string name="infomazioni_toolbar_text">Informazioni</string>
-    <string name="contattami_toolbar_text">Contattami</string>
+    <!-- Stirng User Profile Details -->
+    <string name="user_informazioni_personali_text">Informazioni personali: </string>
+    <string name="user_informazioni_giocatore_text">Informazioni giocatore: </string>
+    <string name="user_age_field_text">Anni: </string>
+    <string name="user_city_field_text">Città: </string>
+    <string name="user_role_field_text">Ruolo: </string>
+    <string name="user_match_played_text">Partite giocate: </string>
+    <string name="user_feedback_text">Feedback: </string>
+
+    <!--String partite -->
+    <string name="nessuna_partita">Nessuna partita</string>
 </resources>

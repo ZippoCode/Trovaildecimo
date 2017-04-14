@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,36 +16,47 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.prochilo.salvatore.trovaildecimo.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 
 public class ProfiloFragment extends Fragment {
 
     private static final String TAG = ProfiloFragment.class.getSimpleName();
 
-    private Toolbar mToolbar;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
+    //private ActionBar mActionBar;
+    private Toolbar mToolbar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_profilo, container, false);
-        mToolbar = (Toolbar) layout.findViewById(R.id.profilo_toolbar);
-        mToolbar.setTitle(R.string.profilo_toolbar_text);
+        //mActionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        //mActionBar.hide();
+        //mToolbar = (Toolbar) layout.findViewById(R.id.profilo_toolbar);
+        //mToolbar.setTitle(R.string.profilo_menu_text);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.profilo_menu_text);
         mViewPager = (ViewPager) layout.findViewById(R.id.profilo_view_pager);
         mTabLayout = (TabLayout) layout.findViewById(R.id.profilo_tab_layout);
         setupViewPager();
         mTabLayout.setupWithViewPager(mViewPager);
         return layout;
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //mActionBar.show();
     }
 
     private void setupViewPager() {
-        Adapter adapter = new Adapter(getFragmentManager());
+        Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new ProfiloDetailsFragment(), "Dettagli");
         adapter.addFragment(new ProfiloScoresFragment(), "Punteggio");
         mViewPager.setAdapter(adapter);
     }
+
 
     private static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();

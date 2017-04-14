@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import it.prochilo.salvatore.trovaildecimo.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 
-public class TerzoFragment extends Fragment {
+public class ContattamiFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_terzo, container, false);
+        View layout =  inflater.inflate(R.layout.fragment_contattami, container, false);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.contattami_menu_text);
+        return layout;
     }
 }

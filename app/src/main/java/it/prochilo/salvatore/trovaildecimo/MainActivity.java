@@ -5,20 +5,27 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import it.prochilo.salvatore.trovaildecimo.fragments.MainFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.AmiciFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.AreaMessaggiFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.ImpostazioniFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.PartiteFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.ProfiloFragment;
-import it.prochilo.salvatore.trovaildecimo.fragments.SecondoFragment;
-import it.prochilo.salvatore.trovaildecimo.fragments.TerzoFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.ContattamiFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.InformazioniFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
 
@@ -27,36 +34,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            final MainFragment mainFragment = new MainFragment();
+            final PartiteFragment partiteFragment = new PartiteFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.anchor_point, mainFragment, MainFragment.TAG)
+                    .add(R.id.anchor_point, partiteFragment, PartiteFragment.TAG)
                     .commit();
         }
+        mToolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
+        setTitle(R.string.app_name);
+        setSupportActionBar(mToolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
+                R.string.drawer_open, R.string.drawer_close);
+        mDrawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                showFragment(item);
-                Log.d(TAG, "Selected: " + item);
-                mDrawerLayout.closeDrawer(mNavigationView);
-                return false;
-            }
-        });
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void showFragment(final MenuItem menuItem) {
-        final int itemId = menuItem.getItemId();
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        final int itemId = item.getItemId();
         final Fragment nextFragment;
         switch (itemId) {
+            case R.id.home_menu:
+                nextFragment = new PartiteFragment();
+                break;
             case R.id.profilo_menu:
                 nextFragment = new ProfiloFragment();
                 break;
+            case R.id.amici_menu:
+                nextFragment = new AmiciFragment();
+                break;
+            case R.id.area_messaggi_menu:
+                nextFragment = new AreaMessaggiFragment();
+                break;
+            case R.id.impostazioni_menu:
+                nextFragment = new ImpostazioniFragment();
+                break;
             case R.id.contattami_menu:
-                nextFragment = new SecondoFragment();
+                nextFragment = new ContattamiFragment();
                 break;
             case R.id.informazioni_menu:
-                nextFragment = new TerzoFragment();
+                nextFragment = new InformazioniFragment();
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -64,5 +83,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.anchor_point, nextFragment)
                 .commit();
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
+
 }

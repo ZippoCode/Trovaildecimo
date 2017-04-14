@@ -4,6 +4,7 @@
     <!-- Dimension from Navigation Drawer-->
     <dimen name="height_profile_appbar">232dp</dimen>
     <!-- Dimension from Drawer Header -->
-    <dimen name="padding">16dp</dimen>
+    <dimen name="padding_drawer_header">16dp</dimen>
+    <dimen name="padding_navigation_header">8dp</dimen>
 
 </resources>

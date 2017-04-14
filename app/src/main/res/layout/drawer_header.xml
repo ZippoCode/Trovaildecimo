@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="222dp"
+    android:layout_height="160dp"
     android:background="@color/colorPrimaryDark"
-    android:orientation="vertical">
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/padding_drawer_header"
+    android:paddingRight="@dimen/padding_drawer_header"
+    android:paddingBottom="@dimen/padding_drawer_header"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <TextView
+    <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoMedium
         android:id="@+id/user_info_drawer_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nome Cognome" />
+        android:text="Salvatore Prochilo"
+        android:textSize="14sp" />
 
-    <TextView
+    <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
         android:id="@+id/email_user_drawer_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="prochilo.salvatore@gmail.com" />
+        android:text="prochilo.salvatore@gmail.com"
+        android:textSize="14sp" />
 </LinearLayout>
