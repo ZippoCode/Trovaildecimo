@@ -7,11 +7,6 @@
     android:orientation="vertical"
     tools:context=".fragments.PartiteFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nessuna_partita" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/nuova_partita"
         android:layout_width="wrap_content"
@@ -23,5 +18,10 @@
         app:fabSize="normal"
         app:layout_anchorGravity="bottom|right|end" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/partite_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/partita_layout"/>
 
 </android.support.design.widget.CoordinatorLayout>

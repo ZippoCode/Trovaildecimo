@@ -18,7 +18,8 @@ public class Partita {
         this.orario = orario;
     }
 
-    public void addPartecipante(User utente) {
+    public Partita addPartecipante(User utente) {
         listaPartecipanti.add(utente);
+        return this;
     }
 }
