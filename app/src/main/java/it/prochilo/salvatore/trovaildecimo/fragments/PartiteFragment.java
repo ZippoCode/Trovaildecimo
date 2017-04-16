@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import it.prochilo.salvatore.trovaildecimo.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
@@ -42,7 +43,6 @@ public class PartiteFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mMainActivity = null;
     }
 
     @Nullable
@@ -113,13 +113,14 @@ public class PartiteFragment extends Fragment {
 
     private void createModel() {
         mModel.clear();
+        Random random = new Random();
         List<User> lista = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = new User("prochilo.salvatore@gmail.com", "Salvatore" + i, "Prochilo" + i);
             lista.add(user);
         }
         for (int i = 0; i < 10; i++) {
-            final Partita item = new Partita("ID:" + i, i + " : " + i, "Via F. Rossi, " + i, 10)
+            final Partita item = new Partita("ID:" + i, random.nextInt(24) + " : " + random.nextInt(60), "Via F. Rossi, " + random.nextInt(189), 10)
                     .addPartecipante(lista.get(i));
             mModel.add(item);
         }

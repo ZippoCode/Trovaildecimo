@@ -28,8 +28,6 @@ public class ProfiloFragment extends Fragment {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    //private ActionBar mActionBar;
-    private Toolbar mToolbar;
 
     @Nullable
     @Override
