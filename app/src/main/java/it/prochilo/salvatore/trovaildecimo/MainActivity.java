@@ -40,14 +40,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .commit();
         }
         mToolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
-        setTitle(R.string.app_name);
+        mToolbar.setTitle(R.string.app_name);
         setSupportActionBar(mToolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
                 R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -85,6 +85,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .commit();
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setupToolbarWithDrawerLayout(Toolbar toolbar, int idTitle){
+        setVisibityToolbar(false);
+        toolbar.setTitle(getString(idTitle));
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
+                R.string.drawer_open, R.string.drawer_close);
+        mDrawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+    }
+
+    public void setVisibityToolbar(boolean flag){
+        if(flag)
+            getSupportActionBar().show();
+        else
+            getSupportActionBar().hide();
     }
 
 }

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class PartiteFragment extends Fragment {
 
     public static final String TAG = PartiteFragment.class.getSimpleName();
 
-    private MainActivity mMainActivity;
+    private static MainActivity mMainActivity;
 
     private RecyclerView mRecyclerView;
     private List<Partita> mModel = new ArrayList<>();
@@ -69,14 +70,18 @@ public class PartiteFragment extends Fragment {
     private final static class PartitaViewHolder extends RecyclerView.ViewHolder {
 
         private TextView cart_title;
+        private ImageView card_image;
 
         public PartitaViewHolder(View itemView) {
             super(itemView);
             cart_title = (TextView) itemView.findViewById(R.id.card_title);
+            card_image = (ImageView) itemView.findViewById(R.id.card_image);
         }
+
 
         public void bind(Partita partita) {
             cart_title.setText(partita.orario + " - " + partita.luogo);
+            card_image.setImageResource(R.drawable.image_card_view);
         }
     }
 

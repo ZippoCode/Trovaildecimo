@@ -26,7 +26,7 @@
             android:layout_height="40dp"
             android:layout_alignBottom="@+id/card_image"
             android:layout_marginLeft="16dp"
-            android:text="Orario - 15:30"
+            android:text="Luogo - 15:30"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular

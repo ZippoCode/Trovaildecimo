@@ -1,5 +1,7 @@
 package it.prochilo.salvatore.trovaildecimo.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -22,6 +24,7 @@ import it.prochilo.salvatore.trovaildecimo.R;
 public class ProfiloFragment extends Fragment {
 
     private static final String TAG = ProfiloFragment.class.getSimpleName();
+    private MainActivity mMainActivity;
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -32,11 +35,7 @@ public class ProfiloFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_profilo, container, false);
-        //mActionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        //mActionBar.hide();
-        //mToolbar = (Toolbar) layout.findViewById(R.id.profilo_toolbar);
-        //mToolbar.setTitle(R.string.profilo_menu_text);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.profilo_menu_text);
+        mMainActivity.setupToolbarWithDrawerLayout((Toolbar)layout.findViewById(R.id.profilo_toolbar), R.string.profilo_menu_text);
         mViewPager = (ViewPager) layout.findViewById(R.id.profilo_view_pager);
         mTabLayout = (TabLayout) layout.findViewById(R.id.profilo_tab_layout);
         setupViewPager();
@@ -45,9 +44,15 @@ public class ProfiloFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        //mActionBar.show();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mMainActivity = (MainActivity)context;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMainActivity.setVisibityToolbar(true);
     }
 
     private void setupViewPager() {
