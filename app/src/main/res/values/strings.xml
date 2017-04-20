@@ -23,4 +23,8 @@
 
     <!--String partite -->
     <string name="nessuna_partita">Nessuna partita</string>
+
+    <!-- String Card View -->
+    <string name="card_view_luogo_label">Luogo: </string>
+    <string name="card_view_orario_label">Ora: </string>
 </resources>

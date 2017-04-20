@@ -9,9 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -48,15 +51,23 @@ public class PartiteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_partite, container, false);
+        final View layout = inflater.inflate(R.layout.fragment_partite, container, false);
         mMainActivity.getSupportActionBar().setTitle(R.string.app_name);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        createModel();
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         linearLayoutManager.scrollToPosition(0);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        createModel();
+
         mAdapter = new PartitaAdapter(mModel);
+        mAdapter.setOnPartitaListener(new PartitaAdapter.OnPartitaListener() {
+            @Override
+            public void onPartitaClicked(Partita partita, int position) {
+                Toast.makeText(getContext(), "Selected " + partita.id, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
         return layout;
     }
@@ -67,27 +78,71 @@ public class PartiteFragment extends Fragment {
         mMainActivity = null;
     }
 
-    private final static class PartitaViewHolder extends RecyclerView.ViewHolder {
+    /**
+     * PartitaViewHolder
+     */
+    private final static class PartitaViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
-        private TextView cart_title;
+        private TextView luogo, orario;
         private ImageView card_image;
+        private Button dettagli_partita_button;
+
+        private WeakReference<OnItemClickListener> mOnItemClickListenerWeakReference;
+
+        public interface OnItemClickListener {
+
+            void onItemClicked(int position);
+        }
 
         public PartitaViewHolder(View itemView) {
             super(itemView);
-            cart_title = (TextView) itemView.findViewById(R.id.card_title);
+            luogo = (TextView) itemView.findViewById(R.id.card_view_luogo_text);
+            orario = (TextView) itemView.findViewById(R.id.card_view_ora_text);
             card_image = (ImageView) itemView.findViewById(R.id.card_image);
+            dettagli_partita_button = (Button) itemView.findViewById(R.id.dettagli_partita_button);
+            itemView.setOnClickListener(this);
         }
 
 
-        public void bind(Partita partita) {
-            cart_title.setText(partita.orario + " - " + partita.luogo);
+        public void bind(final Partita partita) {
+            luogo.setText(partita.luogo);
+            orario.setText(partita.orario);
             card_image.setImageResource(R.drawable.image_card_view);
+            dettagli_partita_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                }
+            });
+        }
+
+        public void setOnItemClickListenerWeakReference(final OnItemClickListener onItemClickListener) {
+            this.mOnItemClickListenerWeakReference = new WeakReference<OnItemClickListener>(onItemClickListener);
+        }
+
+        @Override
+        public void onClick(View view) {
+            OnItemClickListener listener;
+            if (mOnItemClickListenerWeakReference != null &&
+                    (listener = mOnItemClickListenerWeakReference.get()) != null) {
+                listener.onItemClicked(getLayoutPosition());
+            }
         }
     }
 
-    private final static class PartitaAdapter extends RecyclerView.Adapter<PartitaViewHolder> {
+    /**
+     * PartitaAdapter
+     */
+    private final static class PartitaAdapter extends RecyclerView.Adapter<PartitaViewHolder> implements PartitaViewHolder.OnItemClickListener {
 
         private final List<Partita> mModel;
+        private WeakReference<OnPartitaListener> mOnPartitaListenerWeakReference;
+
+        public interface OnPartitaListener {
+
+            void onPartitaClicked(Partita partita, int position);
+        }
+
 
         PartitaAdapter(final List<Partita> model) {
             mModel = model;
@@ -103,12 +158,27 @@ public class PartiteFragment extends Fragment {
         @Override
         public void onBindViewHolder(PartitaViewHolder holder, int position) {
             holder.bind(mModel.get(position));
+            holder.setOnItemClickListenerWeakReference(this);
         }
 
         @Override
         public int getItemCount() {
             return mModel.size();
         }
+
+        @Override
+        public void onItemClicked(int position) {
+            OnPartitaListener listener;
+            if (mOnPartitaListenerWeakReference != null &&
+                    (listener = mOnPartitaListenerWeakReference.get()) != null) {
+                listener.onPartitaClicked(mModel.get(position), position);
+            }
+        }
+
+        public void setOnPartitaListener(final OnPartitaListener onPartitaListener) {
+            this.mOnPartitaListenerWeakReference = new WeakReference<OnPartitaListener>(onPartitaListener);
+        }
+
     }
 
     private void createModel() {
@@ -120,10 +190,15 @@ public class PartiteFragment extends Fragment {
             lista.add(user);
         }
         for (int i = 0; i < 10; i++) {
-            final Partita item = new Partita("ID:" + i, random.nextInt(24) + " : " + random.nextInt(60), "Via F. Rossi, " + random.nextInt(189), 10)
+            final Partita item = new Partita("ID:" + i, "Via F. Rossi, " + random.nextInt(189), random.nextInt(24) + " : " + random.nextInt(60), 10)
                     .addPartecipante(lista.get(i));
             mModel.add(item);
         }
+    }
+
+    private void cardViewSelected() {
+        Toast.makeText(getContext(), "Selected", Toast.LENGTH_SHORT)
+                .show();
     }
 
 }

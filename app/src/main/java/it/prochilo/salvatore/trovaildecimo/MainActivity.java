@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import it.prochilo.salvatore.trovaildecimo.fragments.AmiciFragment;
@@ -28,13 +27,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private PartiteFragment partiteFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            final PartiteFragment partiteFragment = new PartiteFragment();
+            partiteFragment = new PartiteFragment();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.anchor_point, partiteFragment, PartiteFragment.TAG)
                     .commit();
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final Fragment nextFragment;
         switch (itemId) {
             case R.id.home_menu:
-                nextFragment = new PartiteFragment();
+                nextFragment = partiteFragment;
                 break;
             case R.id.profilo_menu:
                 nextFragment = new ProfiloFragment();
