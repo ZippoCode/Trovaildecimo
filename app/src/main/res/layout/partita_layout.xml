@@ -22,11 +22,12 @@
             android:scaleType="centerCrop"
             tools:src="@drawable/image_card_view" />
 
-        <GridLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:columnCount="2"
-            android:rowCount="2">
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/margin_card_view_right_left"
+            android:layout_marginBottom="@dimen/margin_card_view_top_bottom">
 
             <TextView
                 android:id="@+id/card_view_luogo_field"
@@ -40,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Via Filippo Turati"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
             <TextView
                 android:id="@+id/card_view_orario_field"
@@ -54,30 +55,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="15:30"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-        </GridLayout>
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/card_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/card_image"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="QUESTO E' UN MESSAGGIO DI PROVA"
-            android:textColor="#AAAAAA"
-            android:textSize="16dp" />
 
         <Button
             android:id="@+id/dettagli_partita_button"
             style="?attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/card_text"
+            android:layout_below="@+id/card_image"
             android:text="DETTAGLI PARTITA"
             android:textColor="?attr/colorPrimary" />
     </RelativeLayout>

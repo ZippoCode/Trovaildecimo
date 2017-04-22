@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class PartiteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         final View layout = inflater.inflate(R.layout.fragment_partite, container, false);
         mMainActivity.getSupportActionBar().setTitle(R.string.app_name);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
@@ -64,8 +66,11 @@ public class PartiteFragment extends Fragment {
         mAdapter.setOnPartitaListener(new PartitaAdapter.OnPartitaListener() {
             @Override
             public void onPartitaClicked(Partita partita, int position) {
-                Toast.makeText(getContext(), "Selected " + partita.id, Toast.LENGTH_SHORT)
-                        .show();
+                Log.d(TAG, "onPartitaClicked: ");
+                final PartitaDetailsFragment mPartitaDetailsFragment = new PartitaDetailsFragment();
+                getChildFragmentManager().beginTransaction()
+                        .replace(R.id., mPartitaDetailsFragment)
+                        .commit();
             }
         });
         mRecyclerView.setAdapter(mAdapter);
@@ -90,12 +95,12 @@ public class PartiteFragment extends Fragment {
 
         private WeakReference<OnItemClickListener> mOnItemClickListenerWeakReference;
 
-        public interface OnItemClickListener {
+        private interface OnItemClickListener {
 
             void onItemClicked(int position);
         }
 
-        public PartitaViewHolder(View itemView) {
+        private PartitaViewHolder(View itemView) {
             super(itemView);
             luogo = (TextView) itemView.findViewById(R.id.card_view_luogo_text);
             orario = (TextView) itemView.findViewById(R.id.card_view_ora_text);
@@ -105,19 +110,15 @@ public class PartiteFragment extends Fragment {
         }
 
 
-        public void bind(final Partita partita) {
+        private void bind(final Partita partita) {
             luogo.setText(partita.luogo);
             orario.setText(partita.orario);
             card_image.setImageResource(R.drawable.image_card_view);
-            dettagli_partita_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                }
-            });
         }
 
-        public void setOnItemClickListenerWeakReference(final OnItemClickListener onItemClickListener) {
-            this.mOnItemClickListenerWeakReference = new WeakReference<OnItemClickListener>(onItemClickListener);
+        private void setOnItemClickListenerWeakReference(final OnItemClickListener onItemClickListener) {
+            this.mOnItemClickListenerWeakReference =
+                    new WeakReference<OnItemClickListener>(onItemClickListener);
         }
 
         @Override
@@ -133,12 +134,13 @@ public class PartiteFragment extends Fragment {
     /**
      * PartitaAdapter
      */
-    private final static class PartitaAdapter extends RecyclerView.Adapter<PartitaViewHolder> implements PartitaViewHolder.OnItemClickListener {
+    private final static class PartitaAdapter extends RecyclerView.Adapter<PartitaViewHolder>
+            implements PartitaViewHolder.OnItemClickListener {
 
         private final List<Partita> mModel;
         private WeakReference<OnPartitaListener> mOnPartitaListenerWeakReference;
 
-        public interface OnPartitaListener {
+        private interface OnPartitaListener {
 
             void onPartitaClicked(Partita partita, int position);
         }
@@ -175,8 +177,8 @@ public class PartiteFragment extends Fragment {
             }
         }
 
-        public void setOnPartitaListener(final OnPartitaListener onPartitaListener) {
-            this.mOnPartitaListenerWeakReference = new WeakReference<OnPartitaListener>(onPartitaListener);
+        private void setOnPartitaListener(final OnPartitaListener onPartitaListener) {
+            this.mOnPartitaListenerWeakReference = new WeakReference<>(onPartitaListener);
         }
 
     }
@@ -197,7 +199,7 @@ public class PartiteFragment extends Fragment {
     }
 
     private void cardViewSelected() {
-        Toast.makeText(getContext(), "Selected", Toast.LENGTH_SHORT)
+        Toast.makeText(mMainActivity.getApplicationContext(), "Selected", Toast.LENGTH_SHORT)
                 .show();
     }
 

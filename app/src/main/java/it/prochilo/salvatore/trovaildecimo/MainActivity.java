@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void setupToolbarWithDrawerLayout(Toolbar toolbar, int idTitle){
+    public void setupToolbarWithDrawerLayout(Toolbar toolbar, int idTitle) {
         setVisibityToolbar(false);
         toolbar.setTitle(getString(idTitle));
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerToggle.syncState();
     }
 
-    public void setVisibityToolbar(boolean flag){
-        if(flag)
+    public void setVisibityToolbar(boolean flag) {
+        if (flag)
             getSupportActionBar().show();
         else
             getSupportActionBar().hide();
