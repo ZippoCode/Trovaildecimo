@@ -7,16 +7,19 @@
     <TextView
         android:id="@+id/orario"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="CIAO"/>
 
     <TextView
         android:id="@+id/luogo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="CIAONE"/>
 
     <TextView
         android:id="@+id/giocatori"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="SUPER CIANOE"/>
 
 </LinearLayout>

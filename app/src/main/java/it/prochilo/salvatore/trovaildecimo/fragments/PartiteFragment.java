@@ -1,8 +1,10 @@
 package it.prochilo.salvatore.trovaildecimo.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Random;
 
 import it.prochilo.salvatore.trovaildecimo.MainActivity;
+import it.prochilo.salvatore.trovaildecimo.NuovaPartita;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
 import it.prochilo.salvatore.trovaildecimo.models.User;
@@ -34,6 +37,7 @@ public class PartiteFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private List<Partita> mModel = new ArrayList<>();
     private PartitaAdapter mAdapter;
+    private FloatingActionButton mFloatingActionButton;
 
     public PartiteFragment() {
     }
@@ -56,7 +60,6 @@ public class PartiteFragment extends Fragment {
         final View layout = inflater.inflate(R.layout.fragment_partite, container, false);
         mMainActivity.getSupportActionBar().setTitle(R.string.app_name);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
-        createModel();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         linearLayoutManager.scrollToPosition(0);
@@ -67,20 +70,19 @@ public class PartiteFragment extends Fragment {
             @Override
             public void onPartitaClicked(Partita partita, int position) {
                 Log.d(TAG, "onPartitaClicked: ");
-                final PartitaDetailsFragment mPartitaDetailsFragment = new PartitaDetailsFragment();
-                getChildFragmentManager().beginTransaction()
-                        .replace(R.id., mPartitaDetailsFragment)
-                        .commit();
+                mMainActivity.showFragment(new PartitaDetailsFragment());
             }
         });
         mRecyclerView.setAdapter(mAdapter);
-        return layout;
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mMainActivity = null;
+        mFloatingActionButton = (FloatingActionButton) layout.findViewById(R.id.nuova_partita);
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ciaone();
+            }
+        });
+        return layout;
     }
 
     /**
@@ -112,7 +114,7 @@ public class PartiteFragment extends Fragment {
 
         private void bind(final Partita partita) {
             luogo.setText(partita.luogo);
-            orario.setText(partita.orario);
+            orario.setText(partita.ora + " : " + partita.minuti);
             card_image.setImageResource(R.drawable.image_card_view);
         }
 
@@ -183,24 +185,8 @@ public class PartiteFragment extends Fragment {
 
     }
 
-    private void createModel() {
-        mModel.clear();
-        Random random = new Random();
-        List<User> lista = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            User user = new User("prochilo.salvatore@gmail.com", "Salvatore" + i, "Prochilo" + i);
-            lista.add(user);
-        }
-        for (int i = 0; i < 10; i++) {
-            final Partita item = new Partita("ID:" + i, "Via F. Rossi, " + random.nextInt(189), random.nextInt(24) + " : " + random.nextInt(60), 10)
-                    .addPartecipante(lista.get(i));
-            mModel.add(item);
-        }
-    }
 
-    private void cardViewSelected() {
-        Toast.makeText(mMainActivity.getApplicationContext(), "Selected", Toast.LENGTH_SHORT)
-                .show();
+    private void ciaone(){
+        startActivity(new Intent(getActivity(), NuovaPartita.class));
     }
-
 }

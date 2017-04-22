@@ -103,4 +103,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportActionBar().hide();
     }
 
+
+    public void showFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack(PartiteFragment.TAG)
+                .replace(R.id.anchor_point, fragment)
+                .commit();
+    }
 }

@@ -8,14 +8,23 @@ public class Partita {
     public String id;
     public List<User> listaPartecipanti;
     public String luogo;
-    public String orario;
+    public int ora, minuti;
     public int numPartecipanti;
 
-    public Partita(String id, String luogo, String orario, int numPartecipanti) {
+    public Partita(String id, int numPartecipanti) {
         this.id = id;
         listaPartecipanti = new ArrayList<>(numPartecipanti);
+    }
+
+    public Partita setLuogo(String luogo) {
         this.luogo = luogo;
-        this.orario = orario;
+        return this;
+    }
+
+    public Partita setTime(final int ora, final int minuti) {
+        this.ora = ora;
+        this.minuti = minuti;
+        return this;
     }
 
     public Partita addPartecipante(User utente) {
