@@ -4,39 +4,78 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/nuova_partita_luogo"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/nuova_partita_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="?colorPrimary" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/nuova_partita_ora"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:maxEms="2" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="8dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/aggiungi_numero_partecipanti_label"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=":" />
+            android:text="Inserisci il numero dei partecipanti: "
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
         <EditText
-            android:id="@+id/nuova_partita_minuti"
-            android:layout_width="wrap_content"
+            android:id="@+id/nuova_partita_numero_partecipanti"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:maxEms="2" />
-    </LinearLayout>
+            android:inputType="numberDecimal"/>
 
-    <Button
-        android:id="@+id/nuova_partita_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="NUOVA PARTITA" />
+        <TextView
+            android:id="@+id/aggiungi_luogo_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scrivi il nome del campetto: "
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+        <EditText
+            android:id="@+id/nuova_partita_luogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/aggiungi_orario_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Inserisci l'orario: "
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+        <TextView
+            android:id="@+id/nuova_partita_orario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="00:00"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+        <TextView
+            android:id="@+id/aggiungi_data_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Inserisci la data: "
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+        <TextView
+            android:id="@+id/nuova_partita_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="18/07/1992"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+
+        <Button
+            android:id="@+id/nuova_partita_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NUOVA PARTITA" />
+    </LinearLayout>
 </LinearLayout>

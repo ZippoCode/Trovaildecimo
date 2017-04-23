@@ -113,8 +113,8 @@ public class PartiteFragment extends Fragment {
 
 
         private void bind(final Partita partita) {
-            luogo.setText(partita.luogo);
-            orario.setText(partita.ora + " : " + partita.minuti);
+            luogo.setText(partita.mNomeCampo);
+            orario.setText(partita.mOra.toString());
             card_image.setImageResource(R.drawable.image_card_view);
         }
 
@@ -186,7 +186,7 @@ public class PartiteFragment extends Fragment {
     }
 
 
-    private void ciaone(){
+    private void ciaone() {
         startActivity(new Intent(getActivity(), NuovaPartita.class));
     }
 }
