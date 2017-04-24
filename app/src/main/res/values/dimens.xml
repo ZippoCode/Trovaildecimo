@@ -11,5 +11,4 @@
     <dimen name="card_view_height">150dp</dimen>
     <dimen name="margin_card_view_top_bottom">8dp</dimen>
     <dimen name="margin_card_view_right_left">16dp</dimen>
-    <dimen name="image_card_view_height">100dp</dimen>
 </resources>

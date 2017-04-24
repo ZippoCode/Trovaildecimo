@@ -28,5 +28,5 @@
         android:paddingTop="16dp"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/partita_layout" />
+        tools:listitem="@layout/card_view_partita" />
 </android.support.design.widget.CoordinatorLayout>

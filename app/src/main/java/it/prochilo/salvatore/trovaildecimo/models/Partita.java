@@ -6,6 +6,10 @@ import java.util.Random;
 
 public class Partita {
 
+
+    public static List<Partita> list = new ArrayList<>();
+    
+
     /**
      * Rappresenta il numero dei partecipanti della partita
      */
@@ -125,7 +129,7 @@ public class Partita {
 
         @Override
         public String toString() {
-            return mOra + " : " + mMinuti;
+            return String.format("%02d", mOra) + " : " + String.format("%02d", mMinuti);
         }
     }
 
@@ -145,7 +149,7 @@ public class Partita {
 
         @Override
         public String toString() {
-            return mGiorno + " / " + mMese + " / " + mAnno;
+            return mGiorno + "/" + mMese + "/" + mAnno;
         }
     }
 }

@@ -15,18 +15,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import it.prochilo.salvatore.trovaildecimo.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.NuovaPartita;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
-import it.prochilo.salvatore.trovaildecimo.models.User;
 
 public class PartiteFragment extends Fragment {
 
@@ -65,7 +62,9 @@ public class PartiteFragment extends Fragment {
         linearLayoutManager.scrollToPosition(0);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mAdapter = new PartitaAdapter(mModel);
+        Partita.list.add(new Partita().setGiorno(12, 5, 2017).setNomeCampo("Americano").setTime(17, 00));
+
+        mAdapter = new PartitaAdapter(Partita.list);
         mAdapter.setOnPartitaListener(new PartitaAdapter.OnPartitaListener() {
             @Override
             public void onPartitaClicked(Partita partita, int position) {
@@ -91,8 +90,8 @@ public class PartiteFragment extends Fragment {
     private final static class PartitaViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        private TextView luogo, orario;
-        private ImageView card_image;
+        private TextView luogo, orario, giorno;
+        //private ImageView card_image;
         private Button dettagli_partita_button;
 
         private WeakReference<OnItemClickListener> mOnItemClickListenerWeakReference;
@@ -106,7 +105,8 @@ public class PartiteFragment extends Fragment {
             super(itemView);
             luogo = (TextView) itemView.findViewById(R.id.card_view_luogo_text);
             orario = (TextView) itemView.findViewById(R.id.card_view_ora_text);
-            card_image = (ImageView) itemView.findViewById(R.id.card_image);
+            giorno = (TextView) itemView.findViewById(R.id.card_view_giorno_text);
+            //card_image = (ImageView) itemView.findViewById(R.id.card_image);
             dettagli_partita_button = (Button) itemView.findViewById(R.id.dettagli_partita_button);
             itemView.setOnClickListener(this);
         }
@@ -115,7 +115,8 @@ public class PartiteFragment extends Fragment {
         private void bind(final Partita partita) {
             luogo.setText(partita.mNomeCampo);
             orario.setText(partita.mOra.toString());
-            card_image.setImageResource(R.drawable.image_card_view);
+            giorno.setText(partita.mGiorno.toString());
+            //card_image.setImageResource(R.drawable.image_card_view);
         }
 
         private void setOnItemClickListenerWeakReference(final OnItemClickListener onItemClickListener) {
@@ -155,7 +156,7 @@ public class PartiteFragment extends Fragment {
         @Override
         public PartitaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             final View layout = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.partita_layout, parent, false);
+                    .inflate(R.layout.card_view_partita, parent, false);
             return new PartitaViewHolder(layout);
         }
 

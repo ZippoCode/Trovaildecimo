@@ -2,6 +2,7 @@ package it.prochilo.salvatore.trovaildecimo;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
+import it.prochilo.salvatore.trovaildecimo.fragments.PartiteFragment;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
 
 public class NuovaPartita extends AppCompatActivity implements View.OnClickListener {
@@ -86,7 +88,7 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.nuova_partita_button:
                 partita = partita.setNomeCampo(luogo.getText().toString());
-                Log.d(TAG, "" + partita);
+                returnToPartiteFragment(partita);
                 break;
 
         }
@@ -111,5 +113,11 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.popup_menu, popupMenu.getMenu());
         popupMenu.show();
+    }
+
+
+    public void returnToPartiteFragment(Partita partita){
+        Partita.list.add(partita);
+        startActivity(new Intent(this, MainActivity.class));
     }
 }
