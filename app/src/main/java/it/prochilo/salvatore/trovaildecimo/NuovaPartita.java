@@ -5,8 +5,11 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,9 +27,11 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
 
     private Partita partita = new Partita();
     private Toolbar toolbar;
-    private EditText luogo, numeroPartecipanti;
+    private EditText luogo;
+    private Button numeroPartecipanti;
     private TextView ora, data;
     private Button nuovaPartita;
+    final Calendar calendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,19 +43,21 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
 
         luogo = (EditText) findViewById(R.id.nuova_partita_luogo);
-        numeroPartecipanti = (EditText) findViewById(R.id.nuova_partita_numero_partecipanti);
+        numeroPartecipanti = (Button) findViewById(R.id.nuova_partita_numero_partecipanti);
 
         ora = (TextView) findViewById(R.id.nuova_partita_orario);
+        ora.setText(calendar.get(Calendar.HOUR_OF_DAY) + " : " + calendar.get(Calendar.MINUTE));
         data = (TextView) findViewById(R.id.nuova_partita_data);
+        data.setText(calendar.get(Calendar.DAY_OF_MONTH) + " / " + calendar.get(Calendar.MONTH) + " / " + calendar.get(Calendar.YEAR));
         ora.setOnClickListener(this);
         data.setOnClickListener(this);
 
         nuovaPartita = (Button) findViewById(R.id.nuova_partita_button);
+        nuovaPartita.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        final Calendar calendar = Calendar.getInstance();
         switch (view.getId()) {
             case R.id.nuova_partita_orario:
                 int currentOra = calendar.get(Calendar.HOUR_OF_DAY);
@@ -78,11 +85,31 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
                 datePickerDialog.show();
                 break;
             case R.id.nuova_partita_button:
-                partita = partita.setPartecipanti(Integer.parseInt(numeroPartecipanti.getText().toString()))
-                        .setNomeCampo(luogo.getText().toString());
+                partita = partita.setNomeCampo(luogo.getText().toString());
                 Log.d(TAG, "" + partita);
                 break;
 
         }
+    }
+
+    /**
+     * Utilizzato per selezionare il numero di partecipanti alla partita. Viene utilizzato dal bottone R.id.nuova_partita_button
+     *
+     * @param button
+     */
+    public void showPopupMenu(View button) {
+        final PopupMenu popupMenu = new PopupMenu(this, button);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                String num = String.valueOf(item.getTitle());
+                numeroPartecipanti.setText(num);
+                partita = partita.setPartecipanti(Integer.valueOf(num));
+                return false;
+            }
+        });
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.popup_menu, popupMenu.getMenu());
+        popupMenu.show();
     }
 }

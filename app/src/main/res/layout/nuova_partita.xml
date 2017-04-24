@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".NuovaPartita">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/nuova_partita_toolbar"
@@ -10,72 +12,80 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?colorPrimary" />
 
-    <LinearLayout
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="8dp">
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:padding="8dp">
 
-        <TextView
-            android:id="@+id/aggiungi_numero_partecipanti_label"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Inserisci il numero dei partecipanti: "
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/nuova_partita_numero_partecipanti"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"/>
+            <TextView
+                android:id="@+id/orario_giorno_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Inserisci l'orario e il giorno"
+                android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/aggiungi_luogo_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Scrivi il nome del campetto: "
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+            <ImageView
+                android:id="@+id/time_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_access_time_black_36dp" />
 
-        <EditText
-            android:id="@+id/nuova_partita_luogo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/nuova_partita_orario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/aggiungi_orario_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Inserisci l'orario: "
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+            <ImageView
+                android:id="@+id/data_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_event_black_36dp"/>
+            <TextView
+                android:id="@+id/nuova_partita_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/nuova_partita_orario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:text="00:00"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+            <TextView
+                android:id="@+id/aggiungi_numero_partecipanti_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Numero di partecipanti: " />
 
-        <TextView
-            android:id="@+id/aggiungi_data_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Inserisci la data: "
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+            <Button
+                android:id="@+id/nuova_partita_numero_partecipanti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="showPopupMenu"
+                android:text="Seleziona il numero" />
 
-        <TextView
-            android:id="@+id/nuova_partita_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:text="18/07/1992"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+            <TextView
+                android:id="@+id/aggiungi_luogo_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Scrivi il nome del campetto: " />
 
+            <EditText
+                android:id="@+id/nuova_partita_luogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-        <Button
-            android:id="@+id/nuova_partita_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="NUOVA PARTITA" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/nuova_partita_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUOVA PARTITA" />
 </LinearLayout>

@@ -75,10 +75,10 @@ public class Partita {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("ID: " + id + "/n");
-        sb.append("Numero partecipanti: " + numeroPartecipanti.name() + "/n");
-        sb.append("Nome campetto: " + mNomeCampo + "/n");
-        sb.append("Ora: " + mOra + " e Giorno: " + mGiorno + "/n");
+        sb.append("ID: " + id);
+        sb.append("Numero partecipanti: " + numeroPartecipanti.name());
+        sb.append("Nome campetto: " + mNomeCampo);
+        sb.append("Ora: " + mOra + " e Giorno: " + mGiorno);
         return sb.toString();
     }
 
