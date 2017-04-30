@@ -1,22 +1,34 @@
 package it.prochilo.salvatore.trovaildecimo.models;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class Partita {
 
 
     public static List<Partita> list = new ArrayList<>();
-    
 
     /**
      * Rappresenta il numero dei partecipanti della partita
      */
     private enum NumeroPartecipanti {
-        DIECI, DODICI, QUATTORDICI, SEDICI, DICIOTTO, VENTI, VENTIDUE;
+        DIECI, DODICI, QUATTORDICI, SEDICI, DICIOTTO, VENTI, VENTIDUE
     }
 
+    /**
+     * Indica la tipologia dell'incontro
+     */
+    public enum TipoIncontro {
+        NORMALE, SFIDA
+    }
+
+    /**
+     * L'organizzatore della partita
+     */
+    public final User mUser;
     /**
      * L'identificatore delle partite che deve essere univoco
      */
@@ -24,7 +36,7 @@ public class Partita {
     /**
      * La lista dei partecipanti all'incontro
      */
-    public List<User> listaPartecipanti;
+    private List<User> listaPartecipanti;
     /**
      * Il numero di partecipanti della partita
      */
@@ -42,11 +54,17 @@ public class Partita {
      */
     public Data mGiorno;
     /**
+     *
+     */
+    public TipoIncontro mTipoIncontro;
+    /**
      * Viene utilizzato per generare in automatico i numeri identificativi della partita
      */
     private Random random = new Random();
 
-    public Partita() {
+
+    public Partita(User user) {
+        this.mUser = user;
         id = generaId();
     }
 
@@ -68,6 +86,12 @@ public class Partita {
 
     public Partita setGiorno(final int giorno, final int mese, final int anno) {
         mGiorno = new Data(giorno, mese, anno);
+        return this;
+    }
+
+
+    public Partita setTipologia(TipoIncontro tipoIncontro) {
+        this.mTipoIncontro = tipoIncontro;
         return this;
     }
 
@@ -129,7 +153,7 @@ public class Partita {
 
         @Override
         public String toString() {
-            return String.format("%02d", mOra) + " : " + String.format("%02d", mMinuti);
+            return String.format("%02d", mOra) + ":" + String.format("%02d", mMinuti);
         }
     }
 
@@ -137,19 +161,28 @@ public class Partita {
      * La classe rappresenta la data nella quale verrà giocata la partita
      */
     public static class Data {
-        private int mGiorno, mMese, mAnno;
+
+        private final int mGiorno, mMese, mAnno;
+        private final Calendar calendar;
+        private final String nomeGiorno;
+        private final String nomeMese;
 
         Data(final int giorno, final int mese, final int anno) {
-            if (mGiorno < 0 || mGiorno > 31 || mMese < 0 || mMese > 12)
+            if (giorno < 0 || giorno > 31 || mese < 0 || mese > 12)
                 throw new IllegalArgumentException("Formata data errato");
             this.mGiorno = giorno;
             this.mMese = mese;
             this.mAnno = anno;
+            calendar = Calendar.getInstance();
+            calendar.set(anno, mese, giorno);
+            nomeGiorno = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ITALIAN);
+            nomeMese = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALIAN);
         }
 
         @Override
         public String toString() {
-            return mGiorno + "/" + mMese + "/" + mAnno;
+            return nomeGiorno + " " + mGiorno + " " + nomeMese;
         }
+
     }
 }

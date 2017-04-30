@@ -25,9 +25,7 @@
     <string name="nessuna_partita">Nessuna partita</string>
 
     <!-- String Card View -->
-    <string name="card_view_luogo_label">Luogo: </string>
-    <string name="card_view_orario_label">Ora: </string>
-    <string name="card_view_giorno_label">Giorno: </string>
+    <string name="card_view_organizzatore_text">Organizzatore</string>
     <string name="card_view_luogo_text">Via Nome, n° civico</string>
     <string name="card_view_orario_text">Ora:Minuti</string>
     <string name="card_view_giorno_text">Giorno/Mese/Anno</string>

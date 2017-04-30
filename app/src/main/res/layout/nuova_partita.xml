@@ -36,7 +36,7 @@
                 android:id="@+id/time_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_access_time_black_36dp" />
+                android:src="@drawable/ic_access_time_black_24dp" />
 
             <TextView
                 android:id="@+id/nuova_partita_orario"
@@ -49,7 +49,7 @@
                 android:id="@+id/data_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_event_black_36dp"/>
+                android:src="@drawable/ic_event_black_24dp"/>
             <TextView
                 android:id="@+id/nuova_partita_data"
                 android:layout_width="match_parent"

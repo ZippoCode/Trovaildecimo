@@ -20,14 +20,16 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-import it.prochilo.salvatore.trovaildecimo.fragments.PartiteFragment;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
+import it.prochilo.salvatore.trovaildecimo.models.User;
 
 public class NuovaPartita extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = NuovaPartita.class.getCanonicalName();
 
-    private Partita partita = new Partita();
+    User organizzatore = new User("prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
+            .addProprietas(24, "Taurianova", "Attaccante");
+    private Partita partita = new Partita(organizzatore);
     private Toolbar toolbar;
     private EditText luogo;
     private Button numeroPartecipanti;
@@ -58,6 +60,9 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
         nuovaPartita.setOnClickListener(this);
     }
 
+    /**
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -80,7 +85,7 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        data.setText(i2 + "/" + i1++ + "/" + i);
+                        data.setText(i2 + "/" + i1 + "/" + i);
                         partita = partita.setGiorno(i2, i1, i);
                     }
                 }, currentAnno, currentMese, currentGiorno);
@@ -95,7 +100,8 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Utilizzato per selezionare il numero di partecipanti alla partita. Viene utilizzato dal bottone R.id.nuova_partita_button
+     * Utilizzato per selezionare il numero di partecipanti alla partita.
+     * Viene utilizzato dal bottone R.id.nuova_partita_button
      *
      * @param button
      */
@@ -116,7 +122,7 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void returnToPartiteFragment(Partita partita){
+    public void returnToPartiteFragment(Partita partita) {
         Partita.list.add(partita);
         startActivity(new Intent(this, MainActivity.class));
     }

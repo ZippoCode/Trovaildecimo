@@ -31,7 +31,6 @@ public class ProfiloFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_profilo, container, false);
-        mMainActivity.setupToolbarWithDrawerLayout((Toolbar)layout.findViewById(R.id.profilo_toolbar), R.string.profilo_menu_text);
         mViewPager = (ViewPager) layout.findViewById(R.id.profilo_view_pager);
         mTabLayout = (TabLayout) layout.findViewById(R.id.profilo_tab_layout);
         setupViewPager();
@@ -48,7 +47,6 @@ public class ProfiloFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMainActivity.setVisibityToolbar(true);
     }
 
     private void setupViewPager() {

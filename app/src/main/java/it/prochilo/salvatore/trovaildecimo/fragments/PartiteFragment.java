@@ -8,22 +8,22 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.NuovaPartita;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
+import it.prochilo.salvatore.trovaildecimo.models.User;
 
 public class PartiteFragment extends Fragment {
 
@@ -31,12 +31,15 @@ public class PartiteFragment extends Fragment {
 
     private static MainActivity mMainActivity;
 
-    private RecyclerView mRecyclerView;
-    private List<Partita> mModel = new ArrayList<>();
-    private PartitaAdapter mAdapter;
-    private FloatingActionButton mFloatingActionButton;
-
     public PartiteFragment() {
+        User organizzatore = new User("prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
+                .addProprietas(24, "Taurianova", "Attaccante");
+        Partita.list.add(new Partita(organizzatore)
+                .setGiorno(15, 4, 2017)
+                .setTime(15, 47)
+                .setTipologia(Partita.TipoIncontro.NORMALE)
+                .setNomeCampo("Americano")
+                .setPartecipanti(12));
     }
 
     @Override
@@ -55,30 +58,24 @@ public class PartiteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         final View layout = inflater.inflate(R.layout.fragment_partite, container, false);
-        mMainActivity.getSupportActionBar().setTitle(R.string.app_name);
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
+        //Toolbar
+        final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.fragment_partite_toolbar);
+        mToolbar.setTitle("Partite");
+
+        final RecyclerView mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         linearLayoutManager.scrollToPosition(0);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        Partita.list.add(new Partita().setGiorno(12, 5, 2017).setNomeCampo("Americano").setTime(17, 00));
 
-        mAdapter = new PartitaAdapter(Partita.list);
-        mAdapter.setOnPartitaListener(new PartitaAdapter.OnPartitaListener() {
-            @Override
-            public void onPartitaClicked(Partita partita, int position) {
-                Log.d(TAG, "onPartitaClicked: ");
-                mMainActivity.showFragment(new PartitaDetailsFragment());
-            }
-        });
+        final PartitaAdapter mAdapter = new PartitaAdapter(Partita.list);
         mRecyclerView.setAdapter(mAdapter);
-
-        mFloatingActionButton = (FloatingActionButton) layout.findViewById(R.id.nuova_partita);
+        final FloatingActionButton mFloatingActionButton = (FloatingActionButton) layout.findViewById(R.id.nuova_partita);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ciaone();
+                creaUnaNuovaPartita();
             }
         });
         return layout;
@@ -87,67 +84,53 @@ public class PartiteFragment extends Fragment {
     /**
      * PartitaViewHolder
      */
-    private final static class PartitaViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+    private final static class PartitaViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView luogo, orario, giorno;
-        //private ImageView card_image;
+        private PartitaDetailsFragment mPartitaDetailsFragment;
+        private TextView organizzatore, luogo, orario, giorno;
+        private LinearLayout card_view_header;
         private Button dettagli_partita_button;
-
-        private WeakReference<OnItemClickListener> mOnItemClickListenerWeakReference;
-
-        private interface OnItemClickListener {
-
-            void onItemClicked(int position);
-        }
 
         private PartitaViewHolder(View itemView) {
             super(itemView);
+            organizzatore = (TextView) itemView.findViewById(R.id.card_view_organizzatore_text);
             luogo = (TextView) itemView.findViewById(R.id.card_view_luogo_text);
             orario = (TextView) itemView.findViewById(R.id.card_view_ora_text);
             giorno = (TextView) itemView.findViewById(R.id.card_view_giorno_text);
-            //card_image = (ImageView) itemView.findViewById(R.id.card_image);
+            card_view_header = (LinearLayout) itemView.findViewById(R.id.card_view_header);
+            mPartitaDetailsFragment = new PartitaDetailsFragment();
             dettagli_partita_button = (Button) itemView.findViewById(R.id.dettagli_partita_button);
-            itemView.setOnClickListener(this);
         }
 
 
         private void bind(final Partita partita) {
+            organizzatore.setText(partita.mUser.name + " " + partita.mUser.surname);
             luogo.setText(partita.mNomeCampo);
             orario.setText(partita.mOra.toString());
             giorno.setText(partita.mGiorno.toString());
-            //card_image.setImageResource(R.drawable.image_card_view);
+            mPartitaDetailsFragment.setPartita(partita);
+            dettagli_partita_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mMainActivity.showFragment(mPartitaDetailsFragment);
+                }
+            });
+            card_view_header.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "Visualizza Profilo Organizzatore");
+                }
+            });
         }
 
-        private void setOnItemClickListenerWeakReference(final OnItemClickListener onItemClickListener) {
-            this.mOnItemClickListenerWeakReference =
-                    new WeakReference<OnItemClickListener>(onItemClickListener);
-        }
-
-        @Override
-        public void onClick(View view) {
-            OnItemClickListener listener;
-            if (mOnItemClickListenerWeakReference != null &&
-                    (listener = mOnItemClickListenerWeakReference.get()) != null) {
-                listener.onItemClicked(getLayoutPosition());
-            }
-        }
     }
 
     /**
      * PartitaAdapter
      */
-    private final static class PartitaAdapter extends RecyclerView.Adapter<PartitaViewHolder>
-            implements PartitaViewHolder.OnItemClickListener {
+    private final static class PartitaAdapter extends RecyclerView.Adapter<PartitaViewHolder> {
 
         private final List<Partita> mModel;
-        private WeakReference<OnPartitaListener> mOnPartitaListenerWeakReference;
-
-        private interface OnPartitaListener {
-
-            void onPartitaClicked(Partita partita, int position);
-        }
-
 
         PartitaAdapter(final List<Partita> model) {
             mModel = model;
@@ -163,7 +146,6 @@ public class PartiteFragment extends Fragment {
         @Override
         public void onBindViewHolder(PartitaViewHolder holder, int position) {
             holder.bind(mModel.get(position));
-            holder.setOnItemClickListenerWeakReference(this);
         }
 
         @Override
@@ -171,23 +153,10 @@ public class PartiteFragment extends Fragment {
             return mModel.size();
         }
 
-        @Override
-        public void onItemClicked(int position) {
-            OnPartitaListener listener;
-            if (mOnPartitaListenerWeakReference != null &&
-                    (listener = mOnPartitaListenerWeakReference.get()) != null) {
-                listener.onPartitaClicked(mModel.get(position), position);
-            }
-        }
-
-        private void setOnPartitaListener(final OnPartitaListener onPartitaListener) {
-            this.mOnPartitaListenerWeakReference = new WeakReference<>(onPartitaListener);
-        }
-
     }
 
 
-    private void ciaone() {
+    private void creaUnaNuovaPartita() {
         startActivity(new Intent(getActivity(), NuovaPartita.class));
     }
 }

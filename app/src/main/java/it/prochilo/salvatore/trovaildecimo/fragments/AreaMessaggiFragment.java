@@ -16,7 +16,6 @@ public class AreaMessaggiFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_area_messaggi, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.area_messaggi_text);
         return layout;
     }
 }

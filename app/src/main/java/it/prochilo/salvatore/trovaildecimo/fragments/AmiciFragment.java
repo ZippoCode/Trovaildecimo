@@ -17,7 +17,6 @@ public class AmiciFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_amici, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.amici_menu_text);
         return layout;
     }
 }

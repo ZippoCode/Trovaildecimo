@@ -17,7 +17,6 @@ public class InformazioniFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_informazioni, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.informazioni_menu_text);
         return layout;
     }
 }
