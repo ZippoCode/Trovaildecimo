@@ -1,4 +1,4 @@
-package it.prochilo.salvatore.trovaildecimo.fragments;
+package it.prochilo.salvatore.trovaildecimo.fragments.partita;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +40,7 @@ public class PartiteFragment extends Fragment {
                 .setGiorno(15, 4, 2017)
                 .setTime(15, 47)
                 .setTipologia(Partita.TipoIncontro.NORMALE)
+                .setMinutaggio(60)
                 .setNomeCampo("Americano")
                 .setPartecipanti(12));
     }
@@ -61,6 +64,17 @@ public class PartiteFragment extends Fragment {
         //Toolbar
         final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.fragment_partite_toolbar);
         mToolbar.setTitle("Partite");
+
+        mMainActivity.setSupportActionBar(mToolbar);
+        DrawerLayout drawerLayout = (DrawerLayout) mMainActivity.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(),
+                drawerLayout,
+                mToolbar,
+                R.string.drawer_open,
+                R.string.drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
         final RecyclerView mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

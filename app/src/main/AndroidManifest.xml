@@ -17,7 +17,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".NuovaPartita"/>
+        <activity android:name=".NuovaPartita">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
     </application>
 
 </manifest>

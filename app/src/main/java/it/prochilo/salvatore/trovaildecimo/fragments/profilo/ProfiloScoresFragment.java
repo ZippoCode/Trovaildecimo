@@ -1,4 +1,4 @@
-package it.prochilo.salvatore.trovaildecimo.fragments;
+package it.prochilo.salvatore.trovaildecimo.fragments.profilo;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -6,19 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
 import it.prochilo.salvatore.trovaildecimo.models.User;
@@ -29,32 +28,55 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
 
     User organizzatore = new User("prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
             .addProprietas(24, "Taurianova", "Attaccante");
+
     private Partita partita = new Partita(organizzatore);
-    private Toolbar toolbar;
     private EditText luogo;
-    private Button numeroPartecipanti;
-    private TextView ora, data;
+
+    private SeekBar mSeekBar;
+    private TextView mTextSeekBar;
+    private RadioButton mNormale, mSfida;
+    private RadioButton mSessanta, mNovanta, mCentoVenti;
+    private TextView mOra, mData;
+
     private Button nuovaPartita;
+
     final Calendar calendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nuova_partita);
+        setContentView(R.layout.activity_nuova_partita);
 
-        toolbar = (Toolbar) findViewById(R.id.nuova_partita_toolbar);
+        //Set Default Time and Data. Saranno cambiati quando l'utente selezionerà i valore voluti
+        partita.setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+        partita.setGiorno(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.nuova_partita_toolbar);
         toolbar.setTitle("Crea una nuova partita");
         setSupportActionBar(toolbar);
 
-        luogo = (EditText) findViewById(R.id.nuova_partita_luogo);
-        numeroPartecipanti = (Button) findViewById(R.id.nuova_partita_numero_partecipanti);
+        //Set Orario e Data
+        mOra = (TextView) findViewById(R.id.nuova_partita_orario);
+        mData = (TextView) findViewById(R.id.nuova_partita_data);
+        mOra.setText(partita.mOra.toString());
+        mData.setText(partita.mGiorno.toString());
 
-        ora = (TextView) findViewById(R.id.nuova_partita_orario);
-        ora.setText(calendar.get(Calendar.HOUR_OF_DAY) + " : " + calendar.get(Calendar.MINUTE));
-        data = (TextView) findViewById(R.id.nuova_partita_data);
-        data.setText(calendar.get(Calendar.DAY_OF_MONTH) + " / " + calendar.get(Calendar.MONTH) + " / " + calendar.get(Calendar.YEAR));
-        ora.setOnClickListener(this);
-        data.setOnClickListener(this);
+        mOra.setOnClickListener(this);
+        mData.setOnClickListener(this);
+
+
+        luogo = (EditText) findViewById(R.id.nuova_partita_luogo);
+
+        mSeekBar = (SeekBar) findViewById(R.id.numero_partecipanti_seekbar);
+        mTextSeekBar = (TextView) findViewById(R.id.numero_giocatori_seekbar_text);
+        setupSeekBar();
+
+        mNormale = (RadioButton) findViewById(R.id.normale_radio_button);
+        mSfida = (RadioButton) findViewById(R.id.sfida_radio_button);
+
+        mSessanta = (RadioButton) findViewById(R.id.sessanta_minuti_button);
+        mNovanta = (RadioButton) findViewById(R.id.novanta_minuti_button);
+        mCentoVenti = (RadioButton) findViewById(R.id.centoventi_minuti_button);
 
         nuovaPartita = (Button) findViewById(R.id.nuova_partita_button);
         nuovaPartita.setOnClickListener(this);
@@ -72,8 +94,8 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        ora.setText(i + ":" + i1);
                         partita = partita.setTime(i, i1);
+                        mOra.setText(partita.mOra.toString());
                     }
                 }, currentOra, currentMinute, true);
                 timePickerDialog.show();
@@ -85,42 +107,57 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        data.setText(i2 + "/" + i1 + "/" + i);
                         partita = partita.setGiorno(i2, i1, i);
+                        mData.setText(partita.mGiorno.toString());
                     }
                 }, currentAnno, currentMese, currentGiorno);
                 datePickerDialog.show();
                 break;
             case R.id.nuova_partita_button:
                 partita = partita.setNomeCampo(luogo.getText().toString());
+                if (mNovanta.isChecked()) {
+                    partita.setTipologia(Partita.TipoIncontro.NORMALE);
+                } else if (mSfida.isChecked()) {
+                    partita.setTipologia(Partita.TipoIncontro.SFIDA);
+                }
+                if (mSessanta.isChecked()) {
+                    partita.setMinutaggio(60);
+                } else if (mNovanta.isChecked()) {
+                    partita.setMinutaggio(90);
+                } else if (mCentoVenti.isChecked()) {
+                    partita.setMinutaggio(120);
+                }
                 returnToPartiteFragment(partita);
                 break;
 
         }
     }
 
-    /**
-     * Utilizzato per selezionare il numero di partecipanti alla partita.
-     * Viene utilizzato dal bottone R.id.nuova_partita_button
-     *
-     * @param button
-     */
-    public void showPopupMenu(View button) {
-        final PopupMenu popupMenu = new PopupMenu(this, button);
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+    private void setupSeekBar() {
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            final int MINVALUE = 10;
+            int value;
+
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                String num = String.valueOf(item.getTitle());
-                numeroPartecipanti.setText(num);
-                partita = partita.setPartecipanti(Integer.valueOf(num));
-                return false;
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                value = MINVALUE + progress * 2;
+                mTextSeekBar.setText("Numero partecipanti: " + value);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                partita.setPartecipanti(value);
+                mTextSeekBar.setText("Numero partecipanti: " + value);
             }
         });
-        MenuInflater inflater = popupMenu.getMenuInflater();
-        inflater.inflate(R.menu.popup_menu, popupMenu.getMenu());
-        popupMenu.show();
     }
-
 
     public void returnToPartiteFragment(Partita partita) {
         Partita.list.add(partita);

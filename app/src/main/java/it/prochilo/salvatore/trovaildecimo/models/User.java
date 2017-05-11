@@ -1,5 +1,8 @@
 package it.prochilo.salvatore.trovaildecimo.models;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class User {
 
     public String email;
@@ -10,6 +13,8 @@ public class User {
     public String role;
     public int numGamesPlayed = 0;
     public float feedback;
+
+    public List<User> amiciList = null;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -33,5 +38,15 @@ public class User {
         return this;
     }
 
+    public void aggiungiAmico(User user) {
+        if (amiciList == null) {
+            amiciList = new LinkedList<>();
+        }
+        amiciList.add(user);
+    }
+
+    public void rimuoviAmico(User user) {
+        amiciList.remove(user);
+    }
 
 }

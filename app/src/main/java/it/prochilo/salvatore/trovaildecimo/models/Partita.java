@@ -58,6 +58,10 @@ public class Partita {
      */
     public TipoIncontro mTipoIncontro;
     /**
+     *
+     */
+    public int mDurata;
+    /**
      * Viene utilizzato per generare in automatico i numeri identificativi della partita
      */
     private Random random = new Random();
@@ -92,6 +96,11 @@ public class Partita {
 
     public Partita setTipologia(TipoIncontro tipoIncontro) {
         this.mTipoIncontro = tipoIncontro;
+        return this;
+    }
+
+    public Partita setMinutaggio(int durata) {
+        mDurata = durata;
         return this;
     }
 

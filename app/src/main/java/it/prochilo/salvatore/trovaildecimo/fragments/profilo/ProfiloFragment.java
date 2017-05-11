@@ -1,4 +1,4 @@
-package it.prochilo.salvatore.trovaildecimo.fragments;
+package it.prochilo.salvatore.trovaildecimo.fragments.profilo;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,19 @@ public class ProfiloFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_profilo, container, false);
+        final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.toolbar_fragment_profilo);
+        mToolbar.setTitle("Profilo");
+        mMainActivity.setSupportActionBar(mToolbar);
+        DrawerLayout drawerLayout = (DrawerLayout) mMainActivity.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(),
+                drawerLayout,
+                mToolbar,
+                R.string.drawer_open,
+                R.string.drawer_close);
+        drawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+
         mViewPager = (ViewPager) layout.findViewById(R.id.profilo_view_pager);
         mTabLayout = (TabLayout) layout.findViewById(R.id.profilo_tab_layout);
         setupViewPager();
@@ -41,7 +56,7 @@ public class ProfiloFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mMainActivity = (MainActivity)context;
+        mMainActivity = (MainActivity) context;
     }
 
     @Override
