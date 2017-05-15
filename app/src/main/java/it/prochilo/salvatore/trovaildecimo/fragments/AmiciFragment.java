@@ -1,11 +1,10 @@
 package it.prochilo.salvatore.trovaildecimo.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -17,11 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.MainActivity;
+import it.prochilo.salvatore.trovaildecimo.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.User;
+import it.prochilo.salvatore.trovaildecimo.util.Utils;
 
 public class AmiciFragment extends Fragment {
 
@@ -57,46 +59,76 @@ public class AmiciFragment extends Fragment {
                 return false;
             }
         });
-        setSearchView();
-
-        DrawerLayout drawerLayout = (DrawerLayout) mMainActivity.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(),
-                drawerLayout,
-                mToolbar,
-                R.string.drawer_open,
-                R.string.drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
 
         //Otteniamo le referenze della SearchView
+        setSearchView();
+
+        Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
         final RecyclerView recyclerView = (RecyclerView) layout.findViewById(R.id.amici_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
         AmicoAdapter adapter = new AmicoAdapter(user.amiciList);
+
+        adapter.setOnFriendClickedListener(new AmicoAdapter.OnFriendClickedListener() {
+            @Override
+            public void onFriendClicked(User user, int position) {
+                Log.d(TAG, "Clicked on: " + user.name + " " + user.surname);
+                Context context = getContext();
+                ProfiloAmicoActivity.setUtente(user);
+                startActivity(new Intent(context, ProfiloAmicoActivity.class));
+            }
+        });
+
         recyclerView.setAdapter(adapter);
         return layout;
     }
 
-    private final static class AmicoViewHolder extends RecyclerView.ViewHolder {
+    private final static class AmicoViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private TextView nome_cognome;
+        private WeakReference<OnItemClickListener> mOnItemClickListener;
+
+        private interface OnItemClickListener {
+            void onItemClicked(int position);
+        }
 
         private AmicoViewHolder(View itemView) {
             super(itemView);
             nome_cognome = (TextView) itemView.findViewById(R.id.amico_name);
+            itemView.setOnClickListener(this);
         }
 
         private void bind(User user) {
             nome_cognome.setText(user.name + " " + user.surname);
         }
+
+        private void setOnItemClickListener(final OnItemClickListener onItemClickListener) {
+            this.mOnItemClickListener = new WeakReference<>(onItemClickListener);
+        }
+
+        @Override
+        public void onClick(View v) {
+            OnItemClickListener listener = null;
+            if (mOnItemClickListener != null &&
+                    (listener = mOnItemClickListener.get()) != null)
+                listener.onItemClicked(getLayoutPosition());
+        }
     }
 
 
-    private final static class AmicoAdapter extends RecyclerView.Adapter<AmicoViewHolder> {
+    private final static class AmicoAdapter extends RecyclerView.Adapter<AmicoViewHolder>
+            implements AmicoViewHolder.OnItemClickListener {
+
         private final List<User> mModel;
+
+        private WeakReference<OnFriendClickedListener> mOnFriendClickedListener;
+
+        private interface OnFriendClickedListener {
+            void onFriendClicked(User user, int position);
+        }
 
         private AmicoAdapter(final List<User> model) {
             this.mModel = model;
@@ -112,15 +144,30 @@ public class AmiciFragment extends Fragment {
         @Override
         public void onBindViewHolder(AmicoViewHolder holder, int position) {
             holder.bind(mModel.get(position));
+            holder.setOnItemClickListener(this);
         }
 
         @Override
         public int getItemCount() {
             return mModel.size();
         }
+
+        public void setOnFriendClickedListener(final OnFriendClickedListener onFriendClickedListener) {
+            this.mOnFriendClickedListener = new WeakReference<>(onFriendClickedListener);
+        }
+
+        @Override
+        public void onItemClicked(int position) {
+            OnFriendClickedListener listener;
+            if (mOnFriendClickedListener != null &&
+                    (listener = mOnFriendClickedListener.get()) != null)
+                listener.onFriendClicked(mModel.get(position), position);
+        }
     }
 
-
+    /**
+     * Utilizzato per settare la Toolbar e viene utilizzata per cercare gli utenti
+     */
     private void setSearchView() {
         MenuItem searchItem = mToolbar.getMenu().findItem(R.id.action_cerca);
         SearchView searchView = (SearchView) searchItem.getActionView();

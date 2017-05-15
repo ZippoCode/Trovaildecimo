@@ -1,15 +1,14 @@
 package it.prochilo.salvatore.trovaildecimo.models;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 public class Partita {
-
-
-    public static List<Partita> list = new ArrayList<>();
 
     /**
      * Rappresenta il numero dei partecipanti della partita
@@ -26,13 +25,27 @@ public class Partita {
     }
 
     /**
+     * Chiavi per le proprietà
+     */
+    interface KeysPartita {
+        String ID = "id";
+        String ORGANIZZATORE = "organizzatore";
+        String NOMECAMPO = "nomeCampo";
+        String NUMEROPARTECIPANTI = "numeroPartecipanti";
+        String DURATAINCONTRO = "durataIncontro";
+        String DATA = "data";
+        String ORARIO = "orario";
+        String TIPOINCONTRO = "tipoIncontro";
+    }
+
+    /**
      * L'organizzatore della partita
      */
     public final User mUser;
     /**
      * L'identificatore delle partite che deve essere univoco
      */
-    public String id;
+    public String mId;
     /**
      * La lista dei partecipanti all'incontro
      */
@@ -41,6 +54,7 @@ public class Partita {
      * Il numero di partecipanti della partita
      */
     public NumeroPartecipanti numeroPartecipanti;
+    public int numPartecipanti;
     /**
      * Il nome del campo nel quale si disputerà la partita
      */
@@ -48,11 +62,11 @@ public class Partita {
     /**
      * L'ora nella quale si disputerà la partita
      */
-    public Ora mOra;
+    public Orario mOrario;
     /**
      * La rappresenta il giorno nel quale verrà giocato l'incontro
      */
-    public Data mGiorno;
+    public Data mData;
     /**
      *
      */
@@ -61,19 +75,15 @@ public class Partita {
      *
      */
     public int mDurata;
-    /**
-     * Viene utilizzato per generare in automatico i numeri identificativi della partita
-     */
-    private Random random = new Random();
 
-
-    public Partita(User user) {
+    public Partita(final String id, final User user) {
+        this.mId = id;
         this.mUser = user;
-        id = generaId();
     }
 
-    public Partita setPartecipanti(int numPartecipanti) {
+    public Partita setNumeroPartecipanti(int numPartecipanti) {
         listaPartecipanti = new ArrayList<>(numPartecipanti);
+        this.numPartecipanti = numPartecipanti;
         numeroPartecipanti = getNumeroPartecipanti(numPartecipanti);
         return this;
     }
@@ -84,12 +94,12 @@ public class Partita {
     }
 
     public Partita setTime(final int ora, final int minuti) {
-        mOra = new Ora(ora, minuti);
+        mOrario = new Orario(ora, minuti);
         return this;
     }
 
     public Partita setGiorno(final int giorno, final int mese, final int anno) {
-        mGiorno = new Data(giorno, mese, anno);
+        mData = new Data(giorno, mese, anno);
         return this;
     }
 
@@ -109,21 +119,33 @@ public class Partita {
         return this;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("ID: " + id);
-        sb.append("Numero partecipanti: " + numeroPartecipanti.name());
-        sb.append("Nome campetto: " + mNomeCampo);
-        sb.append("Ora: " + mOra + " e Giorno: " + mGiorno);
-        return sb.toString();
+    public static Partita fromJson(final JSONObject jsonObject) throws JSONException {
+        final String id = jsonObject.getString(KeysPartita.ID);
+        final User organizzatore = User.fromJson(jsonObject.getJSONObject(KeysPartita.ORGANIZZATORE));
+        final int numeroPartecipanti = jsonObject.getInt(KeysPartita.NUMEROPARTECIPANTI);
+        final String nomeCampo = jsonObject.getString(KeysPartita.NOMECAMPO);
+        final Orario orario = Orario.fromJson(jsonObject.getJSONObject(KeysPartita.ORARIO));
+        final Data data = Data.fromJson(jsonObject.getJSONObject(KeysPartita.DATA));
+        final int durataIncontro = jsonObject.getInt(KeysPartita.DURATAINCONTRO);
+
+        return new Partita(id, organizzatore)
+                .setNomeCampo(nomeCampo)
+                .setGiorno(data.mGiorno, data.mMese, data.mAnno)
+                .setTime(orario.mOra, orario.mMinuto)
+                .setMinutaggio(durataIncontro);
     }
 
-    /**
-     * Genera in automatico i numeri identificativi della partita
-     */
-    private String generaId() {
-        return String.valueOf(random.nextInt(Integer.MAX_VALUE));
+
+    public JSONObject toJson() throws JSONException {
+        final JSONObject jsonObject = new JSONObject();
+        jsonObject.put(KeysPartita.ID, mId);
+        jsonObject.put(KeysPartita.ORGANIZZATORE, mUser.toJson());
+        jsonObject.put(KeysPartita.NUMEROPARTECIPANTI, numPartecipanti);
+        jsonObject.put(KeysPartita.NOMECAMPO, mNomeCampo);
+        jsonObject.put(KeysPartita.ORARIO, mOrario.toJson());
+        jsonObject.put(KeysPartita.DATA, mData.toJson());
+        jsonObject.put(KeysPartita.DURATAINCONTRO, mDurata);
+        return jsonObject;
     }
 
     private NumeroPartecipanti getNumeroPartecipanti(int numero) {
@@ -150,19 +172,37 @@ public class Partita {
     /**
      * La classe rappresenta l'ora nel quale si disputerà l'incontro
      */
-    public static class Ora {
-        private int mOra, mMinuti;
+    public static class Orario {
+        private int mOra, mMinuto;
 
-        Ora(int ora, int minuti) {
-            if ((ora < 0 || ora > 23) || (minuti < 0 || minuti > 59))
+        private interface KeysOrario{
+            String ORA = "ora";
+            String MINUTO = "minuto";
+        }
+
+        Orario(int ora, int minuto) {
+            if ((ora < 0 || ora > 23) || (minuto < 0 || minuto > 59))
                 throw new IllegalArgumentException("Formato ora errato");
             this.mOra = ora;
-            this.mMinuti = minuti;
+            this.mMinuto = minuto;
+        }
+
+        private static Orario fromJson(final JSONObject jsonObject) throws JSONException {
+            final int ora = jsonObject.getInt(KeysOrario.ORA);
+            final int minuto = jsonObject.getInt(KeysOrario.MINUTO);
+            return new Orario(ora, minuto);
+        }
+
+        private JSONObject toJson() throws JSONException {
+            final JSONObject jsonObject = new JSONObject();
+            jsonObject.put(KeysOrario.ORA, mOra);
+            jsonObject.put(KeysOrario.MINUTO, mMinuto);
+            return jsonObject;
         }
 
         @Override
         public String toString() {
-            return String.format("%02d", mOra) + ":" + String.format("%02d", mMinuti);
+            return String.format("%02d", mOra) + ":" + String.format("%02d", mMinuto);
         }
     }
 
@@ -176,6 +216,11 @@ public class Partita {
         private final String nomeGiorno;
         private final String nomeMese;
 
+        private interface  KeysData{
+            String GIORNO = "giorno";
+            String MESE = "mese";
+            String ANNO = "anno";
+        }
         Data(final int giorno, final int mese, final int anno) {
             if (giorno < 0 || giorno > 31 || mese < 0 || mese > 12)
                 throw new IllegalArgumentException("Formata data errato");
@@ -186,6 +231,21 @@ public class Partita {
             calendar.set(anno, mese, giorno);
             nomeGiorno = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ITALIAN);
             nomeMese = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ITALIAN);
+        }
+
+        private static Data fromJson(JSONObject jsonObject) throws JSONException {
+            final int giorno = jsonObject.getInt(KeysData.GIORNO);
+            final int mese = jsonObject.getInt(KeysData.MESE);
+            final int anno = jsonObject.getInt(KeysData.ANNO);
+            return new Data(giorno, mese, anno);
+        }
+
+        private JSONObject toJson() throws JSONException {
+            final JSONObject jsonObject = new JSONObject();
+            jsonObject.put(KeysData.GIORNO, mGiorno);
+            jsonObject.put(KeysData.MESE, mMese);
+            jsonObject.put(KeysData.ANNO, mAnno);
+            return jsonObject;
         }
 
         @Override

@@ -20,6 +20,7 @@ import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
+import it.prochilo.salvatore.trovaildecimo.util.Utils;
 
 public class ProfiloFragment extends Fragment {
 
@@ -35,17 +36,7 @@ public class ProfiloFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_profilo, container, false);
         final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.toolbar_fragment_profilo);
         mToolbar.setTitle("Profilo");
-        mMainActivity.setSupportActionBar(mToolbar);
-        DrawerLayout drawerLayout = (DrawerLayout) mMainActivity.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(),
-                drawerLayout,
-                mToolbar,
-                R.string.drawer_open,
-                R.string.drawer_close);
-        drawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
-
+        Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
         mViewPager = (ViewPager) layout.findViewById(R.id.profilo_view_pager);
         mTabLayout = (TabLayout) layout.findViewById(R.id.profilo_tab_layout);
         setupViewPager();

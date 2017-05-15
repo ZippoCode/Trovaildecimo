@@ -17,19 +17,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
-import java.util.Locale;
+import java.util.Random;
 
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
 import it.prochilo.salvatore.trovaildecimo.models.User;
 
-public class NuovaPartita extends AppCompatActivity implements View.OnClickListener {
+public class NuovaPartitaActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = NuovaPartita.class.getCanonicalName();
+    private static final String TAG = NuovaPartitaActivity.class.getCanonicalName();
 
     User organizzatore = new User("prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
             .addProprietas(24, "Taurianova", "Attaccante");
 
-    private Partita partita = new Partita(organizzatore);
+    private Partita partita = new Partita(String.valueOf(new Random().nextInt(Integer.MAX_VALUE)), organizzatore);
     private EditText luogo;
 
     private SeekBar mSeekBar;
@@ -54,12 +54,13 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
         final Toolbar toolbar = (Toolbar) findViewById(R.id.nuova_partita_toolbar);
         toolbar.setTitle("Crea una nuova partita");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Set Orario e Data
         mOra = (TextView) findViewById(R.id.nuova_partita_orario);
         mData = (TextView) findViewById(R.id.nuova_partita_data);
-        mOra.setText(partita.mOra.toString());
-        mData.setText(partita.mGiorno.toString());
+        mOra.setText(partita.mOrario.toString());
+        mData.setText(partita.mData.toString());
 
         mOra.setOnClickListener(this);
         mData.setOnClickListener(this);
@@ -95,7 +96,7 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
                         partita = partita.setTime(i, i1);
-                        mOra.setText(partita.mOra.toString());
+                        mOra.setText(partita.mOrario.toString());
                     }
                 }, currentOra, currentMinute, true);
                 timePickerDialog.show();
@@ -108,7 +109,7 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         partita = partita.setGiorno(i2, i1, i);
-                        mData.setText(partita.mGiorno.toString());
+                        mData.setText(partita.mData.toString());
                     }
                 }, currentAnno, currentMese, currentGiorno);
                 datePickerDialog.show();
@@ -153,14 +154,14 @@ public class NuovaPartita extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                partita.setPartecipanti(value);
+                partita.setNumeroPartecipanti(value);
                 mTextSeekBar.setText("Numero partecipanti: " + value);
             }
         });
     }
 
     public void returnToPartiteFragment(Partita partita) {
-        Partita.list.add(partita);
+        GestorePartite.get().addPartita(partita);
         startActivity(new Intent(this, MainActivity.class));
     }
 }

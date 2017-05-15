@@ -33,8 +33,8 @@ public class PartitaDetailsFragment extends Fragment {
         final TextView giornoDetails = (TextView) layout.findViewById(R.id.giorno_text);
         final TextView nomeCampoDetails = (TextView) layout.findViewById(R.id.nomecampo_text);
         final TextView numeroGiocatoriDetails = (TextView) layout.findViewById(R.id.numero_giocatori_text);
-        orarioDetails.setText(mPartita.mOra.toString());
-        giornoDetails.setText(mPartita.mGiorno.toString());
+        orarioDetails.setText(mPartita.mOrario.toString());
+        giornoDetails.setText(mPartita.mData.toString());
         nomeCampoDetails.setText(mPartita.mNomeCampo);
         numeroGiocatoriDetails.setText(String.valueOf(mPartita.numeroPartecipanti));
 

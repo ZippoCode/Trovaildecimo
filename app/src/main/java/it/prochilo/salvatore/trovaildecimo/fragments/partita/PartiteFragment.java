@@ -1,13 +1,11 @@
 package it.prochilo.salvatore.trovaildecimo.fragments.partita;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,29 +19,22 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import it.prochilo.salvatore.trovaildecimo.GestorePartite;
 import it.prochilo.salvatore.trovaildecimo.MainActivity;
-import it.prochilo.salvatore.trovaildecimo.NuovaPartita;
+import it.prochilo.salvatore.trovaildecimo.NuovaPartitaActivity;
+import it.prochilo.salvatore.trovaildecimo.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
 import it.prochilo.salvatore.trovaildecimo.models.User;
+import it.prochilo.salvatore.trovaildecimo.util.Utils;
 
 public class PartiteFragment extends Fragment {
 
     public static final String TAG = PartiteFragment.class.getSimpleName();
 
     private static MainActivity mMainActivity;
-
-    public PartiteFragment() {
-        User organizzatore = new User("prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
-                .addProprietas(24, "Taurianova", "Attaccante");
-        Partita.list.add(new Partita(organizzatore)
-                .setGiorno(15, 4, 2017)
-                .setTime(15, 47)
-                .setTipologia(Partita.TipoIncontro.NORMALE)
-                .setMinutaggio(60)
-                .setNomeCampo("Americano")
-                .setPartecipanti(12));
-    }
+    static User user = new User("prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
+            .addProprietas(24, "Taurianova", "Attaccante");
 
     @Override
     public void onAttach(Context context) {
@@ -65,31 +56,31 @@ public class PartiteFragment extends Fragment {
         final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.fragment_partite_toolbar);
         mToolbar.setTitle("Partite");
 
-        mMainActivity.setSupportActionBar(mToolbar);
-        DrawerLayout drawerLayout = (DrawerLayout) mMainActivity.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(),
-                drawerLayout,
-                mToolbar,
-                R.string.drawer_open,
-                R.string.drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        // DA ELIMINARE
+        GestorePartite.get(getContext()).addPartita(new Partita("1dsf6a", user)
+                .setGiorno(15, 4, 2017)
+                .setTime(15, 47)
+                .setTipologia(Partita.TipoIncontro.NORMALE)
+                .setMinutaggio(60)
+                .setNomeCampo("Americano")
+                .setNumeroPartecipanti(12));
 
+        //Set IconNavigationDrawer
+        Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
         final RecyclerView mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         linearLayoutManager.scrollToPosition(0);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-
-        final PartitaAdapter mAdapter = new PartitaAdapter(Partita.list);
+        final PartitaAdapter mAdapter = new PartitaAdapter(GestorePartite.get(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+
         final FloatingActionButton mFloatingActionButton = (FloatingActionButton) layout.findViewById(R.id.nuova_partita);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                creaUnaNuovaPartita();
+                showActivity(NuovaPartitaActivity.class);
             }
         });
         return layout;
@@ -112,31 +103,32 @@ public class PartiteFragment extends Fragment {
             orario = (TextView) itemView.findViewById(R.id.card_view_ora_text);
             giorno = (TextView) itemView.findViewById(R.id.card_view_giorno_text);
             card_view_header = (LinearLayout) itemView.findViewById(R.id.card_view_header);
+            card_view_header.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    ProfiloAmicoActivity.setUtente(user);
+                    context.startActivity(new Intent(context, ProfiloAmicoActivity.class));
+                }
+            });
             mPartitaDetailsFragment = new PartitaDetailsFragment();
             dettagli_partita_button = (Button) itemView.findViewById(R.id.dettagli_partita_button);
-        }
-
-
-        private void bind(final Partita partita) {
-            organizzatore.setText(partita.mUser.name + " " + partita.mUser.surname);
-            luogo.setText(partita.mNomeCampo);
-            orario.setText(partita.mOra.toString());
-            giorno.setText(partita.mGiorno.toString());
-            mPartitaDetailsFragment.setPartita(partita);
             dettagli_partita_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mMainActivity.showFragment(mPartitaDetailsFragment);
                 }
             });
-            card_view_header.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "Visualizza Profilo Organizzatore");
-                }
-            });
         }
 
+
+        private void bind(final Partita partita) {
+            organizzatore.setText(partita.mUser.name + " " + partita.mUser.surname);
+            luogo.setText(partita.mNomeCampo);
+            orario.setText(partita.mOrario.toString());
+            giorno.setText(partita.mData.toString());
+            mPartitaDetailsFragment.setPartita(partita);
+        }
     }
 
     /**
@@ -144,10 +136,12 @@ public class PartiteFragment extends Fragment {
      */
     private final static class PartitaAdapter extends RecyclerView.Adapter<PartitaViewHolder> {
 
-        private final List<Partita> mModel;
+        private final GestorePartite mGestorePartite;
+        private List<Partita> mModel;
 
-        PartitaAdapter(final List<Partita> model) {
-            mModel = model;
+        PartitaAdapter(final GestorePartite gestorePartite) {
+            mGestorePartite = gestorePartite;
+            mModel = mGestorePartite.getFavoritePartite();
         }
 
         @Override
@@ -159,6 +153,7 @@ public class PartiteFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(PartitaViewHolder holder, int position) {
+            mModel = mGestorePartite.getFavoritePartite();
             holder.bind(mModel.get(position));
         }
 
@@ -166,11 +161,10 @@ public class PartiteFragment extends Fragment {
         public int getItemCount() {
             return mModel.size();
         }
-
     }
 
 
-    private void creaUnaNuovaPartita() {
-        startActivity(new Intent(getActivity(), NuovaPartita.class));
+    private void showActivity(Class classe) {
+        startActivity(new Intent(getActivity(), classe));
     }
 }

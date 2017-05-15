@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import it.prochilo.salvatore.trovaildecimo.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
+import it.prochilo.salvatore.trovaildecimo.util.Utils;
 
 public class ImpostazioniFragment extends Fragment {
 
@@ -30,16 +31,7 @@ public class ImpostazioniFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_impostazioni, container, false);
         Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.toolbar_fragment_impostazioni);
         mToolbar.setTitle("Impostazioni");
-        mMainActivity.setSupportActionBar(mToolbar);
-        DrawerLayout drawerLayout = (DrawerLayout) mMainActivity.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(),
-                drawerLayout,
-                mToolbar,
-                R.string.drawer_open,
-                R.string.drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
         return layout;
     }
 }
