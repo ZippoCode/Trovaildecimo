@@ -26,10 +26,7 @@ public class NuovaPartitaActivity extends AppCompatActivity implements View.OnCl
 
     private static final String TAG = NuovaPartitaActivity.class.getCanonicalName();
 
-    User organizzatore = new User("prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
-            .addProprietas(24, "Taurianova", "Attaccante");
-
-    private Partita partita = new Partita(String.valueOf(new Random().nextInt(Integer.MAX_VALUE)), organizzatore);
+    private Partita partita = new Partita(String.valueOf(new Random().nextInt(Integer.MAX_VALUE)), Dati.user);
     private EditText luogo;
 
     private SeekBar mSeekBar;

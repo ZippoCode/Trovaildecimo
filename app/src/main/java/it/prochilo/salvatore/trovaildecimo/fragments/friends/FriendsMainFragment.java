@@ -33,14 +33,6 @@ public class FriendsMainFragment extends Fragment {
 
     private MainActivity mMainActivity;
 
-    private User user;
-
-
-    public FriendsMainFragment setUser(User user) {
-        this.user = user;
-        return this;
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -71,7 +63,7 @@ public class FriendsMainFragment extends Fragment {
         final TabLayout mTabLayout = (TabLayout) layout.findViewById(R.id.fragment_friends_tablayout);
         AdapterFragmentsTab mAdapter = new AdapterFragmentsTab(getChildFragmentManager());
         mAdapter.addFragment(new FriendsOthersFragment(), getString(R.string.fragment_friends_tab1));
-        mAdapter.addFragment(new FriendsFollowingFragment().setUser(user), getString(R.string.fragment_friends_tab2));
+        mAdapter.addFragment(new FriendsFollowingFragment(), getString(R.string.fragment_friends_tab2));
         mAdapter.addFragment(new FriendsFollowersFragment(), getString(R.string.fragment_friends_tab3));
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);

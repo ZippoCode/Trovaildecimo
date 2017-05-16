@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.GestorePartite;
 import it.prochilo.salvatore.trovaildecimo.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.NuovaPartitaActivity;
@@ -33,8 +34,6 @@ public class PartiteFragment extends Fragment {
     public static final String TAG = PartiteFragment.class.getSimpleName();
 
     private static MainActivity mMainActivity;
-    static User user = new User("prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
-            .addProprietas(24, "Taurianova", "Attaccante");
 
     @Override
     public void onAttach(Context context) {
@@ -57,13 +56,7 @@ public class PartiteFragment extends Fragment {
         mToolbar.setTitle("Partite");
 
         // DA ELIMINARE
-        GestorePartite.get(getContext()).addPartita(new Partita("1dsf6a", user)
-                .setGiorno(15, 4, 2017)
-                .setTime(15, 47)
-                .setTipologia(Partita.TipoIncontro.NORMALE)
-                .setMinutaggio(60)
-                .setNomeCampo("Americano")
-                .setNumeroPartecipanti(12));
+        GestorePartite.get(getContext()).addPartita(Dati.partita);
 
         //Set IconNavigationDrawer
         Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
@@ -107,7 +100,7 @@ public class PartiteFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    ProfiloAmicoActivity.setUtente(user);
+                    ProfiloAmicoActivity.setUtente(Dati.partita.mUser);
                     context.startActivity(new Intent(context, ProfiloAmicoActivity.class));
                 }
             });

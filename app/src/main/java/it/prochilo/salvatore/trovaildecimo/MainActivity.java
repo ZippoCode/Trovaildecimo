@@ -26,14 +26,11 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private DrawerLayout mDrawerLayout;
-    private User user;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        preparaModello();
         if (savedInstanceState == null) {
             final PartiteFragment partiteFragment = new PartiteFragment();
             getSupportFragmentManager().beginTransaction()
@@ -64,7 +61,7 @@ public class MainActivity extends AppCompatActivity
                 nextFragment = new ProfiloFragment();
                 break;
             case R.id.amici_menu:
-                nextFragment = new FriendsMainFragment().setUser(user);
+                nextFragment = new FriendsMainFragment();
                 break;
             case R.id.area_messaggi_menu:
                 nextFragment = new AreaMessaggiFragment();
@@ -93,18 +90,6 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(PartiteFragment.TAG)
                 .replace(R.id.anchor_point, fragment)
                 .commit();
-    }
-
-
-    private void preparaModello() {
-        user = new User("prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
-                .addProprietas(24, "Taurianova", "Attaccante");
-        for (int i = 0; i < 25; i++) {
-            User amico = new User("prova", "Nome #" + i, "Cognome #" + i)
-                    .addProprietas(i, "City #" + i, "Attaccante")
-                    .addFeedBack(5);
-            user.aggiungiAmico(amico);
-        }
     }
 
 }

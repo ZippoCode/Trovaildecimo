@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.User;
@@ -23,14 +24,6 @@ import it.prochilo.salvatore.trovaildecimo.models.User;
 public class FriendsFollowingFragment extends Fragment {
 
     private static final String TAG = FriendsFollowingFragment.class.getSimpleName();
-
-    private User user;
-
-
-    public FriendsFollowingFragment setUser(User user) {
-        this.user = user;
-        return this;
-    }
 
     @Nullable
     @Override
@@ -42,7 +35,9 @@ public class FriendsFollowingFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
-        AmicoAdapter adapter = new AmicoAdapter(user.amiciList);
+
+        //DA MODIFICARE
+        AmicoAdapter adapter = new AmicoAdapter(Dati.user.amiciList);
 
         adapter.setOnFriendClickedListener(new AmicoAdapter.OnFriendClickedListener() {
             @Override
