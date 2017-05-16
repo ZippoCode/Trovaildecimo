@@ -41,4 +41,8 @@
     <string name="novanta_minuti_text">90</string>
     <string name="centoventi_minuti_text">120</string>
     <string name="avvia_nuova_partita_text">Crea partita</string>
+
+    <string name="fragment_friends_tab1">Trova Persone</string>
+    <string name="fragment_friends_tab2">Che segui</string>
+    <string name="fragment_friends_tab3">Che ti seguono</string>
 </resources>

@@ -1,4 +1,4 @@
-package it.prochilo.salvatore.trovaildecimo.fragments.partita;
+package it.prochilo.salvatore.trovaildecimo.fragments.matchs;
 
 import android.content.Context;
 import android.os.Bundle;

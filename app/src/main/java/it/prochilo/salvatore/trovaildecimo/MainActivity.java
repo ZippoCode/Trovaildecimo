@@ -11,10 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import it.prochilo.salvatore.trovaildecimo.fragments.AmiciFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.friends.FriendsMainFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.AreaMessaggiFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.ImpostazioniFragment;
-import it.prochilo.salvatore.trovaildecimo.fragments.partita.PartiteFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.matchs.PartiteFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.profilo.ProfiloFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.ContattamiFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.InformazioniFragment;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
                 nextFragment = new ProfiloFragment();
                 break;
             case R.id.amici_menu:
-                nextFragment = new AmiciFragment().setUser(user);
+                nextFragment = new FriendsMainFragment().setUser(user);
                 break;
             case R.id.area_messaggi_menu:
                 nextFragment = new AreaMessaggiFragment();
