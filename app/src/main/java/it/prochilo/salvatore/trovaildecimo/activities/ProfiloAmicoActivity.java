@@ -1,4 +1,4 @@
-package it.prochilo.salvatore.trovaildecimo;
+package it.prochilo.salvatore.trovaildecimo.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.User;
 
 public class ProfiloAmicoActivity extends AppCompatActivity {
@@ -18,8 +19,8 @@ public class ProfiloAmicoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profilo_amico);
         final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_profilo_amico);
         if (utente != null) {
-            mToolbar.setTitle(utente.name + " " + utente.surname);
-            ((TextView) findViewById(R.id.nome_cognome_amico)).setText(utente.name + " " + utente.surname);
+            mToolbar.setTitle(utente.mName + " " + utente.mSurname);
+            ((TextView) findViewById(R.id.nome_cognome_amico)).setText(utente.mName + " " + utente.mSurname);
         }
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

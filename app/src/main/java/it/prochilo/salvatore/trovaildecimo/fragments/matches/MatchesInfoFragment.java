@@ -1,58 +1,47 @@
-package it.prochilo.salvatore.trovaildecimo.fragments.matchs;
+package it.prochilo.salvatore.trovaildecimo.fragments.matches;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
 
-public class PartitaDetailsFragment extends Fragment {
-
+public class MatchesInfoFragment extends Fragment {
 
     private Partita mPartita;
 
-    public PartitaDetailsFragment() {
+    public MatchesInfoFragment setPartita(Partita partita) {
+        this.mPartita = partita;
+        return this;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_partita_details, container, false);
-        final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.toolbar_details_partite);
-        mToolbar.setTitle("Dettagli partita");
-
+        final View layout = inflater.inflate(R.layout.fragment_matches_info, container, false);
         // Set value of Layout
         final TextView orarioDetails = (TextView) layout.findViewById(R.id.orario_text);
         final TextView giornoDetails = (TextView) layout.findViewById(R.id.giorno_text);
         final TextView nomeCampoDetails = (TextView) layout.findViewById(R.id.nomecampo_text);
         final TextView numeroGiocatoriDetails = (TextView) layout.findViewById(R.id.numero_giocatori_text);
-        orarioDetails.setText(mPartita.mOrario.toString());
-        giornoDetails.setText(mPartita.mData.toString());
+        final TextView tipoIncontro = (TextView) layout.findViewById(R.id.tipoincontro);
+        final Button mViewMapButton = (Button) layout.findViewById(R.id.fragment_matche_info_button);
+        mViewMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        orarioDetails.setText(mPartita.mOrarioIncontro.toString());
+        giornoDetails.setText(mPartita.mDataIncontro.toString());
         nomeCampoDetails.setText(mPartita.mNomeCampo);
-        numeroGiocatoriDetails.setText(String.valueOf(mPartita.numeroPartecipanti));
-
+        numeroGiocatoriDetails.setText(String.valueOf(mPartita.numPartecipanti));
+        tipoIncontro.setText(mPartita.mTipoIncontro);
         return layout;
     }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    public void setPartita(Partita partita) {
-        this.mPartita = partita;
-    }
-
 }

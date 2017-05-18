@@ -1,4 +1,4 @@
-package it.prochilo.salvatore.trovaildecimo;
+package it.prochilo.salvatore.trovaildecimo.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,14 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.fragments.friends.FriendsMainFragment;
-import it.prochilo.salvatore.trovaildecimo.fragments.AreaMessaggiFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.SearchSoccerFieldFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.ImpostazioniFragment;
-import it.prochilo.salvatore.trovaildecimo.fragments.matchs.PartiteFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.matches.MatchesMainFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.profilo.ProfiloFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.ContattamiFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.InformazioniFragment;
-import it.prochilo.salvatore.trovaildecimo.models.User;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,16 +27,18 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout mDrawerLayout;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            final PartiteFragment partiteFragment = new PartiteFragment();
+            final MatchesMainFragment partiteFragment = new MatchesMainFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.anchor_point, partiteFragment, PartiteFragment.TAG)
+                    .add(R.id.anchor_point, partiteFragment, MatchesMainFragment.TAG)
                     .commit();
         }
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         final NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         final Fragment nextFragment;
         switch (itemId) {
             case R.id.home_menu:
-                nextFragment = new PartiteFragment();
+                nextFragment = new MatchesMainFragment();
                 break;
             case R.id.profilo_menu:
                 nextFragment = new ProfiloFragment();
@@ -63,8 +65,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.amici_menu:
                 nextFragment = new FriendsMainFragment();
                 break;
-            case R.id.area_messaggi_menu:
-                nextFragment = new AreaMessaggiFragment();
+            case R.id.cerca_campo_menu:
+                nextFragment = new SearchSoccerFieldFragment();
                 break;
             case R.id.impostazioni_menu:
                 nextFragment = new ImpostazioniFragment();
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity
 
     public void showFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
-                .addToBackStack(PartiteFragment.TAG)
+                .addToBackStack(MatchesMainFragment.TAG)
                 .replace(R.id.anchor_point, fragment)
                 .commit();
     }

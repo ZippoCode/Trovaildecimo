@@ -1,4 +1,4 @@
-package it.prochilo.salvatore.trovaildecimo.fragments.matchs;
+package it.prochilo.salvatore.trovaildecimo.fragments.matches;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +20,16 @@ import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.GestorePartite;
-import it.prochilo.salvatore.trovaildecimo.MainActivity;
-import it.prochilo.salvatore.trovaildecimo.NuovaPartitaActivity;
-import it.prochilo.salvatore.trovaildecimo.ProfiloAmicoActivity;
+import it.prochilo.salvatore.trovaildecimo.activities.MainActivity;
+import it.prochilo.salvatore.trovaildecimo.activities.NuovaPartitaActivity;
+import it.prochilo.salvatore.trovaildecimo.activities.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
-import it.prochilo.salvatore.trovaildecimo.models.User;
 import it.prochilo.salvatore.trovaildecimo.util.Utils;
 
-public class PartiteFragment extends Fragment {
+public class MatchesMainFragment extends Fragment {
 
-    public static final String TAG = PartiteFragment.class.getSimpleName();
+    public static final String TAG = MatchesMainFragment.class.getSimpleName();
 
     private static MainActivity mMainActivity;
 
@@ -41,31 +39,19 @@ public class PartiteFragment extends Fragment {
         mMainActivity = (MainActivity) context;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
-        final View layout = inflater.inflate(R.layout.fragment_partite, container, false);
+        final View layout = inflater.inflate(R.layout.fragment_matches_main, container, false);
         //Toolbar
         final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.fragment_partite_toolbar);
-        mToolbar.setTitle("Partite");
-
-        // DA ELIMINARE
-        GestorePartite.get(getContext()).addPartita(Dati.partita);
+        mToolbar.setTitle(getString(R.string.toolbar_matches_main_fragment));
 
         //Set IconNavigationDrawer
         Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
-        final RecyclerView mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        linearLayoutManager.scrollToPosition(0);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
 
+        final RecyclerView mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         final PartitaAdapter mAdapter = new PartitaAdapter(GestorePartite.get(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 
@@ -73,7 +59,8 @@ public class PartiteFragment extends Fragment {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showActivity(NuovaPartitaActivity.class);
+                Context context = getContext();
+                startActivity(new Intent(context, NuovaPartitaActivity.class));
             }
         });
         return layout;
@@ -84,10 +71,12 @@ public class PartiteFragment extends Fragment {
      */
     private final static class PartitaViewHolder extends RecyclerView.ViewHolder {
 
-        private PartitaDetailsFragment mPartitaDetailsFragment;
+        private MatchesDetailsFragment mPartitaDetailsFragment;
         private TextView organizzatore, luogo, orario, giorno;
         private LinearLayout card_view_header;
         private Button dettagli_partita_button;
+
+        int blue, red;
 
         private PartitaViewHolder(View itemView) {
             super(itemView);
@@ -104,7 +93,7 @@ public class PartiteFragment extends Fragment {
                     context.startActivity(new Intent(context, ProfiloAmicoActivity.class));
                 }
             });
-            mPartitaDetailsFragment = new PartitaDetailsFragment();
+            mPartitaDetailsFragment = new MatchesDetailsFragment();
             dettagli_partita_button = (Button) itemView.findViewById(R.id.dettagli_partita_button);
             dettagli_partita_button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -112,15 +101,22 @@ public class PartiteFragment extends Fragment {
                     mMainActivity.showFragment(mPartitaDetailsFragment);
                 }
             });
+
+            blue = itemView.getResources().getColor(R.color.blue_700);
+            red = itemView.getResources().getColor(R.color.red_700);
         }
 
 
         private void bind(final Partita partita) {
-            organizzatore.setText(partita.mUser.name + " " + partita.mUser.surname);
+            organizzatore.setText(partita.mUser.mName + " " + partita.mUser.mSurname);
             luogo.setText(partita.mNomeCampo);
-            orario.setText(partita.mOrario.toString());
-            giorno.setText(partita.mData.toString());
+            orario.setText(partita.mOrarioIncontro.toString());
+            giorno.setText(partita.mDataIncontro.toString());
             mPartitaDetailsFragment.setPartita(partita);
+            if (partita.mTipoIncontro.equals("Normale")) {
+                card_view_header.setBackgroundColor(blue);
+            } else
+                card_view_header.setBackgroundColor(red);
         }
     }
 
@@ -154,10 +150,5 @@ public class PartiteFragment extends Fragment {
         public int getItemCount() {
             return mModel.size();
         }
-    }
-
-
-    private void showActivity(Class classe) {
-        startActivity(new Intent(getActivity(), classe));
     }
 }

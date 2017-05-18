@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import it.prochilo.salvatore.trovaildecimo.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 
 public class ContattamiFragment extends Fragment {

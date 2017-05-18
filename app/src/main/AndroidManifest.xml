@@ -2,6 +2,14 @@
 
     package="it.prochilo.salvatore.trovaildecimo">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gfs.permission.READ_GSERVICES" />
+
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,24 +18,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".NuovaPartitaActivity">
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.NuovaPartitaActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
-        <activity android:name=".ProfiloAmicoActivity">
+        <activity android:name=".activities.ProfiloAmicoActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAwKkSn4m7SDRuMI9UxS01EgY0P99AhONY" />
     </application>
 
 </manifest>

@@ -11,45 +11,47 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
-import it.prochilo.salvatore.trovaildecimo.ProfiloAmicoActivity;
+import it.prochilo.salvatore.trovaildecimo.activities.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.User;
 
 public class FriendsFollowingFragment extends Fragment {
 
     private static final String TAG = FriendsFollowingFragment.class.getSimpleName();
+    private RecyclerView mRecyclerView;
+    private AmicoAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_friends_following, container, false);
 
-        final RecyclerView recyclerView = (RecyclerView) layout.findViewById(R.id.amici_recycler_view);
+        mRecyclerView = (RecyclerView) layout.findViewById(R.id.amici_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
-        recyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(layoutManager);
 
         //DA MODIFICARE
-        AmicoAdapter adapter = new AmicoAdapter(Dati.user.amiciList);
-
-        adapter.setOnFriendClickedListener(new AmicoAdapter.OnFriendClickedListener() {
+        mAdapter = new AmicoAdapter(Dati.user.mFriendsList);
+        mAdapter.setOnFriendClickedListener(new AmicoAdapter.OnFriendClickedListener() {
             @Override
             public void onFriendClicked(User user, int position) {
-                Log.d(TAG, "Clicked on: " + user.name + " " + user.surname);
+                Log.d(TAG, "Clicked on: " + user.mName + " " + user.mSurname);
                 Context context = getContext();
                 ProfiloAmicoActivity.setUtente(user);
                 startActivity(new Intent(context, ProfiloAmicoActivity.class));
             }
         });
 
-        recyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
         return layout;
     }
 
@@ -66,11 +68,12 @@ public class FriendsFollowingFragment extends Fragment {
         private AmicoViewHolder(View itemView) {
             super(itemView);
             nome_cognome = (TextView) itemView.findViewById(R.id.amico_name);
+            ((ImageButton) itemView.findViewById(R.id.add_friend_button)).setVisibility(View.INVISIBLE);
             itemView.setOnClickListener(this);
         }
 
         private void bind(User user) {
-            nome_cognome.setText(user.name + " " + user.surname);
+            nome_cognome.setText(user.mName + " " + user.mSurname);
         }
 
         private void setOnItemClickListener(final OnItemClickListener onItemClickListener) {
@@ -87,7 +90,7 @@ public class FriendsFollowingFragment extends Fragment {
     }
 
 
-    private final static class AmicoAdapter extends RecyclerView.Adapter<AmicoViewHolder>
+    public final static class AmicoAdapter extends RecyclerView.Adapter<AmicoViewHolder>
             implements AmicoViewHolder.OnItemClickListener {
 
         private final List<User> mModel;

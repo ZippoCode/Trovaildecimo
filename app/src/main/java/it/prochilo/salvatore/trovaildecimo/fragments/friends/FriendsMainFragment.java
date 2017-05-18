@@ -19,9 +19,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.prochilo.salvatore.trovaildecimo.MainActivity;
+import it.prochilo.salvatore.trovaildecimo.activities.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.User;
 import it.prochilo.salvatore.trovaildecimo.util.Utils;
 
 public class FriendsMainFragment extends Fragment {
@@ -30,8 +29,9 @@ public class FriendsMainFragment extends Fragment {
 
     private Toolbar mToolbar;
 
-
     private MainActivity mMainActivity;
+
+    public static ViewPager mViewPager;
 
     @Override
     public void onAttach(Context context) {
@@ -59,7 +59,7 @@ public class FriendsMainFragment extends Fragment {
         Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
 
         //Set TabLayout e ViewPager
-        final ViewPager mViewPager = (ViewPager) layout.findViewById(R.id.fragment_friend_viewpager);
+        mViewPager = (ViewPager) layout.findViewById(R.id.fragment_friend_viewpager);
         final TabLayout mTabLayout = (TabLayout) layout.findViewById(R.id.fragment_friends_tablayout);
         AdapterFragmentsTab mAdapter = new AdapterFragmentsTab(getChildFragmentManager());
         mAdapter.addFragment(new FriendsOthersFragment(), getString(R.string.fragment_friends_tab1));
@@ -109,6 +109,12 @@ public class FriendsMainFragment extends Fragment {
             mFragmentTabList.add(fragment);
             mFragmentTabNameList.add(tabName);
         }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
 
         @Override
         public Fragment getItem(int position) {

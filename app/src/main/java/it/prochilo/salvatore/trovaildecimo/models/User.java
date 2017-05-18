@@ -8,67 +8,85 @@ import java.util.List;
 
 public class User {
 
-    private String email;
-    public String name;
-    public String surname;
-    public int age;
-    public String city;
-    public String role;
-    public int numGamesPlayed = 0;
-    public float feedback;
-    public List<User> amiciList = null;
 
-    public User() {
+    private interface KeysUser {
+        String ID = "id";
+        String EMAIL = "eMail";
+        String NAME = "name";
+        String SURNAME = "surname";
+        String AGE = "age";
+        String CITY = "city";
+        String ROLE = "role";
+        String NUMPLAYEDGAME = "numPlayedGame";
+        String FEEDBACK = "feedback";
     }
 
-    public User(String email, String name, String surname) {
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
+    private String mId;
+    private String mEmail;
+    public String mName;
+    public String mSurname;
+    public int mAge;
+    public String mCity;
+    public String mRole;
+    public int mNumPlayedGame = 0;
+    public float mFeedback;
+    public List<User> mFriendsList = null;
+
+    public User(String id, String email, String name, String surname) {
+        this.mId = id;
+        this.mEmail = email;
+        this.mName = name;
+        this.mSurname = surname;
     }
+
 
     public User addProprietas(int age, String city, String role) {
-        this.age = age;
-        this.city = city;
-        this.role = role;
+        this.mAge = age;
+        this.mCity = city;
+        this.mRole = role;
         return this;
     }
 
     public User addFeedBack(float feedback) {
-        this.feedback = feedback;
+        this.mFeedback = feedback;
         return this;
     }
 
-    public void aggiungiAmico(User user) {
-        if (amiciList == null) {
-            amiciList = new LinkedList<>();
+    public void addFriend(User user) {
+        if (mFriendsList == null) {
+            mFriendsList = new LinkedList<>();
         }
-        amiciList.add(user);
+        mFriendsList.add(user);
     }
 
     public void rimuoviAmico(User user) {
-        amiciList.remove(user);
+        mFriendsList.remove(user);
     }
 
     public static User fromJson(final JSONObject jsonObject) throws JSONException {
-        final String email = jsonObject.getString("email");
-        final String nome = jsonObject.getString("nome");
-        final String cognome = jsonObject.getString("cognome");
-        final int age = jsonObject.getInt("age");
-        final String city = jsonObject.getString("city");
-        final String role = jsonObject.getString("role");
-        return new User(email, nome, cognome)
-                .addProprietas(age, city, role);
+        final String id = jsonObject.getString(KeysUser.ID);
+        final String email = jsonObject.getString(KeysUser.EMAIL);
+        final String nome = jsonObject.getString(KeysUser.NAME);
+        final String cognome = jsonObject.getString(KeysUser.SURNAME);
+        final int age = jsonObject.getInt(KeysUser.AGE);
+        final String city = jsonObject.getString(KeysUser.CITY);
+        final String role = jsonObject.getString(KeysUser.ROLE);
+        final float feedback = jsonObject.getLong(KeysUser.FEEDBACK);
+        return new User(id, email, nome, cognome)
+                .addProprietas(age, city, role)
+                .addFeedBack(feedback);
     }
 
     public JSONObject toJson() throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("email", email);
-        jsonObject.put("nome", name);
-        jsonObject.put("cognome", surname);
-        jsonObject.put("age", age);
-        jsonObject.put("city", city);
-        jsonObject.put("role", role);
+        jsonObject.put(KeysUser.ID, mId);
+        jsonObject.put(KeysUser.EMAIL, mEmail);
+        jsonObject.put(KeysUser.NAME, mName);
+        jsonObject.put(KeysUser.SURNAME, mSurname);
+        jsonObject.put(KeysUser.AGE, mAge);
+        jsonObject.put(KeysUser.CITY, mCity);
+        jsonObject.put(KeysUser.ROLE, mRole);
+        jsonObject.put(KeysUser.FEEDBACK, mFeedback);
         return jsonObject;
     }
 

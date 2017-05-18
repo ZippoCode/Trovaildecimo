@@ -1,7 +1,8 @@
-package it.prochilo.salvatore.trovaildecimo;
+package it.prochilo.salvatore.trovaildecimo.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,8 +20,12 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 import java.util.Random;
 
+import it.prochilo.salvatore.trovaildecimo.Dati;
+import it.prochilo.salvatore.trovaildecimo.GestorePartite;
+import it.prochilo.salvatore.trovaildecimo.R;
+import it.prochilo.salvatore.trovaildecimo.models.Data;
+import it.prochilo.salvatore.trovaildecimo.models.Time;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
-import it.prochilo.salvatore.trovaildecimo.models.User;
 
 public class NuovaPartitaActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,8 +50,13 @@ public class NuovaPartitaActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_nuova_partita);
 
         //Set Default Time and Data. Saranno cambiati quando l'utente selezionerà i valore voluti
-        partita.setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-        partita.setGiorno(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+        partita.setTime(new Time(
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE)));
+        partita.setGiorno(new Data(
+                calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.YEAR)));
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.nuova_partita_toolbar);
         toolbar.setTitle("Crea una nuova partita");
@@ -56,8 +66,8 @@ public class NuovaPartitaActivity extends AppCompatActivity implements View.OnCl
         //Set Orario e Data
         mOra = (TextView) findViewById(R.id.nuova_partita_orario);
         mData = (TextView) findViewById(R.id.nuova_partita_data);
-        mOra.setText(partita.mOrario.toString());
-        mData.setText(partita.mData.toString());
+        mOra.setText(partita.mOrarioIncontro.toString());
+        mData.setText(partita.mDataIncontro.toString());
 
         mOra.setOnClickListener(this);
         mData.setOnClickListener(this);
@@ -92,8 +102,8 @@ public class NuovaPartitaActivity extends AppCompatActivity implements View.OnCl
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        partita = partita.setTime(i, i1);
-                        mOra.setText(partita.mOrario.toString());
+                        partita = partita.setTime(new Time(i, i1));
+                        mOra.setText(partita.mOrarioIncontro.toString());
                     }
                 }, currentOra, currentMinute, true);
                 timePickerDialog.show();
@@ -105,18 +115,18 @@ public class NuovaPartitaActivity extends AppCompatActivity implements View.OnCl
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        partita = partita.setGiorno(i2, i1, i);
-                        mData.setText(partita.mData.toString());
+                        partita = partita.setGiorno(new Data(i2, i1, i));
+                        mData.setText(partita.mDataIncontro.toString());
                     }
                 }, currentAnno, currentMese, currentGiorno);
                 datePickerDialog.show();
                 break;
             case R.id.nuova_partita_button:
                 partita = partita.setNomeCampo(luogo.getText().toString());
-                if (mNovanta.isChecked()) {
-                    partita.setTipologia(Partita.TipoIncontro.NORMALE);
+                if (mNormale.isChecked()) {
+                    partita.setTipologia("Normale");
                 } else if (mSfida.isChecked()) {
-                    partita.setTipologia(Partita.TipoIncontro.SFIDA);
+                    partita.setTipologia("Sfida");
                 }
                 if (mSessanta.isChecked()) {
                     partita.setMinutaggio(60);
@@ -125,7 +135,9 @@ public class NuovaPartitaActivity extends AppCompatActivity implements View.OnCl
                 } else if (mCentoVenti.isChecked()) {
                     partita.setMinutaggio(120);
                 }
-                returnToPartiteFragment(partita);
+                GestorePartite.get().addPartita(partita);
+                Context context = getApplicationContext();
+                startActivity(new Intent(context, MainActivity.class));
                 break;
 
         }
@@ -157,8 +169,4 @@ public class NuovaPartitaActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-    public void returnToPartiteFragment(Partita partita) {
-        GestorePartite.get().addPartita(partita);
-        startActivity(new Intent(this, MainActivity.class));
-    }
 }

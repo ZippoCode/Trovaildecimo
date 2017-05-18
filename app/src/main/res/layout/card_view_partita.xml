@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view_partita"
     android:layout_width="match_parent"
-    android:layout_height="210dp"
+    android:layout_height="190dp"
     android:layout_gravity="center"
     android:layout_marginBottom="@dimen/margin_card_view_top_bottom"
     android:layout_marginLeft="@dimen/margin_card_view_right_left"
@@ -19,46 +19,34 @@
         <LinearLayout
             android:id="@+id/card_view_header"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
+            android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingBottom="16dp"
+            android:paddingBottom="8dp"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="16dp">
+            android:paddingRight="8dp"
+            android:paddingTop="8dp">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/card_view_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/image_card_view" />
+                android:src="@drawable/prova_image_user"
+                app:civ_border_color="@color/black"
+                app:civ_border_width="1dp" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/card_view_organizzatore_text"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/card_view_organizzatore_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/card_view_organizzatore_text"
-                    android:textColor="@color/blue_gray_800"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/card_view_organizzatore_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/blue_gray_500"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
         </LinearLayout>
 
         <RelativeLayout
