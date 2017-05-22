@@ -10,17 +10,19 @@
     android:paddingBottom="@dimen/padding_drawer_header"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoMedium
+    <TextView
         android:id="@+id/user_info_drawer_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Salvatore Prochilo"
+        android:textColor="@color/white"
         android:textSize="14sp" />
 
-    <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+    <TextView
         android:id="@+id/email_user_drawer_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="prochilo.salvatore@gmail.com"
+        android:textColor="@color/white"
         android:textSize="14sp" />
 </LinearLayout>

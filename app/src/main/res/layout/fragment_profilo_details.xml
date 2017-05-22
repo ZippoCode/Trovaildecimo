@@ -6,7 +6,7 @@
     android:background="#E8F5E9"
     android:orientation="vertical">
 
-    <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+    <TextView
         android:id="@+id/informazioni_personali_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:orientation="vertical">
 
 
-                <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+                <TextView
                     android:id="@+id/user_name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                     android:textSize="24sp" />
 
 
-                <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+                <TextView
                     android:id="@+id/user_sunname_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+    <TextView
         android:id="@+id/informazioni_giocatore_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -82,61 +82,61 @@
             android:rowCount="5"
             android:useDefaultMargins="true">
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user_age_field_text"
                 android:textSize="15sp" />
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:id="@+id/user_age_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp" />
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user_city_field_text"
                 android:textSize="15sp" />
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:id="@+id/user_city_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp" />
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user_role_field_text"
                 android:textSize="15sp" />
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:id="@+id/user_role_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp" />
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user_match_played_text"
                 android:textSize="15sp" />
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:id="@+id/user_num_games_played_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp" />
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user_feedback_text"
                 android:textSize="15sp" />
 
-            <it.prochilo.salvatore.trovaildecimo.custom_view.CustomTextViewRobotoRegular
+            <TextView
                 android:id="@+id/user_feedbak_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -5,16 +5,22 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 
+/**
+ * Rappresenta l'orario di una partita. La classe contiene due parametri di tipo intero
+ * che rappresentato rispettivamente l'ora e il minuto.
+ *
+ * @version 1.0
+ */
 public final class Time {
 
-    public final int mHour, mMinute;
+    private final int mHour, mMinute;
 
     private interface KeysOrario {
         String HOUR = "ora";
         String MINUTE = "minuto";
     }
 
-    public Time(int hour, int minute) {
+    public Time(final int hour, final int minute) {
         if ((hour < 0 || hour > 23) || (minute < 0 || minute > 59))
             throw new IllegalArgumentException("Formato ora errato");
         this.mHour = hour;

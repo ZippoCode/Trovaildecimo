@@ -22,6 +22,8 @@ public class Partita {
         String DATA = "data";
         String ORARIO = "orario";
         String TIPOINCONTRO = "tipoIncontro";
+        String PARTECIPANTI = "partecipanti";
+        String PARTECIPANTE = "partecipante #";
     }
 
     /**
@@ -35,7 +37,7 @@ public class Partita {
     /**
      * La lista dei partecipanti all'incontro
      */
-    private List<User> listaPartecipanti;
+    public List<User> listaPartecipanti;
     /**
      * Il numero di partecipanti della partita
      */
@@ -73,6 +75,11 @@ public class Partita {
         this.mUser = user;
         mDataAggiunta = Data.getCurrentData();
         mOrarioAggiunta = Time.getCurrentTime();
+
+        //Inizialmente setto l'orario dell'incontro come quelli correnti, sarà compito
+        //dell'utente settarli nel modo adeguato
+        mOrarioIncontro = Time.getCurrentTime();
+        mDataIncontro = Data.getCurrentData();
     }
 
     public Partita setNumeroPartecipanti(int numPartecipanti) {
@@ -122,13 +129,25 @@ public class Partita {
         final int durataIncontro = jsonObject.getInt(KeysPartita.DURATAINCONTRO);
         final String tipoIncontro = jsonObject.getString(KeysPartita.TIPOINCONTRO);
 
-        return new Partita(id, organizzatore)
+        final Partita partita = new Partita(id, organizzatore)
                 .setNomeCampo(nomeCampo)
                 .setGiorno(data)
                 .setTime(orario)
                 .setMinutaggio(durataIncontro)
                 .setNumeroPartecipanti(numeroPartecipanti)
                 .setTipologia(tipoIncontro);
+
+        //Ricavo la lista dei partecipanti e l'aggiungo alla partita
+        final JSONObject partecipanti = jsonObject.getJSONObject(KeysPartita.PARTECIPANTI);
+        for (int i = 0; i < numeroPartecipanti; i++) {
+            try {
+                partita.addPartecipante(User
+                        .fromJson(partecipanti.getJSONObject(KeysPartita.PARTECIPANTE + i)));
+            } catch (Exception e) {
+                break;
+            }
+        }
+        return partita;
     }
 
     public JSONObject toJson() throws JSONException {
@@ -141,6 +160,14 @@ public class Partita {
         jsonObject.put(KeysPartita.DATA, mDataIncontro.toJson());
         jsonObject.put(KeysPartita.DURATAINCONTRO, mDurata);
         jsonObject.put(KeysPartita.TIPOINCONTRO, mTipoIncontro);
+
+        //Aggiungo la lista dei partecipanti
+        JSONObject partecipanti = new JSONObject();
+        for (int i = 0; i < listaPartecipanti.size(); i++) {
+            partecipanti.put(KeysPartita.PARTECIPANTE + i, listaPartecipanti.get(i).toJson());
+        }
+        jsonObject.put(KeysPartita.PARTECIPANTI, partecipanti);
+
         return jsonObject;
     }
 

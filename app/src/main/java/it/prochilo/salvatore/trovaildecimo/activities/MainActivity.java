@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity
 
     private final static int MAX_GEOCODE_RESULTS = 1;
 
-
     private final GoogleApiClient.ConnectionCallbacks mConnectionCallbacks =
             new GoogleApiClient.ConnectionCallbacks() {
                 @Override

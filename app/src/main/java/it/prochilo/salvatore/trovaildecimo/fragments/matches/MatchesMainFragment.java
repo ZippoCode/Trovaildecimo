@@ -21,7 +21,7 @@ import java.util.List;
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.GestorePartite;
 import it.prochilo.salvatore.trovaildecimo.activities.MainActivity;
-import it.prochilo.salvatore.trovaildecimo.activities.NuovaPartitaActivity;
+import it.prochilo.salvatore.trovaildecimo.fragments.add_match.AddMatchActivity;
 import it.prochilo.salvatore.trovaildecimo.activities.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
@@ -41,7 +41,8 @@ public class MatchesMainFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         final View layout = inflater.inflate(R.layout.fragment_matches_main, container, false);
         //Toolbar
         final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.fragment_partite_toolbar);
@@ -50,17 +51,30 @@ public class MatchesMainFragment extends Fragment {
         //Set IconNavigationDrawer
         Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
 
-        final RecyclerView mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
+        final RecyclerView mRecyclerView = (RecyclerView)
+                layout.findViewById(R.id.partite_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         final PartitaAdapter mAdapter = new PartitaAdapter(GestorePartite.get(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 
-        final FloatingActionButton mFloatingActionButton = (FloatingActionButton) layout.findViewById(R.id.nuova_partita);
+        final FloatingActionButton mFloatingActionButton = (FloatingActionButton)
+                layout.findViewById(R.id.nuova_partita);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context context = getContext();
-                startActivity(new Intent(context, NuovaPartitaActivity.class));
+                startActivity(new Intent(context, AddMatchActivity.class));
+            }
+        });
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                //Nasconde il FAB durente lo scrolling verso il basso e lo fa ricomparire quando viene
+                //eseguito uno scrolling verso l'alto
+                if (dy > 0)
+                    mFloatingActionButton.hide();
+                else if (dy < 0)
+                    mFloatingActionButton.show();
             }
         });
         return layout;
@@ -76,7 +90,7 @@ public class MatchesMainFragment extends Fragment {
         private LinearLayout card_view_header;
         private Button dettagli_partita_button;
 
-        int blue, red;
+        private int blue, red;
 
         private PartitaViewHolder(View itemView) {
             super(itemView);

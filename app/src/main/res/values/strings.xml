@@ -30,18 +30,6 @@
     <string name="card_view_orario_text">Ora:Minuti</string>
     <string name="card_view_giorno_text">Giorno/Mese/Anno</string>
 
-    <!-- String Nuova Partita -->
-    <string name="seleziona_giorno_ora_text">Inserisci le varie informazioni</string>
-    <string name="numero_giocatori_text">Numero di giocatori: 10</string>
-    <string name="tipo_partita_text">Tipo di partita</string>
-    <string name="durata_partita_text">Durata partita</string>
-    <string name="normale_text">Normale</string>
-    <string name="sfida_text">Sfida</string>
-    <string name="sessanta_minuti_text">60</string>
-    <string name="novanta_minuti_text">90</string>
-    <string name="centoventi_minuti_text">120</string>
-    <string name="avvia_nuova_partita_text">Crea partita</string>
-
     <!-- -->
     <string name="fragment_friends_tab1">Trova Persone</string>
     <string name="fragment_friends_tab2">Che segui</string>
@@ -50,4 +38,18 @@
     <!-- String to Friends Other Fragment -->
     <string name="friend_added">Amico Aggiunto</string>
     <string name="delete_added">Annulla</string>
+
+    <!-- String utilizzate per creare una nuova partita -->
+    <string name="seleziona_giorno_ora_text">Inserisci le varie informazioni</string>
+    <string name="numero_giocatori_text">Numero di giocatori</string>
+    <string name="tipo_partita_text">Tipo di partita</string>
+    <string name="durata_partita_text">Durata partita</string>
+    <string name="normale_text">Normale</string>
+    <string name="sfida_text">Sfida</string>
+    <string name="sessanta_minuti_text">60</string>
+    <string name="novanta_minuti_text">90</string>
+    <string name="centoventi_minuti_text">120</string>
+    <string name="add_partencipant_button_text">Aggiungi partecipanti</string>
+    <string name="avvia_nuova_partita_text">Crea partita</string>
+
 </resources>

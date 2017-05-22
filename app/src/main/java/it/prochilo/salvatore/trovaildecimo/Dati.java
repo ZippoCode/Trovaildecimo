@@ -2,6 +2,7 @@ package it.prochilo.salvatore.trovaildecimo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import it.prochilo.salvatore.trovaildecimo.models.Data;
 import it.prochilo.salvatore.trovaildecimo.models.Message;
@@ -17,6 +18,8 @@ public final class Dati {
     public static Partita partita;
     public static List<Message> exampleMessage;
     public static List<User> exampleAmici;
+
+    public static Partita newPartita;
 
     private Dati() {
         user = new User("145872", "prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
@@ -43,6 +46,7 @@ public final class Dati {
             exampleMessage.add(new Message(user, "Questo è un messaggio di prova, ed è il numero #" + i));
         }
 
+        newPartita = createNuovaPartita();
 
         exampleAmici = new ArrayList<>();
         exampleAmici.add(new User("5215151", "email1@gmail.com", "Antonio", "Condello")
@@ -53,6 +57,11 @@ public final class Dati {
                 .addProprietas(18, "Taurianova", "Attaccante"));
         exampleAmici.add(new User("5215151", "email4@gmail.com", "Simone", "Marafioti")
                 .addProprietas(18, "Taurianova", "Centrocampista"));
+    }
+
+    private Partita createNuovaPartita() {
+        return new Partita(String.valueOf(new Random().nextInt(Integer.MAX_VALUE)),
+                Dati.user);
     }
 
 }

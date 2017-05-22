@@ -15,12 +15,17 @@ public class LocationAwareFragment extends Fragment {
 
     private class LocationBroadcastReceiver extends BroadcastReceiver {
 
+        private boolean notLoop = false;
+
         @Override
         public void onReceive(Context context, Intent intent) {
             final Location location = intent
                     .getParcelableExtra(FusedLocationProviderApi.KEY_LOCATION_CHANGED);
             mCurrentLocation = location;
-            onLocationAvaiable(location);
+            if (!notLoop) {
+                onLocationAvaiable(location);
+                notLoop = true;
+            }
         }
     }
 

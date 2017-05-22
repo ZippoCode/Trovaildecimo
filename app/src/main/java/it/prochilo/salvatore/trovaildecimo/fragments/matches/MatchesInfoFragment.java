@@ -3,6 +3,7 @@ package it.prochilo.salvatore.trovaildecimo.fragments.matches;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,14 @@ public class MatchesInfoFragment extends Fragment {
         nomeCampoDetails.setText(mPartita.mNomeCampo);
         numeroGiocatoriDetails.setText(String.valueOf(mPartita.numPartecipanti));
         tipoIncontro.setText(mPartita.mTipoIncontro);
+
+        //TEMPORANEO, UTILIZZATO UNICAMENTE PER VEDERE MOMENTAMENTE I PARTECIPANTI
+        final TextView textView = (TextView) layout.findViewById(R.id.text_partecipanti_incontro);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < mPartita.listaPartecipanti.size(); i++) {
+            sb.append(mPartita.listaPartecipanti.get(i)).append('\n');
+        }
+        textView.setText(sb.toString());
         return layout;
     }
 }
