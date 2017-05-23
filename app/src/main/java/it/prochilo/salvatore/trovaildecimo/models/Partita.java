@@ -1,6 +1,7 @@
 package it.prochilo.salvatore.trovaildecimo.models;
 
-import android.util.Log;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,7 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Partita {
+public class Partita implements Parcelable {
 
     /**
      * Chiavi per le proprietà
@@ -25,6 +26,18 @@ public class Partita {
         String PARTECIPANTI = "partecipanti";
         String PARTECIPANTE = "partecipante #";
     }
+
+    public static final Creator<Partita> CREATOR = new Creator<Partita>() {
+        @Override
+        public Partita createFromParcel(Parcel source) {
+            return null;
+        }
+
+        @Override
+        public Partita[] newArray(int size) {
+            return new Partita[0];
+        }
+    };
 
     /**
      * L'organizzatore della partita
@@ -70,6 +83,10 @@ public class Partita {
 
     private int numMissingPlayer;
 
+    private static final byte PRESENT = 1;
+
+    private static final byte NOT_PRESENT = 0;
+
     public Partita(final String id, final User user) {
         this.mId = id;
         this.mUser = user;
@@ -80,6 +97,19 @@ public class Partita {
         //dell'utente settarli nel modo adeguato
         mOrarioIncontro = Time.getCurrentTime();
         mDataIncontro = Data.getCurrentData();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Partita(Parcel parcel) {
+        mId = parcel.readString();
+        mUser = parcel.readParcelable(User.class.getClassLoader());
+        numPartecipanti = parcel.readInt();
+        mNomeCampo = parcel.readString();
+        mOrarioIncontro = parcel.readParcelable(Time.class.getClassLoader());
+        mDataIncontro = parcel.readParcelable(Data.class.getClassLoader());
+        mDurata = parcel.readInt();
+        mTipoIncontro = parcel.readString();
+        listaPartecipanti = parcel.readArrayList(User.class.getClassLoader());
     }
 
     public Partita setNumeroPartecipanti(int numPartecipanti) {
@@ -119,6 +149,46 @@ public class Partita {
         return this;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mId);
+        dest.writeParcelable(mUser, flags);
+        dest.writeInt(numPartecipanti);
+        dest.writeString(mNomeCampo);
+
+        dest.writeParcelable(mOrarioIncontro, flags);
+        dest.writeParcelable(mDataIncontro, flags);
+        dest.writeInt(mDurata);
+        dest.writeString(mTipoIncontro);
+        dest.writeList(listaPartecipanti);
+    }
+
+    public JSONObject toJson() throws JSONException {
+        final JSONObject jsonObject = new JSONObject();
+        jsonObject.put(KeysPartita.ID, mId);
+        jsonObject.put(KeysPartita.ORGANIZZATORE, mUser.toJson());
+        jsonObject.put(KeysPartita.NUMEROPARTECIPANTI, numPartecipanti);
+        jsonObject.put(KeysPartita.NOMECAMPO, mNomeCampo);
+        jsonObject.put(KeysPartita.ORARIO, mOrarioIncontro.toJson());
+        jsonObject.put(KeysPartita.DATA, mDataIncontro.toJson());
+        jsonObject.put(KeysPartita.DURATAINCONTRO, mDurata);
+        jsonObject.put(KeysPartita.TIPOINCONTRO, mTipoIncontro);
+
+        //Aggiungo la lista dei partecipanti
+        JSONObject partecipanti = new JSONObject();
+        for (int i = 0; i < listaPartecipanti.size(); i++) {
+            partecipanti.put(KeysPartita.PARTECIPANTE + i, listaPartecipanti.get(i).toJson());
+        }
+        jsonObject.put(KeysPartita.PARTECIPANTI, partecipanti);
+
+        return jsonObject;
+    }
+
     public static Partita fromJson(final JSONObject jsonObject) throws JSONException {
         final String id = jsonObject.getString(KeysPartita.ID);
         final User organizzatore = User.fromJson(jsonObject.getJSONObject(KeysPartita.ORGANIZZATORE));
@@ -148,27 +218,6 @@ public class Partita {
             }
         }
         return partita;
-    }
-
-    public JSONObject toJson() throws JSONException {
-        final JSONObject jsonObject = new JSONObject();
-        jsonObject.put(KeysPartita.ID, mId);
-        jsonObject.put(KeysPartita.ORGANIZZATORE, mUser.toJson());
-        jsonObject.put(KeysPartita.NUMEROPARTECIPANTI, numPartecipanti);
-        jsonObject.put(KeysPartita.NOMECAMPO, mNomeCampo);
-        jsonObject.put(KeysPartita.ORARIO, mOrarioIncontro.toJson());
-        jsonObject.put(KeysPartita.DATA, mDataIncontro.toJson());
-        jsonObject.put(KeysPartita.DURATAINCONTRO, mDurata);
-        jsonObject.put(KeysPartita.TIPOINCONTRO, mTipoIncontro);
-
-        //Aggiungo la lista dei partecipanti
-        JSONObject partecipanti = new JSONObject();
-        for (int i = 0; i < listaPartecipanti.size(); i++) {
-            partecipanti.put(KeysPartita.PARTECIPANTE + i, listaPartecipanti.get(i).toJson());
-        }
-        jsonObject.put(KeysPartita.PARTECIPANTI, partecipanti);
-
-        return jsonObject;
     }
 
 }

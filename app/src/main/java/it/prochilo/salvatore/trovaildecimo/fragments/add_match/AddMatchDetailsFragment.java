@@ -32,7 +32,7 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
 
     private static final int MIN_NUM_PARTECIPANT = 10;
 
-    private Partita partita = Dati.newPartita;
+    private Partita partita = Dati.createNuovaPartita();
 
     private TextView mOra, mData;
 
@@ -92,9 +92,16 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
                 break;
             case R.id.fragment_add_match_details_button:
                 setupMatch();
+
+                //Passaggio dell paramentro partita appena creato
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("partita", partita);
+                Fragment nextFragment = new AddMatchUserFragment();
+                nextFragment.setArguments(bundle);
+
                 getFragmentManager().beginTransaction()
                         .addToBackStack(AddMatchDetailsFragment.TAG)
-                        .replace(R.id.fragment_add_match_anchor, new AddMatchUserFragment())
+                        .replace(R.id.fragment_add_match_anchor, nextFragment)
                         .commit();
                 break;
             default:
@@ -103,7 +110,7 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
     }
 
     /**
-     * Settiamo la setupSeekBar
+     * Setto la setupSeekBar
      */
     private void setupSeekBar() {
         //Setto un valore iniziale nel caso nel quale l'utente non toccasse la barra

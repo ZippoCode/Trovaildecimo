@@ -1,13 +1,15 @@
 package it.prochilo.salvatore.trovaildecimo.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class User {
-
+public class User implements Parcelable {
 
     private interface KeysUser {
         String ID = "id";
@@ -32,6 +34,22 @@ public class User {
     public float mFeedback;
     public List<User> mFriendsList = null;
 
+    private static final byte PRESENT = 1;
+    private static final byte NOT_PRESENT = 0;
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     public User(String id, String email, String name, String surname) {
         this.mId = id;
         this.mEmail = email;
@@ -39,6 +57,25 @@ public class User {
         this.mSurname = surname;
     }
 
+    @SuppressWarnings("unchecked")
+    private User(Parcel in) {
+        mId = in.readString();
+        mEmail = in.readString();
+        mName = in.readString();
+        mSurname = in.readString();
+        if (in.readByte() == PRESENT) {
+            mAge = in.readInt();
+            mCity = in.readString();
+            mRole = in.readString();
+        }
+        if (in.readByte() == PRESENT)
+            mFeedback = in.readFloat();
+        if (in.readByte() == PRESENT)
+            mNumPlayedGame = in.readInt();
+        if (in.readByte() == PRESENT)
+            mFriendsList = in.readArrayList(User.class.getClassLoader());
+
+    }
 
     public User addProprietas(int age, String city, String role) {
         this.mAge = age;
@@ -49,6 +86,11 @@ public class User {
 
     public User addFeedBack(float feedback) {
         this.mFeedback = feedback;
+        return this;
+    }
+
+    public User addNumberPlayedGame(int numPlayedGame) {
+        this.mNumPlayedGame = numPlayedGame;
         return this;
     }
 
@@ -63,6 +105,42 @@ public class User {
         mFriendsList.remove(user);
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mId);
+        dest.writeString(mEmail);
+        dest.writeString(mName);
+        dest.writeString(mSurname);
+        if (mCity != null) {
+            dest.writeByte(PRESENT);
+            dest.writeInt(mAge);
+            dest.writeString(mCity);
+            dest.writeString(mRole);
+        } else
+            dest.writeByte(NOT_PRESENT);
+        if (mFeedback != 0) {
+            dest.writeByte(PRESENT);
+            dest.writeFloat(mFeedback);
+        } else
+            dest.writeByte(NOT_PRESENT);
+        if (mNumPlayedGame > 0) {
+            dest.writeByte(PRESENT);
+            dest.writeInt(mNumPlayedGame);
+        } else
+            dest.writeByte(NOT_PRESENT);
+        if (mFriendsList != null && mFriendsList.size() > 0) {
+            dest.writeByte(PRESENT);
+            dest.writeList(mFriendsList);
+        } else
+            dest.writeByte(NOT_PRESENT);
+    }
+
     public static User fromJson(final JSONObject jsonObject) throws JSONException {
         final String id = jsonObject.getString(KeysUser.ID);
         final String email = jsonObject.getString(KeysUser.EMAIL);
@@ -71,10 +149,12 @@ public class User {
         final int age = jsonObject.getInt(KeysUser.AGE);
         final String city = jsonObject.getString(KeysUser.CITY);
         final String role = jsonObject.getString(KeysUser.ROLE);
+        final int numPlayedGame = jsonObject.getInt(KeysUser.NUMPLAYEDGAME);
         final float feedback = jsonObject.getLong(KeysUser.FEEDBACK);
         return new User(id, email, nome, cognome)
                 .addProprietas(age, city, role)
-                .addFeedBack(feedback);
+                .addFeedBack(feedback)
+                .addNumberPlayedGame(numPlayedGame);
     }
 
     public JSONObject toJson() throws JSONException {
@@ -86,6 +166,7 @@ public class User {
         jsonObject.put(KeysUser.AGE, mAge);
         jsonObject.put(KeysUser.CITY, mCity);
         jsonObject.put(KeysUser.ROLE, mRole);
+        jsonObject.put(KeysUser.NUMPLAYEDGAME, mNumPlayedGame);
         jsonObject.put(KeysUser.FEEDBACK, mFeedback);
         return jsonObject;
     }

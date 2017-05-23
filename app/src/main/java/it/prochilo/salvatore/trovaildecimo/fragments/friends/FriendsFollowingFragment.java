@@ -11,18 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
-
-import java.lang.ref.WeakReference;
-import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.activities.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.User;
 import it.prochilo.salvatore.trovaildecimo.recycler_view.UserListAdapter;
-import it.prochilo.salvatore.trovaildecimo.recycler_view.UserListViewHolder;
 
 public class FriendsFollowingFragment extends Fragment {
 
@@ -43,7 +37,7 @@ public class FriendsFollowingFragment extends Fragment {
 
         //DA MODIFICARE
         mAdapter = new UserListAdapter(Dati.user.mFriendsList);
-        mAdapter.setOnFriendClickedListener(new UserListAdapter.OnUserClickedListener() {
+        mAdapter.setOnUserListListener(new UserListAdapter.OnUserClickedListener() {
 
             @Override
             public void onUserClicked(User user, int position) {

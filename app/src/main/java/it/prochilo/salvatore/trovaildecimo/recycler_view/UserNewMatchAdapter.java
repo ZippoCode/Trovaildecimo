@@ -22,9 +22,8 @@ public class UserNewMatchAdapter extends UserListAdapter {
     @Override
     public void onItemClicked(int position) {
         super.onItemClicked(position);
-
-        //Rimuovo l'utente dalla lista visualizzata e notifico il cambiamento
+        //Quando clicco su un elemento lo posso eliminare
         mModel.remove(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
     }
 }

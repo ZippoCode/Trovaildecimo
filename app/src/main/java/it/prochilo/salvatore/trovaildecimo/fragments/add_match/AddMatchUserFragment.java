@@ -35,13 +35,17 @@ public class AddMatchUserFragment extends Fragment {
 
     private static final String TAG = AddMatchUserFragment.class.getSimpleName();
 
-    private static Partita mPartita = Dati.newPartita;
+    private static Partita mPartita;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View layout = inflater.inflate(R.layout.fragment_add_match_user, container, false);
+        Bundle arguments = this.getArguments();
+        if (arguments != null) {
+            mPartita = arguments.getParcelable("partita");
+        }
         final TabLayout mTabLayout = (TabLayout) layout
                 .findViewById(R.id.fragment_add_match_user_tablayout);
         final ViewPager mViewPager = (ViewPager) layout
@@ -49,17 +53,15 @@ public class AddMatchUserFragment extends Fragment {
 
         final TabFragmentAdapter mAdapter = new TabFragmentAdapter(getChildFragmentManager());
 
-        mViewPager.setAdapter(mAdapter);
-
         //Creo i miei fragment
         UserToAddFragment mUserToAddFragment = new UserToAddFragment();
-        mUserToAddFragment.setAdapter(mAdapter);
         UserAddedFragment mUserAddedFragment = new UserAddedFragment();
-
         //Aggiungo i fragment all'adapter
         mAdapter.addFragment(mUserToAddFragment, "Aggiungi Amici");
         mAdapter.addFragment(mUserAddedFragment, "Amici aggiunti");
-
+        //Setto gli Adapter
+        mViewPager.setAdapter(mAdapter);
+        mUserToAddFragment.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
         final FloatingActionButton mFloatingActionButton =
@@ -69,7 +71,6 @@ public class AddMatchUserFragment extends Fragment {
             public void onClick(View v) {
                 //Aggiungo la partita
                 GestorePartite.get().addPartita(mPartita);
-
                 //Ritorno alla schermata principale
                 Context context = getContext();
                 startActivity(new Intent(context, MainActivity.class));
@@ -136,6 +137,15 @@ public class AddMatchUserFragment extends Fragment {
 
         private PagerAdapter mAdapterViewPager;
 
+        private List<User> customModel;
+
+        public UserToAddFragment() {
+            customModel = new ArrayList<>();
+            for (int i = 0; i < Dati.user.mFriendsList.size(); i++) {
+                customModel.add(Dati.user.mFriendsList.get(i));
+            }
+        }
+
         public void setAdapter(PagerAdapter adapter) {
             this.mAdapterViewPager = adapter;
         }
@@ -148,19 +158,18 @@ public class AddMatchUserFragment extends Fragment {
             final RecyclerView mRecyclerView = (RecyclerView) layout
                     .findViewById(R.id.fragment_add_match_user_toadd_recyclerview);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-            final UserNewMatchAdapter mAdapter = new UserNewMatchAdapter(Dati.user.mFriendsList);
-            mAdapter.setOnFriendClickedListener(new UserListAdapter.OnUserClickedListener() {
+            final UserNewMatchAdapter mAdapter = new UserNewMatchAdapter(customModel);
+            mAdapter.setOnUserListListener(new UserListAdapter.OnUserClickedListener() {
                 @Override
                 public void onUserClicked(User user, int position) {
+                    // Quando viene eseguito un operazione di click su un utente della lista
+                    // questo viene aggiunto all'elenco degli utenti della partita. Successivamente
+                    // viene notificato l'Adapter del ViewPager poichè questo venga aggiunto
+                    // all'elenco. Infine visualizzato un Toast per informare l'utente
+                    // dell'aggiunta
                     Log.d(TAG, "User: " + user.mName + " aggiunto");
-                    //Aggiungo l'utente ai partecipanti e lo rimuovo dagli utenti disponibili
                     mPartita.addPartecipante(user);
-
-                    //Lo notifico affinché aggiorni l'elenco
-                    mAdapter.notifyDataSetChanged();
                     mAdapterViewPager.notifyDataSetChanged();
-
                     Toast.makeText(getContext(), "Utente aggiunto", Toast.LENGTH_SHORT)
                             .show();
                 }

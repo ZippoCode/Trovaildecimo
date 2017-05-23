@@ -19,7 +19,7 @@ public final class Dati {
     public static List<Message> exampleMessage;
     public static List<User> exampleAmici;
 
-    public static Partita newPartita;
+    public Partita newPartita;
 
     private Dati() {
         user = new User("145872", "prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
@@ -46,8 +46,6 @@ public final class Dati {
             exampleMessage.add(new Message(user, "Questo è un messaggio di prova, ed è il numero #" + i));
         }
 
-        newPartita = createNuovaPartita();
-
         exampleAmici = new ArrayList<>();
         exampleAmici.add(new User("5215151", "email1@gmail.com", "Antonio", "Condello")
                 .addProprietas(18, "Taurianova", "Portiere"));
@@ -59,9 +57,17 @@ public final class Dati {
                 .addProprietas(18, "Taurianova", "Centrocampista"));
     }
 
-    private Partita createNuovaPartita() {
+    public static Partita createNuovaPartita() {
         return new Partita(String.valueOf(new Random().nextInt(Integer.MAX_VALUE)),
                 Dati.user);
+    }
+
+    public static Dati getInstance(){
+        return mIstance;
+    }
+
+    public void setPartita(Partita partita) {
+        newPartita = partita;
     }
 
 }

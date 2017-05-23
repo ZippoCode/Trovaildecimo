@@ -17,7 +17,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListViewHolder>
 
     protected final List<User> mModel;
 
-    private WeakReference<OnUserClickedListener> mOnFriendClickedListener;
+    private WeakReference<OnUserClickedListener> mOnListUserListener;
 
     public interface OnUserClickedListener {
         void onUserClicked(User user, int position);
@@ -45,15 +45,15 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListViewHolder>
         return mModel.size();
     }
 
-    public void setOnFriendClickedListener(final OnUserClickedListener onUserClickedListener) {
-        this.mOnFriendClickedListener = new WeakReference<>(onUserClickedListener);
+    public void setOnUserListListener(final OnUserClickedListener onUserClickedListener) {
+        this.mOnListUserListener = new WeakReference<>(onUserClickedListener);
     }
 
     @Override
     public void onItemClicked(int position) {
         OnUserClickedListener listener;
-        if (mOnFriendClickedListener != null &&
-                (listener = mOnFriendClickedListener.get()) != null)
+        if (mOnListUserListener != null &&
+                (listener = mOnListUserListener.get()) != null)
             listener.onUserClicked(mModel.get(position), position);
     }
 }

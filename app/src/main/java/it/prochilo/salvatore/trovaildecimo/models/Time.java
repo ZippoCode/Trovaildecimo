@@ -1,5 +1,8 @@
 package it.prochilo.salvatore.trovaildecimo.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,22 +12,50 @@ import java.util.Calendar;
  * Rappresenta l'orario di una partita. La classe contiene due parametri di tipo intero
  * che rappresentato rispettivamente l'ora e il minuto.
  *
- * @version 1.0
+ * @version 1.1
  */
-public final class Time {
-
-    private final int mHour, mMinute;
+public final class Time implements Parcelable {
 
     private interface KeysOrario {
         String HOUR = "ora";
         String MINUTE = "minuto";
     }
 
+    private final int mHour, mMinute;
+
+    public static final Creator<Time> CREATOR = new Creator<Time>() {
+        @Override
+        public Time createFromParcel(Parcel source) {
+            return new Time(source);
+        }
+
+        @Override
+        public Time[] newArray(int size) {
+            return new Time[size];
+        }
+    };
+
     public Time(final int hour, final int minute) {
         if ((hour < 0 || hour > 23) || (minute < 0 || minute > 59))
             throw new IllegalArgumentException("Formato ora errato");
         this.mHour = hour;
         this.mMinute = minute;
+    }
+
+    public Time(Parcel parcel) {
+        mHour = parcel.readInt();
+        mMinute = parcel.readInt();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mHour);
+        dest.writeInt(mMinute);
     }
 
     public static Time fromJson(final JSONObject jsonObject) throws JSONException {
