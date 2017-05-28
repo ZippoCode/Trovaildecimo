@@ -17,15 +17,14 @@ public class MatchesInfoFragment extends Fragment {
 
     private Partita mPartita;
 
-    public MatchesInfoFragment setPartita(Partita partita) {
-        this.mPartita = partita;
-        return this;
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View layout = inflater.inflate(R.layout.fragment_matches_info, container, false);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mPartita = bundle.getParcelable(MatchesMainFragment.KEY_PARTITA_TAG);
+        }
         // Set value of Layout
         final TextView orarioDetails = (TextView) layout.findViewById(R.id.orario_text);
         final TextView giornoDetails = (TextView) layout.findViewById(R.id.giorno_text);

@@ -41,11 +41,9 @@ import java.util.Locale;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.fragments.friends.FriendsMainFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.SearchSoccerFieldFragment;
-import it.prochilo.salvatore.trovaildecimo.fragments.ImpostazioniFragment;
+import it.prochilo.salvatore.trovaildecimo.fragments.SettingsFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.matches.MatchesMainFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.profilo.ProfiloFragment;
-import it.prochilo.salvatore.trovaildecimo.fragments.ContattamiFragment;
-import it.prochilo.salvatore.trovaildecimo.fragments.InformazioniFragment;
 import it.prochilo.salvatore.trovaildecimo.location.LocationUtil;
 
 public class MainActivity extends AppCompatActivity
@@ -245,13 +243,7 @@ public class MainActivity extends AppCompatActivity
                 nextFragment = new SearchSoccerFieldFragment();
                 break;
             case R.id.impostazioni_menu:
-                nextFragment = new ImpostazioniFragment();
-                break;
-            case R.id.contattami_menu:
-                nextFragment = new ContattamiFragment();
-                break;
-            case R.id.informazioni_menu:
-                nextFragment = new InformazioniFragment();
+                nextFragment = new SettingsFragment();
                 break;
             default:
                 throw new IllegalArgumentException();

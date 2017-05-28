@@ -1,178 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:padding="10dp"
     tools:context=".fragments.matches.MatchesInfoFragment">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="2dp"
-        app:contentPadding="8dp">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/orario_partita_dettagli"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="start"
+            android:text="Orario e giorno"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/orario_partita_dettagli"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="Orario e giorno"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_access_time_black_24dp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/orario_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/blue_gray_800"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/giorno_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/blue_gray_800"
-                        android:textSize="17sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="2dp"
-        app:contentPadding="8dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/orario_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:textColor="@color/blue_gray_800"
+            android:textSize="17sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/nome_campo_partita_dettagli"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="Nome Campetto"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/nomecampo_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:textColor="@color/blue_gray_800"
-                    android:textSize="17sp" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/fragment_matche_info_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="Vedi su Google Maps" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="2dp"
-        app:contentPadding="8dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/giorno_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:textColor="@color/blue_gray_800"
+            android:textSize="17sp" />
 
-            <TextView
-                android:id="@+id/partecipanti_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="Partecipanti"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
+        <TextView
+            android:id="@+id/nome_campo_partita_dettagli"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Nome Campetto"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/numero_giocatori_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/blue_gray_300"
-                android:textSize="20sp" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        <TextView
+            android:id="@+id/nomecampo_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/blue_gray_800"
+            android:textSize="17sp" />
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="2dp"
-        app:contentPadding="8dp">
+        <Button
+            android:id="@+id/fragment_matche_info_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Vedi su Google Maps" />
 
-        <LinearLayout
+
+        <TextView
+            android:id="@+id/partecipanti_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Partecipanti"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/numero_giocatori_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue_gray_300"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Tipo Incontro"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tipoincontro"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="Tipo Incontro"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/tipoincontro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/text_partecipanti_incontro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </android.support.v7.widget.CardView>
-
-</LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -22,14 +22,22 @@ import it.prochilo.salvatore.trovaildecimo.models.Partita;
 
 public class MatchesDetailsFragment extends Fragment {
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    private Partita mPartita;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.
                 inflate(R.layout.fragment_matches_details, container, false);
+        Bundle arguments = getArguments();
+        Partita mPartita = null;
+        if (arguments != null) {
+            mPartita = arguments.getParcelable(MatchesMainFragment.KEY_PARTITA_TAG);
+        }
         final Toolbar mToolbar = (Toolbar)
                 layout.findViewById(R.id.fragment_matches_details_toolbar);
         mToolbar.setTitle("Dettagli partita");
@@ -40,18 +48,20 @@ public class MatchesDetailsFragment extends Fragment {
         final TabLayout mTabLayout = (TabLayout)
                 layout.findViewById(R.id.fragment_matches_details_tablayout);
         final AdapterFragmentsTab mAdapter = new AdapterFragmentsTab(getChildFragmentManager());
-        mAdapter.addFragment(new MatchesInfoFragment().setPartita(mPartita), "Informazioni");
-        mAdapter.addFragment(new MatchesMessagesFragment(), "Messaggi");
+        //Creo i fragment passandogli la partita e li aggiungo all'Adapter
+        MatchesInfoFragment mMatchesInfoFragment = new MatchesInfoFragment();
+        MatchesMessagesFragment mMatchesMessagesFragment = new MatchesMessagesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(MatchesMainFragment.KEY_PARTITA_TAG, mPartita);
+        mMatchesInfoFragment.setArguments(bundle);
+        mMatchesMessagesFragment.setArguments(bundle);
+        mAdapter.addFragment(mMatchesInfoFragment, "Informazioni");
+        mAdapter.addFragment(mMatchesMessagesFragment, "Messaggi");
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
         return layout;
     }
-
-    public void setPartita(Partita partita) {
-        this.mPartita = partita;
-    }
-
 
     private final class AdapterFragmentsTab extends FragmentPagerAdapter {
 

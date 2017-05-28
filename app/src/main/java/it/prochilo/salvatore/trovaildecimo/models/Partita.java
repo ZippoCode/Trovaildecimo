@@ -25,6 +25,10 @@ public class Partita implements Parcelable {
         String TIPOINCONTRO = "tipoIncontro";
         String PARTECIPANTI = "partecipanti";
         String PARTECIPANTE = "partecipante #";
+        String NUM_PLAYED_ADD = "numPartecipantiAggiunti";
+        String MESSAGGI = "messaggi";
+        String MESSAGGIO_NUM = "messaggio #";
+        String NUM_MESSAGE = "numeroDiMessaggi";
     }
 
     public static final Creator<Partita> CREATOR = new Creator<Partita>() {
@@ -81,22 +85,25 @@ public class Partita implements Parcelable {
      */
     public int mDurata;
 
-    private int numMissingPlayer;
+    public int numMissingPlayer;
 
-    private static final byte PRESENT = 1;
+    public List<Message> mMessageList;
 
-    private static final byte NOT_PRESENT = 0;
+    //Rappresenta il numero dei messaggi scritti
+    public int numMessaggi;
 
     public Partita(final String id, final User user) {
         this.mId = id;
         this.mUser = user;
         mDataAggiunta = Data.getCurrentData();
         mOrarioAggiunta = Time.getCurrentTime();
-
         //Inizialmente setto l'orario dell'incontro come quelli correnti, sarà compito
         //dell'utente settarli nel modo adeguato
         mOrarioIncontro = Time.getCurrentTime();
         mDataIncontro = Data.getCurrentData();
+        //Inizializzo i messaggi
+        mMessageList = new ArrayList<>();
+        numMessaggi = 0;
     }
 
     @SuppressWarnings("unchecked")
@@ -110,11 +117,13 @@ public class Partita implements Parcelable {
         mDurata = parcel.readInt();
         mTipoIncontro = parcel.readString();
         listaPartecipanti = parcel.readArrayList(User.class.getClassLoader());
+        mMessageList = parcel.readArrayList(Message.class.getClassLoader());
     }
 
     public Partita setNumeroPartecipanti(int numPartecipanti) {
         listaPartecipanti = new ArrayList<>(numPartecipanti);
         this.numPartecipanti = numPartecipanti;
+        numMissingPlayer = this.numPartecipanti;
         return this;
     }
 
@@ -133,7 +142,6 @@ public class Partita implements Parcelable {
         return this;
     }
 
-
     public Partita setTipologia(String tipoIncontro) {
         this.mTipoIncontro = tipoIncontro;
         return this;
@@ -146,7 +154,13 @@ public class Partita implements Parcelable {
 
     public Partita addPartecipante(User utente) {
         listaPartecipanti.add(utente);
+        numMissingPlayer--;
         return this;
+    }
+
+    public synchronized void addMessage(Message message) {
+        numMessaggi++;
+        mMessageList.add(message);
     }
 
     @Override
@@ -160,12 +174,12 @@ public class Partita implements Parcelable {
         dest.writeParcelable(mUser, flags);
         dest.writeInt(numPartecipanti);
         dest.writeString(mNomeCampo);
-
         dest.writeParcelable(mOrarioIncontro, flags);
         dest.writeParcelable(mDataIncontro, flags);
         dest.writeInt(mDurata);
         dest.writeString(mTipoIncontro);
         dest.writeList(listaPartecipanti);
+        dest.writeList(mMessageList);
     }
 
     public JSONObject toJson() throws JSONException {
@@ -178,14 +192,20 @@ public class Partita implements Parcelable {
         jsonObject.put(KeysPartita.DATA, mDataIncontro.toJson());
         jsonObject.put(KeysPartita.DURATAINCONTRO, mDurata);
         jsonObject.put(KeysPartita.TIPOINCONTRO, mTipoIncontro);
-
         //Aggiungo la lista dei partecipanti
+        jsonObject.put(KeysPartita.NUM_PLAYED_ADD, listaPartecipanti.size());
         JSONObject partecipanti = new JSONObject();
         for (int i = 0; i < listaPartecipanti.size(); i++) {
             partecipanti.put(KeysPartita.PARTECIPANTE + i, listaPartecipanti.get(i).toJson());
         }
         jsonObject.put(KeysPartita.PARTECIPANTI, partecipanti);
-
+        //Aggiungo la lista dei messaggi
+        jsonObject.put(KeysPartita.NUM_MESSAGE, numMessaggi);
+        JSONObject messageList = new JSONObject();
+        for (int i = 0; i < numMessaggi; i++) {
+            messageList.put(KeysPartita.MESSAGGIO_NUM + i, mMessageList.get(i).toJson());
+        }
+        jsonObject.put(KeysPartita.MESSAGGI, messageList);
         return jsonObject;
     }
 
@@ -198,7 +218,6 @@ public class Partita implements Parcelable {
         final Data data = Data.fromJson(jsonObject.getJSONObject(KeysPartita.DATA));
         final int durataIncontro = jsonObject.getInt(KeysPartita.DURATAINCONTRO);
         final String tipoIncontro = jsonObject.getString(KeysPartita.TIPOINCONTRO);
-
         final Partita partita = new Partita(id, organizzatore)
                 .setNomeCampo(nomeCampo)
                 .setGiorno(data)
@@ -206,16 +225,19 @@ public class Partita implements Parcelable {
                 .setMinutaggio(durataIncontro)
                 .setNumeroPartecipanti(numeroPartecipanti)
                 .setTipologia(tipoIncontro);
-
         //Ricavo la lista dei partecipanti e l'aggiungo alla partita
+        final int numPlayedAdd = jsonObject.getInt(KeysPartita.NUM_PLAYED_ADD);
         final JSONObject partecipanti = jsonObject.getJSONObject(KeysPartita.PARTECIPANTI);
-        for (int i = 0; i < numeroPartecipanti; i++) {
-            try {
-                partita.addPartecipante(User
-                        .fromJson(partecipanti.getJSONObject(KeysPartita.PARTECIPANTE + i)));
-            } catch (Exception e) {
-                break;
-            }
+        for (int i = 0; i < numPlayedAdd; i++) {
+            partita.addPartecipante(
+                    User.fromJson(partecipanti.getJSONObject(KeysPartita.PARTECIPANTE + i)));
+        }
+        //Ricavo la lista dei messaggi e li aggiungo alla partita
+        final int numMessaggi = jsonObject.getInt(KeysPartita.NUM_MESSAGE);
+        final JSONObject messaggi = jsonObject.getJSONObject(KeysPartita.MESSAGGI);
+        for (int i = 0; i < numMessaggi; i++) {
+            partita.addMessage(
+                    Message.fromJson(messaggi.getJSONObject(KeysPartita.MESSAGGIO_NUM + i)));
         }
         return partita;
     }

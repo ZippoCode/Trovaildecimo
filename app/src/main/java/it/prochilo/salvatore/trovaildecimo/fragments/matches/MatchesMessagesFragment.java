@@ -8,25 +8,59 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
+import it.prochilo.salvatore.trovaildecimo.GestorePartite;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Message;
+import it.prochilo.salvatore.trovaildecimo.models.Partita;
 
 public class MatchesMessagesFragment extends Fragment {
 
+    private Partita mPartita;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_matches_messages, container, false);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mPartita = arguments.getParcelable(MatchesMainFragment.KEY_PARTITA_TAG);
+        }
         RecyclerView mRecyclerView = (RecyclerView)
                 layout.findViewById(R.id.fragment_matches_messages_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(new MessageAdapter(Dati.exampleMessage));
+        final MessageAdapter mMessageAdapter = new MessageAdapter(mPartita.mMessageList);
+        mRecyclerView.setAdapter(mMessageAdapter);
+
+        final ImageButton mImageButton = (ImageButton)
+                layout.findViewById(R.id.fragment_matches_messages_imagebutton);
+        final EditText mEditText = (EditText)
+                layout.findViewById(R.id.fragment_matches_messages_edittext);
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * Leggo il messaggio e lo elimino dal EditText, successivamente creo un Messagge
+                 * e lo aggiungo alla lista dei messaggi della partita
+                 * E successivamente notifico l'adapter affinché aggiorni l'elenco dei messaggi
+                 */
+                final String testoMessaggio = mEditText.getText().toString();
+                mEditText.setText("");
+                final Message mNuovoMessaggio = new Message(mPartita.mUser, testoMessaggio);
+                mPartita.addMessage(mNuovoMessaggio);
+                mMessageAdapter.notifyDataSetChanged();
+                //Ora aggiungo la partita che essendo già presente non farà altro che salvare i
+                // nuovi messaggi. Dunque questa parte va rivista
+                GestorePartite.get().addPartita(mPartita);
+            }
+        });
         return layout;
     }
 

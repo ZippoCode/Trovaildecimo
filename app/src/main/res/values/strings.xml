@@ -9,8 +9,6 @@
     <string name="area_messaggi_text">Cerca campo</string>
     <string name="amici_menu_text">Amici</string>
     <string name="impostazioni_text">Impostazioni</string>
-    <string name="informazioni_menu_text">Informazioni</string>
-    <string name="contattami_menu_text">Contattami</string>
 
     <!-- Stirng User Profile Details -->
     <string name="user_informazioni_personali_text">Informazioni personali: </string>
@@ -51,5 +49,11 @@
     <string name="centoventi_minuti_text">120</string>
     <string name="add_partencipant_button_text">Aggiungi partecipanti</string>
     <string name="avvia_nuova_partita_text">Crea partita</string>
+
+
+    <!-- Setting Strings -->
+    <string name="setting_infomation_app_title">Informazioni generali</string>
+    <string name="title_version">Versione</string>
+    <string name="title_info_legali"></string>
 
 </resources>

@@ -41,9 +41,8 @@ public final class GestorePartite {
         return sInstance;
     }
 
-    public
     @NonNull
-    List<Partita> getFavoritePartite() {
+    public List<Partita> getFavoritePartite() {
         if (!mDirty && mFavoriteCache != null) {
             return mFavoriteCache;
         }

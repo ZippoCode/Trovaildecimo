@@ -15,8 +15,6 @@ public final class Dati {
     private static Dati mIstance = new Dati();
 
     public static User user;
-    public static Partita partita;
-    public static List<Message> exampleMessage;
     public static List<User> exampleAmici;
 
     public Partita newPartita;
@@ -29,21 +27,6 @@ public final class Dati {
                     .addProprietas(i, "City #" + i, "Attaccante")
                     .addFeedBack(5);
             user.addFriend(amico);
-        }
-
-        partita = new Partita("1dsf6a", user)
-                .setGiorno(new Data(15, 4, 2017))
-                .setTime(new Time(15, 47))
-                .setTipologia("Normale")
-                .setMinutaggio(60)
-                .setNomeCampo("Americano")
-                .setNumeroPartecipanti(12);
-
-        //
-
-        exampleMessage = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            exampleMessage.add(new Message(user, "Questo è un messaggio di prova, ed è il numero #" + i));
         }
 
         exampleAmici = new ArrayList<>();
@@ -62,7 +45,7 @@ public final class Dati {
                 Dati.user);
     }
 
-    public static Dati getInstance(){
+    public static Dati getInstance() {
         return mIstance;
     }
 

@@ -29,15 +29,6 @@
             android:icon="@drawable/ic_settings_applications_white_24dp"
             android:title="@string/impostazioni_text" />
 
-        <item
-            android:id="@+id/contattami_menu"
-            android:icon="@drawable/ic_email_white_24dp"
-            android:title="@string/contattami_menu_text" />
-
-        <item
-            android:id="@+id/informazioni_menu"
-            android:icon="@drawable/ic_info_white_24dp"
-            android:title="@string/informazioni_menu_text" />
     </group>
 
 </menu>

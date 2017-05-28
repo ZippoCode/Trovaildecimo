@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +34,9 @@ public class MatchesMainFragment extends Fragment {
 
     public static final String TAG = MatchesMainFragment.class.getSimpleName();
 
-    private static MainActivity mMainActivity;
+    public static final String KEY_PARTITA_TAG = "PARTITA_TAG";
+
+    private MainActivity mMainActivity;
 
     @Override
     public void onAttach(Context context) {
@@ -45,20 +50,32 @@ public class MatchesMainFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         final View layout = inflater.inflate(R.layout.fragment_matches_main, container, false);
         //Toolbar
-        final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.fragment_partite_toolbar);
+        final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.fragment_match_main_toolbar);
         mToolbar.setTitle(getString(R.string.toolbar_matches_main_fragment));
-
         //Set IconNavigationDrawer
         Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
+        //Setto lo SwipeRefreshLayout
+        final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout)
+                layout.findViewById(R.id.fragment_match_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Qui dovrà cercare visualizzare eventuali aggiornamenti
+                // (...)
 
+                //Ci permette di notificare al SwipeRefreshLayout che l'operazione di refresh si è
+                //conclusa e quindi la freccia rotante può essere fatta sparire
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
         final RecyclerView mRecyclerView = (RecyclerView)
                 layout.findViewById(R.id.partite_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        final PartitaAdapter mAdapter = new PartitaAdapter(GestorePartite.get(getContext()));
+        final MatchAdapter mAdapter = new MatchAdapter(GestorePartite.get(getContext()), this);
         mRecyclerView.setAdapter(mAdapter);
 
         final FloatingActionButton mFloatingActionButton = (FloatingActionButton)
-                layout.findViewById(R.id.nuova_partita);
+                layout.findViewById(R.id.fragment_matches_main_fab);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,79 +100,94 @@ public class MatchesMainFragment extends Fragment {
     /**
      * PartitaViewHolder
      */
-    private final static class PartitaViewHolder extends RecyclerView.ViewHolder {
+    private final class MatchViewHolder extends RecyclerView.ViewHolder {
 
         private MatchesDetailsFragment mPartitaDetailsFragment;
-        private TextView organizzatore, luogo, orario, giorno;
-        private LinearLayout card_view_header;
-        private Button dettagli_partita_button;
+        private TextView mOrganizzatore, mLuogo, mTime, mDay;
+        private TextView mNumPlayedMatch, mNumMissingPlayedMatch;
+        private LinearLayout mCardViewHeader;
+        private Button mMatchDetailsButton;
+        private int mColorNormalMatch, mColorSfidaMatch;
 
-        private int blue, red;
-
-        private PartitaViewHolder(View itemView) {
+        private MatchViewHolder(final FragmentManager fragmentManager, final View itemView) {
             super(itemView);
-            organizzatore = (TextView) itemView.findViewById(R.id.card_view_organizzatore_text);
-            luogo = (TextView) itemView.findViewById(R.id.card_view_luogo_text);
-            orario = (TextView) itemView.findViewById(R.id.card_view_ora_text);
-            giorno = (TextView) itemView.findViewById(R.id.card_view_giorno_text);
-            card_view_header = (LinearLayout) itemView.findViewById(R.id.card_view_header);
-            card_view_header.setOnClickListener(new View.OnClickListener() {
+            mOrganizzatore = (TextView) itemView.findViewById(R.id.card_view_organizzatore_text);
+            mLuogo = (TextView) itemView.findViewById(R.id.card_view_luogo_text);
+            mTime = (TextView) itemView.findViewById(R.id.card_view_ora_text);
+            mDay = (TextView) itemView.findViewById(R.id.card_view_giorno_text);
+            mCardViewHeader = (LinearLayout) itemView.findViewById(R.id.card_view_header);
+            mNumPlayedMatch = (TextView) itemView.findViewById(R.id.card_view_numPartecipanti);
+            mNumMissingPlayedMatch = (TextView) itemView.findViewById(R.id.card_view_numPlayedMissing);
+            mMatchDetailsButton = (Button) itemView.findViewById(R.id.dettagli_partita_button);
+            // Setto il listener per visualizzare le informazioni sull'organizzatore quando l'utente
+            // clicca sull'intestazione della CardView
+            mCardViewHeader.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    ProfiloAmicoActivity.setUtente(Dati.partita.mUser);
+                    ProfiloAmicoActivity.setUtente(Dati.user);
                     context.startActivity(new Intent(context, ProfiloAmicoActivity.class));
                 }
             });
-            mPartitaDetailsFragment = new MatchesDetailsFragment();
-            dettagli_partita_button = (Button) itemView.findViewById(R.id.dettagli_partita_button);
-            dettagli_partita_button.setOnClickListener(new View.OnClickListener() {
+            mMatchDetailsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mMainActivity.showFragment(mPartitaDetailsFragment);
+                    fragmentManager.beginTransaction()
+                            .addToBackStack(MatchesMainFragment.TAG)
+                            .replace(R.id.anchor_point, mPartitaDetailsFragment)
+                            .commit();
                 }
             });
 
-            blue = itemView.getResources().getColor(R.color.blue_700);
-            red = itemView.getResources().getColor(R.color.red_700);
+            mColorNormalMatch = ContextCompat.getColor(itemView.getContext(), R.color.blue_700);
+            mColorSfidaMatch = ContextCompat.getColor(itemView.getContext(), R.color.red_700);
         }
 
 
         private void bind(final Partita partita) {
-            organizzatore.setText(partita.mUser.mName + " " + partita.mUser.mSurname);
-            luogo.setText(partita.mNomeCampo);
-            orario.setText(partita.mOrarioIncontro.toString());
-            giorno.setText(partita.mDataIncontro.toString());
-            mPartitaDetailsFragment.setPartita(partita);
+            mOrganizzatore.setText(partita.mUser.mName + " " + partita.mUser.mSurname);
+            mLuogo.setText(partita.mNomeCampo);
+            mTime.setText(partita.mOrarioIncontro.toString());
+            mDay.setText(partita.mDataIncontro.toString());
             if (partita.mTipoIncontro.equals("Normale")) {
-                card_view_header.setBackgroundColor(blue);
+                mCardViewHeader.setBackgroundColor(mColorNormalMatch);
             } else
-                card_view_header.setBackgroundColor(red);
+                mCardViewHeader.setBackgroundColor(mColorSfidaMatch);
+            mNumPlayedMatch.setText("Numero partecipanti: " + partita.numPartecipanti);
+            mNumMissingPlayedMatch.setText("Giocatori mancanti: " + partita.numMissingPlayer);
+            //Creo il Fragment che contiene i dettagli della partita e gli passo le informazioni
+            mPartitaDetailsFragment = new MatchesDetailsFragment();
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(KEY_PARTITA_TAG, partita);
+            mPartitaDetailsFragment.setArguments(arguments);
         }
     }
 
     /**
      * PartitaAdapter
      */
-    private final static class PartitaAdapter extends RecyclerView.Adapter<PartitaViewHolder> {
+    private final class MatchAdapter extends RecyclerView.Adapter<MatchViewHolder> {
 
         private final GestorePartite mGestorePartite;
+        private Fragment mFragment;
         private List<Partita> mModel;
 
-        PartitaAdapter(final GestorePartite gestorePartite) {
+        private MatchAdapter(final GestorePartite gestorePartite, final Fragment fragment) {
             mGestorePartite = gestorePartite;
+            this.mFragment = fragment;
+            //Prendo le partite preferite
             mModel = mGestorePartite.getFavoritePartite();
         }
 
         @Override
-        public PartitaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             final View layout = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.card_view_partita, parent, false);
-            return new PartitaViewHolder(layout);
+            return new MatchViewHolder(mFragment.getFragmentManager(), layout);
         }
 
         @Override
-        public void onBindViewHolder(PartitaViewHolder holder, int position) {
+        public void onBindViewHolder(MatchViewHolder holder, int position) {
             mModel = mGestorePartite.getFavoritePartite();
             holder.bind(mModel.get(position));
         }

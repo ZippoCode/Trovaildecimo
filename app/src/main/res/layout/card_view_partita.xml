@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view_partita"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginBottom="@dimen/margin_card_view_top_bottom"
     android:layout_marginLeft="@dimen/margin_card_view_right_left"
@@ -14,7 +14,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/card_view_header"
@@ -119,6 +119,19 @@
                 android:textColor="@color/blue_gray_500"
                 android:textSize="18sp" />
 
+            <TextView
+                android:id="@+id/card_view_numPartecipanti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card_view_luogo_text"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/card_view_numPlayedMissing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card_view_numPartecipanti"
+                android:textSize="18sp" />
         </RelativeLayout>
 
         <Button
