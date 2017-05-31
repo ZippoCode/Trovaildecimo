@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
-import it.prochilo.salvatore.trovaildecimo.GestorePartite;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.activities.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
@@ -69,11 +68,14 @@ public class AddMatchUserFragment extends Fragment {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Aggiungo la partita
-                GestorePartite.get().addPartita(mPartita);
+                //Aggiungo la partita a Firebase e successivamente devo aggingerla anche sul
+                //al database SQL
+                mPartita.writeToDatabaseReference();
                 //Ritorno alla schermata principale
                 Context context = getContext();
-                startActivity(new Intent(context, MainActivity.class));
+                Intent backToMainActivity = new Intent(context, MainActivity.class);
+                backToMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(backToMainActivity);
             }
         });
         return layout;

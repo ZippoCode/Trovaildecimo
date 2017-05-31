@@ -7,7 +7,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Rappresenta la Data di un incontro
@@ -22,11 +24,11 @@ public final class Data implements Parcelable {
         String ANNO = "anno";
     }
 
-    public final int mGiorno, mMese, mAnno;
+    public int mGiorno, mMese, mAnno;
 
-    public final String nomeGiorno;
+    public String nomeGiorno;
 
-    public final String nomeMese;
+    public String nomeMese;
 
     public static final Creator<Data> CREATOR = new Creator<Data>() {
         @Override
@@ -39,6 +41,11 @@ public final class Data implements Parcelable {
             return new Data[0];
         }
     };
+
+    //Necessarrio per FirebaseDatabase
+    public Data() {
+
+    }
 
     public Data(final int giorno, final int mese, final int anno) {
         if (giorno < 0 || giorno > 31 || mese < 0 || mese > 12)

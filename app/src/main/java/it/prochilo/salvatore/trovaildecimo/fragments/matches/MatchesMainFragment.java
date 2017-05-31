@@ -12,17 +12,28 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
-import it.prochilo.salvatore.trovaildecimo.GestorePartite;
+import it.prochilo.salvatore.trovaildecimo.activities.ChooserActivity;
 import it.prochilo.salvatore.trovaildecimo.activities.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.fragments.add_match.AddMatchActivity;
 import it.prochilo.salvatore.trovaildecimo.activities.ProfiloAmicoActivity;
@@ -38,10 +49,14 @@ public class MatchesMainFragment extends Fragment {
 
     private MainActivity mMainActivity;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mMainActivity = (MainActivity) context;
+    private RecyclerView mRecyclerView;
+
+    private RecyclerView.Adapter mAdapter;
+
+    private DatabaseReference mDatabaseReference;
+
+    public MatchesMainFragment() {
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
     @Nullable
@@ -52,6 +67,29 @@ public class MatchesMainFragment extends Fragment {
         //Toolbar
         final Toolbar mToolbar = (Toolbar) layout.findViewById(R.id.fragment_match_main_toolbar);
         mToolbar.setTitle(getString(R.string.toolbar_matches_main_fragment));
+        mToolbar.inflateMenu(R.menu.main_toolbar_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            //Può essere migliorato, facendo implementare la classe e ridefinendo il metodo
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.main_toolbar_menu_order:
+                        //Deve essere aggiunta l'opzione per ordinare
+                        break;
+                    case R.id.main_toolbar_menu_logout:
+                        FirebaseAuth.getInstance().signOut();
+                        Log.d(TAG, "Disconnessione");
+                        //Deve essere convertito in String
+                        Toast.makeText(getContext(), "Disconnessione...", Toast.LENGTH_SHORT)
+                                .show();
+                        startActivity(new Intent(getContext(), ChooserActivity.class));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Not fount");
+                }
+                return true;
+            }
+        });
         //Set IconNavigationDrawer
         Utils.setActionBarDrawerToggle(mMainActivity, mToolbar);
         //Setto lo SwipeRefreshLayout
@@ -68,12 +106,8 @@ public class MatchesMainFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-        final RecyclerView mRecyclerView = (RecyclerView)
-                layout.findViewById(R.id.partite_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        final MatchAdapter mAdapter = new MatchAdapter(GestorePartite.get(getContext()), this);
-        mRecyclerView.setAdapter(mAdapter);
-
+        mRecyclerView = (RecyclerView) layout.findViewById(R.id.partite_recycler_view);
+        mAdapter = new MatchAdapter(this);
         final FloatingActionButton mFloatingActionButton = (FloatingActionButton)
                 layout.findViewById(R.id.fragment_matches_main_fab);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +129,34 @@ public class MatchesMainFragment extends Fragment {
             }
         });
         return layout;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mMainActivity = (MainActivity) context;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mAdapter);
+        mDatabaseReference.child("matches").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnaphot : dataSnapshot.getChildren()) {
+                    //Ricavo la lista delle partite. Controllo se la partita è già presente
+                    Partita partita = postSnaphot.getValue(Partita.class);
+                    ((MatchAdapter) mAdapter).addMatches(partita);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
@@ -133,7 +195,6 @@ public class MatchesMainFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     fragmentManager.beginTransaction()
-                            .addToBackStack(MatchesMainFragment.TAG)
                             .replace(R.id.anchor_point, mPartitaDetailsFragment)
                             .commit();
                 }
@@ -168,16 +229,21 @@ public class MatchesMainFragment extends Fragment {
      */
     private final class MatchAdapter extends RecyclerView.Adapter<MatchViewHolder> {
 
-        private final GestorePartite mGestorePartite;
         private Fragment mFragment;
         private List<Partita> mModel;
 
-        private MatchAdapter(final GestorePartite gestorePartite, final Fragment fragment) {
-            mGestorePartite = gestorePartite;
+        private MatchAdapter(final Fragment fragment) {
             this.mFragment = fragment;
             //Prendo le partite preferite
-            mModel = mGestorePartite.getFavoritePartite();
+            //mModel = mGestorePartite.getFavoritePartite();
+            mModel = new ArrayList<>();
         }
+
+        private void addMatches(Partita match) {
+            mModel.add(match);
+            notifyItemInserted(mModel.size() - 1);
+        }
+
 
         @Override
         public MatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -188,7 +254,6 @@ public class MatchesMainFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MatchViewHolder holder, int position) {
-            mModel = mGestorePartite.getFavoritePartite();
             holder.bind(mModel.get(position));
         }
 

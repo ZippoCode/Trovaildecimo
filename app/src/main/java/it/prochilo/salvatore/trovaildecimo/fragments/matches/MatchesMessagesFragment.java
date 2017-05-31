@@ -13,9 +13,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Random;
 
-import it.prochilo.salvatore.trovaildecimo.Dati;
-import it.prochilo.salvatore.trovaildecimo.GestorePartite;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Message;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
@@ -23,6 +22,7 @@ import it.prochilo.salvatore.trovaildecimo.models.Partita;
 public class MatchesMessagesFragment extends Fragment {
 
     private Partita mPartita;
+
 
     @Nullable
     @Override
@@ -33,13 +33,14 @@ public class MatchesMessagesFragment extends Fragment {
         if (arguments != null) {
             mPartita = arguments.getParcelable(MatchesMainFragment.KEY_PARTITA_TAG);
         }
-        RecyclerView mRecyclerView = (RecyclerView)
+
+        final RecyclerView mRecyclerView = (RecyclerView)
                 layout.findViewById(R.id.fragment_matches_messages_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         final MessageAdapter mMessageAdapter = new MessageAdapter(mPartita.mMessageList);
         mRecyclerView.setAdapter(mMessageAdapter);
 
-        final ImageButton mImageButton = (ImageButton)
+         final ImageButton mImageButton = (ImageButton)
                 layout.findViewById(R.id.fragment_matches_messages_imagebutton);
         final EditText mEditText = (EditText)
                 layout.findViewById(R.id.fragment_matches_messages_edittext);
@@ -48,17 +49,17 @@ public class MatchesMessagesFragment extends Fragment {
             public void onClick(View v) {
                 /**
                  * Leggo il messaggio e lo elimino dal EditText, successivamente creo un Messagge
-                 * e lo aggiungo alla lista dei messaggi della partita
+                 * e lo aggiungo alla lista dei messaggi della partita e lo scrivo sul Database.
                  * E successivamente notifico l'adapter affinché aggiorni l'elenco dei messaggi
                  */
                 final String testoMessaggio = mEditText.getText().toString();
                 mEditText.setText("");
-                final Message mNuovoMessaggio = new Message(mPartita.mUser, testoMessaggio);
+                final Message mNuovoMessaggio = new Message
+                        (String.valueOf(new Random().nextInt(Integer.MAX_VALUE)),
+                                mPartita.mUser, testoMessaggio);
                 mPartita.addMessage(mNuovoMessaggio);
+                mPartita.writeToDatabaseReference();
                 mMessageAdapter.notifyDataSetChanged();
-                //Ora aggiungo la partita che essendo già presente non farà altro che salvare i
-                // nuovi messaggi. Dunque questa parte va rivista
-                GestorePartite.get().addPartita(mPartita);
             }
         });
         return layout;
@@ -95,7 +96,6 @@ public class MatchesMessagesFragment extends Fragment {
             View layout = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.message_layout, parent, false);
             return new MessageViewHolder(layout);
-
         }
 
         @Override

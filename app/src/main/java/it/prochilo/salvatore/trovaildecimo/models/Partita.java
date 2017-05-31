@@ -3,6 +3,9 @@ package it.prochilo.salvatore.trovaildecimo.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,10 +27,10 @@ public class Partita implements Parcelable {
         String ORARIO = "orario";
         String TIPOINCONTRO = "tipoIncontro";
         String PARTECIPANTI = "partecipanti";
-        String PARTECIPANTE = "partecipante #";
+        String PARTECIPANTE = "partecipante num";
         String NUM_PLAYED_ADD = "numPartecipantiAggiunti";
         String MESSAGGI = "messaggi";
-        String MESSAGGIO_NUM = "messaggio #";
+        String MESSAGGIO_NUM = "messaggio num";
         String NUM_MESSAGE = "numeroDiMessaggi";
     }
 
@@ -46,7 +49,7 @@ public class Partita implements Parcelable {
     /**
      * L'organizzatore della partita
      */
-    public final User mUser;
+    public User mUser;
     /**
      * L'identificatore delle partite che deve essere univoco
      */
@@ -54,11 +57,11 @@ public class Partita implements Parcelable {
     /**
      * La lista dei partecipanti all'incontro
      */
-    public List<User> listaPartecipanti;
+    public List<User> listaPartecipanti = new ArrayList<>();
     /**
      * Il numero di partecipanti della partita
      */
-    public int numPartecipanti;
+    public Integer numPartecipanti;
     /**
      * Il nome del campo nel quale si disputerà la partita
      */
@@ -70,27 +73,40 @@ public class Partita implements Parcelable {
     /**
      * La rappresenta il giorno nel quale verrà giocato l'incontro
      */
-
-    public Time mOrarioAggiunta;
-
-    public Data mDataAggiunta;
-
     public Data mDataIncontro;
     /**
-     * La tipologia dell'Incontro è può essere o normale o sfida
+     * Rappresenta l'orario nel quale è stata aggiunta la partita
+     */
+    public Time mOrarioAggiunta;
+    /**
+     * Rappresenta la data nella quale è stata aggiunta la partita
+     */
+    public Data mDataAggiunta;
+    /**
+     * La tipologia dell'incontropuò essere o normale o sfida
      */
     public String mTipoIncontro;
     /**
      * La durata dell'incontro
      */
-    public int mDurata;
+    public Integer mDurata;
+    /**
+     * Il numero di giocatori che mancano al completamento del numero di giocatori
+     */
+    public Integer numMissingPlayer;
+    /**
+     * La lista dei messaggi che vengono scambiati dai i partecipanti all'incontro
+     */
+    public List<Message> mMessageList = new ArrayList<>();
+    /**
+     * Il numero di messaggi scambiati dai partecipanti
+     */
+    public Integer numMessaggi;
 
-    public int numMissingPlayer;
+    //Ho bisogno di questo costruttore per Firebase
+    public Partita() {
 
-    public List<Message> mMessageList;
-
-    //Rappresenta il numero dei messaggi scritti
-    public int numMessaggi;
+    }
 
     public Partita(final String id, final User user) {
         this.mId = id;
@@ -101,9 +117,8 @@ public class Partita implements Parcelable {
         //dell'utente settarli nel modo adeguato
         mOrarioIncontro = Time.getCurrentTime();
         mDataIncontro = Data.getCurrentData();
-        //Inizializzo i messaggi
-        mMessageList = new ArrayList<>();
         numMessaggi = 0;
+
     }
 
     @SuppressWarnings("unchecked")
@@ -121,7 +136,6 @@ public class Partita implements Parcelable {
     }
 
     public Partita setNumeroPartecipanti(int numPartecipanti) {
-        listaPartecipanti = new ArrayList<>(numPartecipanti);
         this.numPartecipanti = numPartecipanti;
         numMissingPlayer = this.numPartecipanti;
         return this;
@@ -242,4 +256,7 @@ public class Partita implements Parcelable {
         return partita;
     }
 
+    public void writeToDatabaseReference() {
+        FirebaseDatabase.getInstance().getReference("matches/".concat(mId)).setValue(Partita.this);
+    }
 }

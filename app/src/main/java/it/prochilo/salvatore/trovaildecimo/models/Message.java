@@ -9,6 +9,7 @@ import org.json.JSONObject;
 public class Message implements Parcelable {
 
     private interface KeysMessage {
+        String ID = "messageId";
         String USER = "user";
         String TEXT = "text";
     }
@@ -26,16 +27,26 @@ public class Message implements Parcelable {
     };
 
     /**
+     * Identifica il messaggio
+     */
+    public String mId;
+    /**
      * Il mittente del Messaggio
      */
-    public final User mUser;
+    public User mUser;
 
     /**
      * Il testo di ogni messaggio
      */
     public String mText;
 
-    public Message(final User user, final String text) {
+    //Necessario per Firebase
+    public Message() {
+
+    }
+
+    public Message(final String id, final User user, final String text) {
+        this.mId = id;
         this.mUser = user;
         this.mText = text;
     }
@@ -47,15 +58,17 @@ public class Message implements Parcelable {
 
     public JSONObject toJson() throws JSONException {
         JSONObject jsonObject = new JSONObject();
+        jsonObject.put(KeysMessage.ID, mId);
         jsonObject.put(KeysMessage.USER, mUser.toJson());
         jsonObject.put(KeysMessage.TEXT, mText);
         return jsonObject;
     }
 
     public static Message fromJson(final JSONObject jsonObject) throws JSONException {
+        final String id = jsonObject.getString(KeysMessage.ID);
         final User user = User.fromJson(jsonObject.getJSONObject(KeysMessage.USER));
         final String text = jsonObject.getString(KeysMessage.TEXT);
-        return new Message(user, text);
+        return new Message(id, user, text);
     }
 
     @Override

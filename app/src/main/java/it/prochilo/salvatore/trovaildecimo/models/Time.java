@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Rappresenta l'orario di una partita. La classe contiene due parametri di tipo intero
@@ -21,7 +23,7 @@ public final class Time implements Parcelable {
         String MINUTE = "minuto";
     }
 
-    private final int mHour, mMinute;
+    public int mHour, mMinute;
 
     public static final Creator<Time> CREATOR = new Creator<Time>() {
         @Override
@@ -34,6 +36,11 @@ public final class Time implements Parcelable {
             return new Time[size];
         }
     };
+
+    //Necessario per Firebase
+    public Time() {
+
+    }
 
     public Time(final int hour, final int minute) {
         if ((hour < 0 || hour > 23) || (minute < 0 || minute > 59))

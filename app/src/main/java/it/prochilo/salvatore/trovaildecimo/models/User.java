@@ -2,12 +2,15 @@ package it.prochilo.salvatore.trovaildecimo.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class User implements Parcelable {
 
@@ -23,8 +26,8 @@ public class User implements Parcelable {
         String FEEDBACK = "feedback";
     }
 
-    private String mId;
-    private String mEmail;
+    public String mId;
+    public String mEmail;
     public String mName;
     public String mSurname;
     public int mAge;
@@ -49,6 +52,11 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    //Necessario per FirebaseDatabase
+    public User() {
+
+    }
 
     public User(String id, String email, String name, String surname) {
         this.mId = id;
@@ -170,5 +178,4 @@ public class User implements Parcelable {
         jsonObject.put(KeysUser.FEEDBACK, mFeedback);
         return jsonObject;
     }
-
 }
