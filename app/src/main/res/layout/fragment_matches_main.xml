@@ -15,9 +15,10 @@
             android:id="@+id/fragment_match_main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:elevation="4dp" />
+            app:elevation="4dp" />
 
     </android.support.design.widget.AppBarLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fragment_matches_main_fab"
@@ -25,11 +26,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:backgroundTint="?attr/colorPrimary"
         android:clickable="true"
         android:src="@drawable/ic_add_white_24dp"
+        app:backgroundTint="?attr/colorPrimary"
         app:fabSize="normal"
         app:layout_anchorGravity="bottom|right|end" />
+
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/fragment_match_main_swipe_refresh_layout"
@@ -47,4 +49,5 @@
             android:scrollbars="vertical"
             tools:listitem="@layout/card_view_partita" />
     </android.support.v4.widget.SwipeRefreshLayout>
+
 </android.support.design.widget.CoordinatorLayout>

@@ -5,7 +5,7 @@
         <EditTextPreference
             android:key="version"
             android:selectable="false"
-            android:summary="0.4.3"
+            android:summary="1.0"
             android:title="Versione" />
         <EditTextPreference
             android:selectable="false"

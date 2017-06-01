@@ -143,8 +143,8 @@ public class AddMatchUserFragment extends Fragment {
 
         public UserToAddFragment() {
             customModel = new ArrayList<>();
-            for (int i = 0; i < Dati.user.mFriendsList.size(); i++) {
-                customModel.add(Dati.user.mFriendsList.get(i));
+            for (int i = 0; i < mPartita.mUser.mFriendsList.size(); i++) {
+                customModel.add(mPartita.mUser.mFriendsList.get(i));
             }
         }
 

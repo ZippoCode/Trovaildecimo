@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.Random;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
@@ -32,7 +33,9 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
 
     private static final int MIN_NUM_PARTECIPANT = 10;
 
-    private Partita partita = Dati.createNuovaPartita();
+    private Partita mMatch = new Partita(
+            String.valueOf(new Random().nextInt(Integer.MAX_VALUE)),
+            Dati.user);
 
     private TextView mOra, mData;
 
@@ -54,8 +57,8 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
         //Set Orario e Data
         mOra = (TextView) layout.findViewById(R.id.nuova_partita_orario);
         mData = (TextView) layout.findViewById(R.id.nuova_partita_data);
-        mOra.setText(partita.mOrarioIncontro.toString());
-        mData.setText(partita.mDataIncontro.toString());
+        mOra.setText(mMatch.mOrarioIncontro.toString());
+        mData.setText(mMatch.mDataIncontro.toString());
         mOra.setOnClickListener(this);
         mData.setOnClickListener(this);
 
@@ -71,7 +74,7 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
         mNormale = (RadioButton) layout.findViewById(R.id.normale_radio_button);
         mSfida = (RadioButton) layout.findViewById(R.id.sfida_radio_button);
 
-        //Setto la durata della partita
+        //Setto la durata della mMatch
         mSessanta = (RadioButton) layout.findViewById(R.id.sessanta_minuti_button);
         mNovanta = (RadioButton) layout.findViewById(R.id.novanta_minuti_button);
         mCentoVenti = (RadioButton) layout.findViewById(R.id.centoventi_minuti_button);
@@ -93,9 +96,9 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
             case R.id.fragment_add_match_details_button:
                 setupMatch();
 
-                //Passaggio dell paramentro partita appena creato
+                //Passaggio dell paramentro mMatch appena creato
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("partita", partita);
+                bundle.putParcelable("partita", mMatch);
                 Fragment nextFragment = new AddMatchUserFragment();
                 nextFragment.setArguments(bundle);
 
@@ -114,7 +117,7 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
      */
     private void setupSeekBar() {
         //Setto un valore iniziale nel caso nel quale l'utente non toccasse la barra
-        partita.setNumeroPartecipanti(MIN_NUM_PARTECIPANT);
+        mMatch.setNumeroPartecipanti(MIN_NUM_PARTECIPANT);
         mTextSeekBar.setText(getString(R.string.numero_giocatori_text) + ": "
                 + MIN_NUM_PARTECIPANT);
 
@@ -137,7 +140,7 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //Notifica che l'utente ha arrestato la gesture sulla SeekBar
-                partita.setNumeroPartecipanti(value);
+                mMatch.setNumeroPartecipanti(value);
                 mTextSeekBar.setText(getString(R.string.numero_giocatori_text) + ": " + value);
             }
         });
@@ -150,8 +153,8 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        partita = partita.setTime(new Time(i, i1));
-                        mOra.setText(partita.mOrarioIncontro.toString());
+                        mMatch = mMatch.setTime(new Time(i, i1));
+                        mOra.setText(mMatch.mOrarioIncontro.toString());
                     }
                 }, currentOra, currentMinute, true);
         timePickerDialog.show();
@@ -165,26 +168,26 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        partita = partita.setGiorno(new Data(i2, i1, i));
-                        mData.setText(partita.mDataIncontro.toString());
+                        mMatch = mMatch.setGiorno(new Data(i2, i1, i));
+                        mData.setText(mMatch.mDataIncontro.toString());
                     }
                 }, currentAnno, currentMese, currentGiorno);
         datePickerDialog.show();
     }
 
     private void setupMatch() {
-        partita = partita.setNomeCampo(luogo.getText().toString());
+        mMatch = mMatch.setNomeCampo(luogo.getText().toString());
         if (mNormale.isChecked()) {
-            partita.setTipologia("Normale");
+            mMatch.setTipologia("Normale");
         } else if (mSfida.isChecked()) {
-            partita.setTipologia("Sfida");
+            mMatch.setTipologia("Sfida");
         }
         if (mSessanta.isChecked()) {
-            partita.setMinutaggio(60);
+            mMatch.setMinutaggio(60);
         } else if (mNovanta.isChecked()) {
-            partita.setMinutaggio(90);
+            mMatch.setMinutaggio(90);
         } else if (mCentoVenti.isChecked()) {
-            partita.setMinutaggio(120);
+            mMatch.setMinutaggio(120);
         }
     }
 }

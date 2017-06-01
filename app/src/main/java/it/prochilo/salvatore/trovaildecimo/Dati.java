@@ -1,5 +1,9 @@
 package it.prochilo.salvatore.trovaildecimo;
 
+import android.util.Log;
+
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,15 +24,6 @@ public final class Dati {
     public Partita newPartita;
 
     private Dati() {
-        user = new User("145872", "prochilo.salvatore@gmail.com", "Salvatore", "Prochilo")
-                .addProprietas(24, "Taurianova", "Attaccante");
-        for (int i = 0; i < 25; i++) {
-            User amico = new User("584829" + i, "prova", "Nome #" + i, "Cognome #" + i)
-                    .addProprietas(i, "City #" + i, "Attaccante")
-                    .addFeedBack(5);
-            user.addFriend(amico);
-        }
-
         exampleAmici = new ArrayList<>();
         exampleAmici.add(new User("5215151", "email1@gmail.com", "Antonio", "Condello")
                 .addProprietas(18, "Taurianova", "Portiere"));
@@ -40,17 +35,7 @@ public final class Dati {
                 .addProprietas(18, "Taurianova", "Centrocampista"));
     }
 
-    public static Partita createNuovaPartita() {
-        return new Partita(String.valueOf(new Random().nextInt(Integer.MAX_VALUE)),
-                Dati.user);
-    }
-
-    public static Dati getInstance() {
-        return mIstance;
-    }
-
     public void setPartita(Partita partita) {
         newPartita = partita;
     }
-
 }

@@ -7,6 +7,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,16 +27,44 @@ public class User implements Parcelable {
         String FEEDBACK = "feedback";
     }
 
-    public String mId;
-    public String mEmail;
+    /**
+     * L'identificativo dell'utente
+     */
+    private String mId;
+    /**
+     * L'email con il quale l'utente si è registrato
+     */
+    private String mEmail;
+    /**
+     * Il nome e il cognome dell'utente
+     */
     public String mName;
     public String mSurname;
+    /**
+     * L'età dell'utente
+     */
     public int mAge;
+    /**
+     * La città dell'utente
+     */
     public String mCity;
+    /**
+     * Il ruolo dell'utente. In questo momento è di tipo String ma deve essere modificato
+     * in un valore predefinito tramite un singleton
+     */
     public String mRole;
+    /**
+     * Il numero di incontri che l'utente ha disputato
+     */
     public int mNumPlayedGame = 0;
+    /**
+     * Il feedback dell'utente
+     */
     public float mFeedback;
-    public List<User> mFriendsList = null;
+    /**
+     * La lista degli amici
+     */
+    public List<User> mFriendsList = new ArrayList<>();
 
     private static final byte PRESENT = 1;
     private static final byte NOT_PRESENT = 0;
@@ -103,9 +132,6 @@ public class User implements Parcelable {
     }
 
     public void addFriend(User user) {
-        if (mFriendsList == null) {
-            mFriendsList = new LinkedList<>();
-        }
         mFriendsList.add(user);
     }
 

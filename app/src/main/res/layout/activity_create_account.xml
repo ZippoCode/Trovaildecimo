@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
+
+    <EditText
+        android:id="@+id/activity_create_account_name_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Inserisci il nome" />
+
+    <EditText
+        android:id="@+id/activity_create_account_surname_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Inserisci il cognome" />
+
+    <EditText
+        android:id="@+id/activity_create_account_age_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Inserisci l'età"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/activity_create_account_city_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Inserisci la città" />
+
+    <EditText
+        android:id="@+id/activity_create_account_role_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Inserisci il ruolo" />
+
+    <Button
+        android:id="@+id/activity_create_account_conferm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Conferma"/>
+</LinearLayout>

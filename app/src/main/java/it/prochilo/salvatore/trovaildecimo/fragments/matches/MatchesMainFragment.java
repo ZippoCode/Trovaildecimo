@@ -159,9 +159,6 @@ public class MatchesMainFragment extends Fragment {
         });
     }
 
-    /**
-     * PartitaViewHolder
-     */
     private final class MatchViewHolder extends RecyclerView.ViewHolder {
 
         private MatchesDetailsFragment mPartitaDetailsFragment;
@@ -181,16 +178,6 @@ public class MatchesMainFragment extends Fragment {
             mNumPlayedMatch = (TextView) itemView.findViewById(R.id.card_view_numPartecipanti);
             mNumMissingPlayedMatch = (TextView) itemView.findViewById(R.id.card_view_numPlayedMissing);
             mMatchDetailsButton = (Button) itemView.findViewById(R.id.dettagli_partita_button);
-            // Setto il listener per visualizzare le informazioni sull'organizzatore quando l'utente
-            // clicca sull'intestazione della CardView
-            mCardViewHeader.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = v.getContext();
-                    ProfiloAmicoActivity.setUtente(Dati.user);
-                    context.startActivity(new Intent(context, ProfiloAmicoActivity.class));
-                }
-            });
             mMatchDetailsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -221,12 +208,19 @@ public class MatchesMainFragment extends Fragment {
             Bundle arguments = new Bundle();
             arguments.putParcelable(KEY_PARTITA_TAG, partita);
             mPartitaDetailsFragment.setArguments(arguments);
+            // Setto il listener per visualizzare le informazioni sull'organizzatore quando l'utente
+            // clicca sull'intestazione della CardView
+            mCardViewHeader.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    ProfiloAmicoActivity.setUtente(partita.mUser);
+                    context.startActivity(new Intent(context, ProfiloAmicoActivity.class));
+                }
+            });
         }
     }
 
-    /**
-     * PartitaAdapter
-     */
     private final class MatchAdapter extends RecyclerView.Adapter<MatchViewHolder> {
 
         private Fragment mFragment;

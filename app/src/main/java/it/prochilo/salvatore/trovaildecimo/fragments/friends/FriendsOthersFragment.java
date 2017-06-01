@@ -31,7 +31,7 @@ public class FriendsOthersFragment extends Fragment {
         RecyclerView mRecyclerView = (RecyclerView)
                 layout.findViewById(R.id.fragment_friend_other_recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        FriendsOthersAdapter mAdapter = new FriendsOthersAdapter(Dati.exampleAmici);
+        final FriendsOthersAdapter mAdapter = new FriendsOthersAdapter(Dati.exampleAmici);
         mAdapter.setOnFriendsOthersClicked(new FriendsOthersAdapter.OnFriendsOthersClickedListener() {
             @Override
             public void onFriendsOthersClicked(User user, int position) {

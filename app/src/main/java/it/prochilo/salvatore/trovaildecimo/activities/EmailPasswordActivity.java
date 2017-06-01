@@ -19,8 +19,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
+import it.prochilo.salvatore.trovaildecimo.models.User;
 
 public class EmailPasswordActivity extends AppCompatActivity
         implements View.OnClickListener {
@@ -75,12 +81,6 @@ public class EmailPasswordActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currUser = mAuth.getCurrentUser();
-        //Se l'utente si è già loggato passo alla subito alla nuova schermata
-        if (currUser != null) {
-            showProgressDialog();
-            startActivity(new Intent(EmailPasswordActivity.this, MainActivity.class));
-        }
     }
 
     @Override
@@ -112,13 +112,16 @@ public class EmailPasswordActivity extends AppCompatActivity
                         //Il metodo di callback viene invocato quando l'operazione risulta essere
                         //completata.
                         if (task.isSuccessful()) {
-                            //L'operazione è andata a buon fine, dovrò mostrare una schermata nella quale vengono inserite le
-                            //informazioni dell'utente come Nome, Cognome ecc..
                             Log.d(TAG, "createUserWithEmail:success");
+                            //Se l'operazione andata a buon fine ricavo le credenziali dell'utente
+                            //e mostro un'Activity alla quale passo l'identificativo dell'utente e
+                            //la sua email. L'activity avrà anche il compito di salvarlo nel DB di Firebase
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //Devo creare la schermata di creazione di un utente, per il momento mostro
-                            //la schermata partita
-                            startActivity(new Intent(EmailPasswordActivity.this, MainActivity.class));
+                            Intent createAccountIntent = new Intent(EmailPasswordActivity.this,
+                                    CreateAccountActivity.class);
+                            createAccountIntent.putExtra("ID",user.getUid());
+                            createAccountIntent.putExtra("EMAIL",user.getEmail());
+                            startActivity(createAccountIntent);
                         } else {
                             Log.w(TAG, "createUserWithEmail:unsuccess ", task.getException());
                             Toast.makeText(EmailPasswordActivity.this,
@@ -153,22 +156,37 @@ public class EmailPasswordActivity extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //Il login ha avuto successo
+                            //Il login ha avuto successo. Ricavo le informazioni dell'utente e le
+                            //dentro la classe stupida Dati
                             Log.d(TAG, "signInEmailPassword:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //Se l'operazione di login è andata a buon fine posso visualizzare
-                            // la schermata delle partita
-                            startActivity(new Intent(EmailPasswordActivity.this, MainActivity.class));
+                            FirebaseDatabase.getInstance().getReference("users/"+user.getUid())
+                                    .addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            User userMatches = dataSnapshot.getValue(User.class);
+                                            Dati.user = userMatches;
+                                            //Se l'operazione di login è andata a buon fine posso visualizzare
+                                            // la schermata delle partita
+                                            Intent intent = new Intent(EmailPasswordActivity.this, MainActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
+                                            hideProgressDialog();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
                         } else {
                             Log.w(TAG, "signInEmailPassword:unsuccess ", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Autentificazione fallita",
                                     Toast.LENGTH_SHORT).show();
-                            //Aggiorno l'interfaccia grafica
                         }
                         if (!task.isSuccessful()) {
                             mStatusTextView.setText("Login non riuscito");
                         }
-
                         //L'operazione è conclusa, nascondo la finestra di dialogo
                         hideProgressDialog();
                     }

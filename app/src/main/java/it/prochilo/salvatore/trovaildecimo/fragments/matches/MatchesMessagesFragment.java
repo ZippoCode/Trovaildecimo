@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Random;
 
+import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.models.Message;
 import it.prochilo.salvatore.trovaildecimo.models.Partita;
@@ -56,7 +57,7 @@ public class MatchesMessagesFragment extends Fragment {
                 mEditText.setText("");
                 final Message mNuovoMessaggio = new Message
                         (String.valueOf(new Random().nextInt(Integer.MAX_VALUE)),
-                                mPartita.mUser, testoMessaggio);
+                                Dati.user, testoMessaggio);
                 mPartita.addMessage(mNuovoMessaggio);
                 mPartita.writeToDatabaseReference();
                 mMessageAdapter.notifyDataSetChanged();

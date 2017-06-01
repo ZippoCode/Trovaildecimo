@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.fragments.friends.FriendsMainFragment;
 import it.prochilo.salvatore.trovaildecimo.fragments.SearchSoccerFieldFragment;
@@ -37,7 +40,6 @@ public class MainActivity extends AppCompatActivity
             mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             final NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
             mNavigationView.setNavigationItemSelectedListener(this);
-
         }
     }
 
