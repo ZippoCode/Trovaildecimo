@@ -17,8 +17,8 @@ import java.util.Random;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.Message;
-import it.prochilo.salvatore.trovaildecimo.models.Partita;
+import it.prochilo.salvatore.datamodels.Message;
+import it.prochilo.salvatore.datamodels.Partita;
 
 public class MatchesMessagesFragment extends Fragment {
 

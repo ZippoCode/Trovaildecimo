@@ -21,9 +21,9 @@ import java.util.Random;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.Data;
-import it.prochilo.salvatore.trovaildecimo.models.Partita;
-import it.prochilo.salvatore.trovaildecimo.models.Time;
+import it.prochilo.salvatore.datamodels.Data;
+import it.prochilo.salvatore.datamodels.Partita;
+import it.prochilo.salvatore.datamodels.Time;
 
 public final class AddMatchDetailsFragment extends Fragment implements View.OnClickListener {
 

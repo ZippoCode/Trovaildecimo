@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.User;
+import it.prochilo.salvatore.datamodels.User;
 
 public class ProfiloDetailsFragment extends Fragment {
 

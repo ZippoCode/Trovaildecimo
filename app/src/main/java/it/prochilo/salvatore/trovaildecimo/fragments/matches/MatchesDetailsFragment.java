@@ -1,6 +1,5 @@
 package it.prochilo.salvatore.trovaildecimo.fragments.matches;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -12,13 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.Partita;
+import it.prochilo.salvatore.datamodels.Partita;
 
 public class MatchesDetailsFragment extends Fragment {
 

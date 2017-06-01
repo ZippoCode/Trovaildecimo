@@ -8,7 +8,7 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.User;
+import it.prochilo.salvatore.datamodels.User;
 
 public final class UserListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

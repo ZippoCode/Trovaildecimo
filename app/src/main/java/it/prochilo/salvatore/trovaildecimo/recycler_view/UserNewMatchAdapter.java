@@ -4,7 +4,7 @@ import android.view.View;
 
 import java.util.List;
 
-import it.prochilo.salvatore.trovaildecimo.models.User;
+import it.prochilo.salvatore.datamodels.User;
 
 public class UserNewMatchAdapter extends UserListAdapter {
 

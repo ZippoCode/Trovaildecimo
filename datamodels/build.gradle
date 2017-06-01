@@ -1,15 +1,17 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+
     defaultConfig {
-        applicationId "it.prochilo.salvatore.trovaildecimo"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -17,7 +19,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
 }
 
 dependencies {
@@ -25,30 +26,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-    //Dunque devo tenere questa versione altrimenti ho degli errori
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:preference-v7:25.3.1'
-
-    //Play-Service
-    compile 'com.google.android.gms:play-services-location:10.2.6'
-    compile 'com.google.android.gms:play-services-maps:10.2.6'
 
     //Firebase
     compile 'com.google.firebase:firebase-auth:10.2.6'
     compile 'com.google.firebase:firebase-database:10.2.6'
     compile 'com.google.firebase:firebase-storage:10.2.6'
 
-    //UI
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-
-    //Library
-    compile project(':datamodels')
     testCompile 'junit:junit:4.12'
 }
-
-
-
-apply plugin: 'com.google.gms.google-services'

@@ -1,18 +1,10 @@
 package it.prochilo.salvatore.trovaildecimo;
 
-import android.util.Log;
-
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import it.prochilo.salvatore.trovaildecimo.models.Data;
-import it.prochilo.salvatore.trovaildecimo.models.Message;
-import it.prochilo.salvatore.trovaildecimo.models.Time;
-import it.prochilo.salvatore.trovaildecimo.models.Partita;
-import it.prochilo.salvatore.trovaildecimo.models.User;
+import it.prochilo.salvatore.datamodels.Partita;
+import it.prochilo.salvatore.datamodels.User;
 
 public final class Dati {
 

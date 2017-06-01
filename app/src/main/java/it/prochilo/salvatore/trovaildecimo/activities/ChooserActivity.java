@@ -1,12 +1,10 @@
 package it.prochilo.salvatore.trovaildecimo.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,7 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.User;
+import it.prochilo.salvatore.datamodels.User;
 
 /**
  * Questa è la prima classe che viene avviata quando l'utente effettua l'accesso e permette di

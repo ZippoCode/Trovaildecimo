@@ -9,7 +9,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.User;
+import it.prochilo.salvatore.datamodels.User;
 
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListViewHolder>

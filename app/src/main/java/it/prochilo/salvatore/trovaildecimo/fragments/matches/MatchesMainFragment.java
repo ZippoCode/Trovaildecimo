@@ -32,13 +32,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.activities.ChooserActivity;
 import it.prochilo.salvatore.trovaildecimo.activities.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.fragments.add_match.AddMatchActivity;
 import it.prochilo.salvatore.trovaildecimo.activities.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.Partita;
+import it.prochilo.salvatore.datamodels.Partita;
 import it.prochilo.salvatore.trovaildecimo.util.Utils;
 
 public class MatchesMainFragment extends Fragment {

@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.List;
 
-import it.prochilo.salvatore.trovaildecimo.models.Partita;
+import it.prochilo.salvatore.datamodels.Partita;
 
 public final class GestorePartite {
 

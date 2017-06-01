@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.activities.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.trovaildecimo.models.User;
+import it.prochilo.salvatore.datamodels.User;
 import it.prochilo.salvatore.trovaildecimo.recycler_view.UserListAdapter;
 
 public class FriendsFollowingFragment extends Fragment {

@@ -1,4 +1,4 @@
-package it.prochilo.salvatore.trovaildecimo.models;
+package it.prochilo.salvatore.datamodels;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,8 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Rappresenta l'orario di una partita. La classe contiene due parametri di tipo intero

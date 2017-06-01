@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "560963935090",
+    "firebase_url": "https://zippo-trovaildecimo.firebaseio.com",
+    "project_id": "zippo-trovaildecimo",
+    "storage_bucket": "zippo-trovaildecimo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560963935090:android:a3322905ccb4e845",
+        "android_client_info": {
+          "package_name": "it.prochilo.salvatore.trovaildecimo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560963935090-6j2nh4h69gsfcjkor3krhnvn785pstgg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.prochilo.salvatore.trovaildecimo",
+            "certificate_hash": "8be763833ab6e044d2db51d9d319f89245557d17"
+          }
+        },
+        {
+          "client_id": "560963935090-7309kgblt5m8srf32huc0ievsan3qs3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtDmJEGta287Oum9_DACJPhOou6m7WJNA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560963935090-7309kgblt5m8srf32huc0ievsan3qs3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

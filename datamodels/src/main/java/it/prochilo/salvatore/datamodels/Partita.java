@@ -1,4 +1,4 @@
-package it.prochilo.salvatore.trovaildecimo.models;
+package it.prochilo.salvatore.datamodels;
 
 import android.os.Parcel;
 import android.os.Parcelable;
