@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.datamodels.Partita;
+import it.prochilo.salvatore.datamodels.Match;
 
 public class MatchesDetailsFragment extends Fragment {
 
@@ -32,7 +32,7 @@ public class MatchesDetailsFragment extends Fragment {
         View layout = inflater.
                 inflate(R.layout.fragment_matches_details, container, false);
         Bundle arguments = getArguments();
-        Partita mPartita = null;
+        Match mPartita = null;
         if (arguments != null) {
             mPartita = arguments.getParcelable(MatchesMainFragment.KEY_PARTITA_TAG);
         }

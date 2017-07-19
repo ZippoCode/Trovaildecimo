@@ -19,8 +19,8 @@ public class ProfiloAmicoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profilo_amico);
         final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_profilo_amico);
         if (utente != null) {
-            mToolbar.setTitle(utente.mName + " " + utente.mSurname);
-            ((TextView) findViewById(R.id.nome_cognome_amico)).setText(utente.mName + " " + utente.mSurname);
+            mToolbar.setTitle(utente.name + " " + utente.surname);
+            ((TextView) findViewById(R.id.nome_cognome_amico)).setText(utente.name + " " + utente.surname);
         }
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

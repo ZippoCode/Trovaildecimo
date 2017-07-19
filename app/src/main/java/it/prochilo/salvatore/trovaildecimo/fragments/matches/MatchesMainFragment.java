@@ -37,7 +37,7 @@ import it.prochilo.salvatore.trovaildecimo.activities.MainActivity;
 import it.prochilo.salvatore.trovaildecimo.fragments.add_match.AddMatchActivity;
 import it.prochilo.salvatore.trovaildecimo.activities.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.datamodels.Partita;
+import it.prochilo.salvatore.datamodels.Match;
 import it.prochilo.salvatore.trovaildecimo.util.Utils;
 
 public class MatchesMainFragment extends Fragment {
@@ -141,12 +141,12 @@ public class MatchesMainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-        mDatabaseReference.child("matches").addValueEventListener(new ValueEventListener() {
+        /**mDatabaseReference.child("matches").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnaphot : dataSnapshot.getChildren()) {
                     //Ricavo la lista delle partite. Controllo se la partita è già presente
-                    Partita partita = postSnaphot.getValue(Partita.class);
+                    Match partita = postSnaphot.getValue(Match.class);
                     ((MatchAdapter) mAdapter).addMatches(partita);
                 }
             }
@@ -155,7 +155,7 @@ public class MatchesMainFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 
     private final class MatchViewHolder extends RecyclerView.ViewHolder {
@@ -191,17 +191,17 @@ public class MatchesMainFragment extends Fragment {
         }
 
 
-        private void bind(final Partita partita) {
-            mOrganizzatore.setText(partita.mUser.mName + " " + partita.mUser.mSurname);
-            mLuogo.setText(partita.mNomeCampo);
-            mTime.setText(partita.mOrarioIncontro.toString());
-            mDay.setText(partita.mDataIncontro.toString());
-            if (partita.mTipoIncontro.equals("Normale")) {
+        private void bind(final Match partita) {
+            mOrganizzatore.setText(partita.user.name + " " + partita.user.surname);
+            //mLuogo.setText(partita.n);
+            //mTime.setText(partita.mOrarioIncontro.toString());
+            //mDay.setText(partita.mMatchDay.toString());
+            if (partita.challengeType.equals("Normale")) {
                 mCardViewHeader.setBackgroundColor(mColorNormalMatch);
             } else
                 mCardViewHeader.setBackgroundColor(mColorSfidaMatch);
-            mNumPlayedMatch.setText("Numero partecipanti: " + partita.numPartecipanti);
-            mNumMissingPlayedMatch.setText("Giocatori mancanti: " + partita.numMissingPlayer);
+            mNumPlayedMatch.setText("Numero partecipanti: " + partita.numPlayer);
+            //mNumMissingPlayedMatch.setText("Giocatori mancanti: " + partita.numMissingPlayer);
             //Creo il Fragment che contiene i dettagli della partita e gli passo le informazioni
             mPartitaDetailsFragment = new MatchesDetailsFragment();
             Bundle arguments = new Bundle();
@@ -213,7 +213,7 @@ public class MatchesMainFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    ProfiloAmicoActivity.setUtente(partita.mUser);
+                    ProfiloAmicoActivity.setUtente(partita.user);
                     context.startActivity(new Intent(context, ProfiloAmicoActivity.class));
                 }
             });
@@ -223,7 +223,7 @@ public class MatchesMainFragment extends Fragment {
     private final class MatchAdapter extends RecyclerView.Adapter<MatchViewHolder> {
 
         private Fragment mFragment;
-        private List<Partita> mModel;
+        private List<Match> mModel;
 
         private MatchAdapter(final Fragment fragment) {
             this.mFragment = fragment;
@@ -232,7 +232,7 @@ public class MatchesMainFragment extends Fragment {
             mModel = new ArrayList<>();
         }
 
-        private void addMatches(Partita match) {
+        private void addMatches(Match match) {
             mModel.add(match);
             notifyItemInserted(mModel.size() - 1);
         }

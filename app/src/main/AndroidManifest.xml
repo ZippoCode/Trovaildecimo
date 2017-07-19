@@ -21,14 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activities.ChooserActivity">
+        <activity android:name=".activities.ChooserActivity" />
+        <activity android:name=".activities.EmailPasswordActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.EmailPasswordActivity" />
-        <activity android:name=".activities.MainActivity" />
+
         <activity android:name=".fragments.add_match.AddMatchActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -41,6 +42,11 @@
                 android:value=".activities.MainActivity" />
         </activity>
         <activity android:name=".activities.CreateAccountActivity" />
+
+        <!-- Il Provider-->
+        <provider
+            android:name="it.prochilo.salvatore.datamodels.content.UsersContentProvider"
+            android:authorities="it.prochilo.salvatore.trovaildecimo" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

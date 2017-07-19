@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.List;
 
-import it.prochilo.salvatore.datamodels.Partita;
+import it.prochilo.salvatore.datamodels.Match;
 
 public final class GestorePartite {
 
@@ -21,7 +21,7 @@ public final class GestorePartite {
 
     private final SharedPreferences mSharedPreferences;
     private boolean mDirty = true;
-    private List<Partita> mFavoriteCache;
+    private List<Match> mFavoriteCache;
 
     private GestorePartite(final Context context) {
         mSharedPreferences = context.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -42,7 +42,7 @@ public final class GestorePartite {
     }
 
     @NonNull
-    public List<Partita> getFavoritePartite() {
+    public List<Match> getFavoritePartite() {
         if (!mDirty && mFavoriteCache != null) {
             return mFavoriteCache;
         }
@@ -50,10 +50,10 @@ public final class GestorePartite {
         if (favoriteAsString != null) {
             try {
                 JSONArray jsonArray = new JSONArray(favoriteAsString);
-                List<Partita> favoriteTemp = new LinkedList<>();
+                List<Match> favoriteTemp = new LinkedList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     final JSONObject item = jsonArray.getJSONObject(i);
-                    final Partita partita = Partita.fromJson(item);
+                    final Match partita = Match.fromJson(item);
                     favoriteTemp.add(partita);
                 }
                 mFavoriteCache = favoriteTemp;
@@ -67,15 +67,15 @@ public final class GestorePartite {
         return mFavoriteCache;
     }
 
-    public boolean addPartita(@NonNull final Partita partita) {
-        List<Partita> currentFavorite = getFavoritePartite();
+    public boolean addPartita(@NonNull final Match partita) {
+        List<Match> currentFavorite = getFavoritePartite();
         if (currentFavorite == null) {
             currentFavorite = new LinkedList<>();
         }
         int duplicateIndex = -1;
         for (int i = 0; i < currentFavorite.size(); i++) {
-            final Partita item = currentFavorite.get(i);
-            if (item.mId.equals(partita.mId)) {
+            final Match item = currentFavorite.get(i);
+            if (item.id.equals(partita.id)) {
                 duplicateIndex = i;
                 break;
             }
@@ -91,7 +91,7 @@ public final class GestorePartite {
         return mDirty;
     }
 
-    public boolean forceFavourite(final List<Partita> newFavorite) {
+    public boolean forceFavourite(final List<Match> newFavorite) {
         mFavoriteCache = newFavorite;
         return save();
     }
@@ -105,7 +105,7 @@ public final class GestorePartite {
         if (mFavoriteCache != null) {
             try {
                 final JSONArray array = new JSONArray();
-                for (Partita partita : mFavoriteCache) {
+                for (Match partita : mFavoriteCache) {
                     JSONObject item = partita.toJson();
                     array.put(item);
                 }

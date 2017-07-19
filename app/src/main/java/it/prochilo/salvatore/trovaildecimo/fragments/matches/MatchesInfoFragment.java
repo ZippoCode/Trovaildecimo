@@ -10,11 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.datamodels.Partita;
+import it.prochilo.salvatore.datamodels.Match;
 
 public class MatchesInfoFragment extends Fragment {
 
-    private Partita mPartita;
+    private Match mPartita;
 
     @Nullable
     @Override
@@ -36,18 +36,18 @@ public class MatchesInfoFragment extends Fragment {
             public void onClick(View v) {
             }
         });
-        orarioDetails.setText(mPartita.mOrarioIncontro.toString());
-        giornoDetails.setText(mPartita.mDataIncontro.toString());
-        nomeCampoDetails.setText(mPartita.mNomeCampo);
-        numeroGiocatoriDetails.setText(String.valueOf(mPartita.numPartecipanti));
-        tipoIncontro.setText(mPartita.mTipoIncontro);
+        //orarioDetails.setText(mPartita.mOrarioIncontro.toString());
+        //giornoDetails.setText(mPartita.mMatchDay.toString());
+        //nomeCampoDetails.setText(mPartita.playingField.toString());
+        numeroGiocatoriDetails.setText(String.valueOf(mPartita.numPlayer));
+        tipoIncontro.setText(mPartita.challengeType.toString());
 
         //TEMPORANEO, UTILIZZATO UNICAMENTE PER VEDERE MOMENTAMENTE I PARTECIPANTI
         final TextView textView = (TextView) layout.findViewById(R.id.text_partecipanti_incontro);
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < mPartita.listaPartecipanti.size(); i++) {
-            sb.append(mPartita.listaPartecipanti.get(i)).append('\n');
-        }
+        //for (int i = 0; i < mPartita.listaPartecipanti.size(); i++) {
+         //   sb.append(mPartita.listaPartecipanti.get(i)).append('\n');
+       // }
         textView.setText(sb.toString());
         return layout;
     }

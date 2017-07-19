@@ -30,7 +30,7 @@ public final class UserListViewHolder extends RecyclerView.ViewHolder implements
     }
 
     public void bind(User user, int visibility) {
-        nome_cognome.setText(user.mName + " " + user.mSurname);
+        nome_cognome.setText(user.name + " " + user.surname);
         mImageButton.setVisibility(visibility);
     }
 

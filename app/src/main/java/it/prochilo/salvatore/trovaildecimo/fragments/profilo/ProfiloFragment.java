@@ -22,6 +22,9 @@ import it.prochilo.salvatore.trovaildecimo.util.Utils;
 
 public class ProfiloFragment extends Fragment {
 
+    /**
+     * Il TAG per il Log
+     */
     private static final String TAG = ProfiloFragment.class.getSimpleName();
     private MainActivity mMainActivity;
 

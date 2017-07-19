@@ -1,0 +1,14 @@
+CREATE TABLE USERS (
+    _id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    userId TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
+    surname TEXT NOT NULL,
+    age REAL,
+    city TEXT,
+    role TEXT,
+    numPlayedGame INTEGER,
+    feedback REAL
+);
+
+CREATE INDEX UNIQUE_NAME ON USERS (name);
+CREATE INDEX UNIQUE_SURNAME ON USERS (surname);

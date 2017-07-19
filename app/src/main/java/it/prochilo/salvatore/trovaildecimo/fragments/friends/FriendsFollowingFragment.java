@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.LinkedList;
+
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.activities.ProfiloAmicoActivity;
 import it.prochilo.salvatore.trovaildecimo.R;
@@ -36,12 +38,12 @@ public class FriendsFollowingFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         //DA MODIFICARE
-        mAdapter = new UserListAdapter(Dati.user.mFriendsList);
+        mAdapter = new UserListAdapter(new LinkedList<User>());
         mAdapter.setOnUserListListener(new UserListAdapter.OnUserClickedListener() {
 
             @Override
             public void onUserClicked(User user, int position) {
-                Log.d(TAG, "Clicked on: " + user.mName + " " + user.mSurname);
+                Log.d(TAG, "Clicked on: " + user.name + " " + user.surname);
                 Context context = getContext();
                 ProfiloAmicoActivity.setUtente(user);
                 startActivity(new Intent(context, ProfiloAmicoActivity.class));

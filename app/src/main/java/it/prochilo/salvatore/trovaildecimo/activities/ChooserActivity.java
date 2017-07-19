@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -30,6 +31,10 @@ import it.prochilo.salvatore.datamodels.User;
  */
 public class ChooserActivity extends AppCompatActivity {
 
+    /**
+     * Il Tag per il Log
+     */
+    private static final String TAG = ChooserActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
 
     @Override
@@ -63,6 +68,7 @@ public class ChooserActivity extends AppCompatActivity {
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             User user = dataSnapshot.getValue(User.class);
                             Dati.user = user;
+                            Log.d(TAG, "Player name:" + user.name);
                             startActivity(intent);
                         }
 

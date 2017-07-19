@@ -17,13 +17,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
+import it.prochilo.salvatore.datamodels.Enumeration;
+import it.prochilo.salvatore.datamodels.PlayingField;
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
-import it.prochilo.salvatore.datamodels.Data;
-import it.prochilo.salvatore.datamodels.Partita;
-import it.prochilo.salvatore.datamodels.Time;
+import it.prochilo.salvatore.datamodels.Match;
 
 public final class AddMatchDetailsFragment extends Fragment implements View.OnClickListener {
 
@@ -32,10 +33,6 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
     private static final Calendar CALENDAR = Calendar.getInstance();
 
     private static final int MIN_NUM_PARTECIPANT = 10;
-
-    private Partita mMatch = new Partita(
-            String.valueOf(new Random().nextInt(Integer.MAX_VALUE)),
-            Dati.user);
 
     private TextView mOra, mData;
 
@@ -49,6 +46,18 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
 
     private RadioButton mSessanta, mNovanta, mCentoVenti;
 
+    private Match mMatch;
+
+    private int numPartecipanti;
+
+    private Calendar calendar = Calendar.getInstance();
+
+    private int min, hour;
+
+    private int day, month, year;
+
+    private String nameCampo;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,8 +66,6 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
         //Set Orario e Data
         mOra = (TextView) layout.findViewById(R.id.nuova_partita_orario);
         mData = (TextView) layout.findViewById(R.id.nuova_partita_data);
-        mOra.setText(mMatch.mOrarioIncontro.toString());
-        mData.setText(mMatch.mDataIncontro.toString());
         mOra.setOnClickListener(this);
         mData.setOnClickListener(this);
 
@@ -117,7 +124,7 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
      */
     private void setupSeekBar() {
         //Setto un valore iniziale nel caso nel quale l'utente non toccasse la barra
-        mMatch.setNumeroPartecipanti(MIN_NUM_PARTECIPANT);
+        numPartecipanti = MIN_NUM_PARTECIPANT;
         mTextSeekBar.setText(getString(R.string.numero_giocatori_text) + ": "
                 + MIN_NUM_PARTECIPANT);
 
@@ -140,7 +147,7 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //Notifica che l'utente ha arrestato la gesture sulla SeekBar
-                mMatch.setNumeroPartecipanti(value);
+                numPartecipanti = value;
                 mTextSeekBar.setText(getString(R.string.numero_giocatori_text) + ": " + value);
             }
         });
@@ -153,8 +160,9 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        mMatch = mMatch.setTime(new Time(i, i1));
-                        mOra.setText(mMatch.mOrarioIncontro.toString());
+                        min = i;
+                        hour = i1;
+                        mOra.setText(i + " " + i1);
                     }
                 }, currentOra, currentMinute, true);
         timePickerDialog.show();
@@ -168,26 +176,40 @@ public final class AddMatchDetailsFragment extends Fragment implements View.OnCl
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        mMatch = mMatch.setGiorno(new Data(i2, i1, i));
-                        mData.setText(mMatch.mDataIncontro.toString());
+                        year = i2;
+                        month = i1;
+                        day = i;
+                        mData.setText(1 + "/" + i1 + "/" + i2);
                     }
                 }, currentAnno, currentMese, currentGiorno);
         datePickerDialog.show();
     }
 
     private void setupMatch() {
-        mMatch = mMatch.setNomeCampo(luogo.getText().toString());
+        CALENDAR.set(year, month, day, hour, min);
+        Calendar current = Calendar.getInstance();
+        Enumeration.DurationMatch durationMatch = null;
+        Enumeration.ChallangeType challangeType = null;
         if (mNormale.isChecked()) {
-            mMatch.setTipologia("Normale");
+            challangeType = Enumeration.ChallangeType.NORMALE;
         } else if (mSfida.isChecked()) {
-            mMatch.setTipologia("Sfida");
+            challangeType = Enumeration.ChallangeType.SFIDA;
         }
         if (mSessanta.isChecked()) {
-            mMatch.setMinutaggio(60);
+            durationMatch = Enumeration.DurationMatch.SESSANTA;
         } else if (mNovanta.isChecked()) {
-            mMatch.setMinutaggio(90);
+            durationMatch = Enumeration.DurationMatch.NOVANTA;
         } else if (mCentoVenti.isChecked()) {
-            mMatch.setMinutaggio(120);
+            durationMatch = Enumeration.DurationMatch.CENTOVENTI;
         }
+        mMatch = Match.Builder.create(String.valueOf(new Random().nextInt(Integer.MAX_VALUE)),
+                Dati.user,
+                new Date(calendar.getTimeInMillis()),
+                new Date(current.getTimeInMillis()),
+                PlayingField.Builder.create("5151654984", luogo.getText().toString()).build())
+                .withInfoMatch(numPartecipanti, durationMatch, challangeType)
+                .build();
+
+
     }
 }

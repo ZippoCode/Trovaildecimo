@@ -24,7 +24,7 @@ import java.util.List;
 
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.trovaildecimo.activities.MainActivity;
-import it.prochilo.salvatore.datamodels.Partita;
+import it.prochilo.salvatore.datamodels.Match;
 import it.prochilo.salvatore.datamodels.User;
 import it.prochilo.salvatore.trovaildecimo.recycler_view.UserListAdapter;
 import it.prochilo.salvatore.trovaildecimo.recycler_view.UserNewMatchAdapter;
@@ -33,7 +33,7 @@ public class AddMatchUserFragment extends Fragment {
 
     private static final String TAG = AddMatchUserFragment.class.getSimpleName();
 
-    private static Partita mPartita;
+    private static Match mPartita;
 
     @Nullable
     @Override
@@ -69,7 +69,7 @@ public class AddMatchUserFragment extends Fragment {
             public void onClick(View v) {
                 //Aggiungo la partita a Firebase e successivamente devo aggingerla anche sul
                 //al database SQL
-                mPartita.writeToDatabaseReference();
+                //mPartita.writeToDatabaseReference();
                 //Ritorno alla schermata principale
                 Context context = getContext();
                 Intent backToMainActivity = new Intent(context, MainActivity.class);
@@ -129,7 +129,7 @@ public class AddMatchUserFragment extends Fragment {
             final RecyclerView mRecyclerView = (RecyclerView) layout
                     .findViewById(R.id.fragment_add_match_user_added_recyclerview);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            mRecyclerView.setAdapter(new UserListAdapter(mPartita.listaPartecipanti));
+           // mRecyclerView.setAdapter(new UserListAdapter(mPartita.listaPartecipanti));
             return layout;
         }
     }
@@ -142,9 +142,9 @@ public class AddMatchUserFragment extends Fragment {
 
         public UserToAddFragment() {
             customModel = new ArrayList<>();
-            for (int i = 0; i < mPartita.mUser.mFriendsList.size(); i++) {
-                customModel.add(mPartita.mUser.mFriendsList.get(i));
-            }
+            //for (int i = 0; i < mPartita.mUser.mFriendsList.size(); i++) {
+              //  customModel.add(mPartita.mUser.mFriendsList.get(i));
+            //}
         }
 
         public void setAdapter(PagerAdapter adapter) {
@@ -168,8 +168,8 @@ public class AddMatchUserFragment extends Fragment {
                     // viene notificato l'Adapter del ViewPager poichè questo venga aggiunto
                     // all'elenco. Infine visualizzato un Toast per informare l'utente
                     // dell'aggiunta
-                    Log.d(TAG, "User: " + user.mName + " aggiunto");
-                    mPartita.addPartecipante(user);
+                    Log.d(TAG, "User: " + user.name + " aggiunto");
+                    //mPartita.addPartecipante(user);
                     mAdapterViewPager.notifyDataSetChanged();
                     Toast.makeText(getContext(), "Utente aggiunto", Toast.LENGTH_SHORT)
                             .show();

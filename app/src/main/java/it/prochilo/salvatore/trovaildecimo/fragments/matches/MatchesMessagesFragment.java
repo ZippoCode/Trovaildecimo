@@ -18,11 +18,11 @@ import java.util.Random;
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.datamodels.Message;
-import it.prochilo.salvatore.datamodels.Partita;
+import it.prochilo.salvatore.datamodels.Match;
 
 public class MatchesMessagesFragment extends Fragment {
 
-    private Partita mPartita;
+    private Match mPartita;
 
 
     @Nullable
@@ -38,8 +38,8 @@ public class MatchesMessagesFragment extends Fragment {
         final RecyclerView mRecyclerView = (RecyclerView)
                 layout.findViewById(R.id.fragment_matches_messages_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        final MessageAdapter mMessageAdapter = new MessageAdapter(mPartita.mMessageList);
-        mRecyclerView.setAdapter(mMessageAdapter);
+        //final MessageAdapter mMessageAdapter = new MessageAdapter(mPartita.mMessageList);
+        //mRecyclerView.setAdapter(mMessageAdapter);
 
          final ImageButton mImageButton = (ImageButton)
                 layout.findViewById(R.id.fragment_matches_messages_imagebutton);
@@ -58,9 +58,9 @@ public class MatchesMessagesFragment extends Fragment {
                 final Message mNuovoMessaggio = new Message
                         (String.valueOf(new Random().nextInt(Integer.MAX_VALUE)),
                                 Dati.user, testoMessaggio);
-                mPartita.addMessage(mNuovoMessaggio);
-                mPartita.writeToDatabaseReference();
-                mMessageAdapter.notifyDataSetChanged();
+                //mPartita.addMessage(mNuovoMessaggio);
+                //mPartita.writeToDatabaseReference();
+                //mMessageAdapter.notifyDataSetChanged();
             }
         });
         return layout;
@@ -78,7 +78,7 @@ public class MatchesMessagesFragment extends Fragment {
         }
 
         public void bind(Message message) {
-            mSenderName.setText(message.mUser.mName + " " + message.mUser.mSurname);
+            mSenderName.setText(message.mUser.name + " " + message.mUser.surname);
             mMessageText.setText(message.mText);
         }
     }

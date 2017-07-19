@@ -10,6 +10,8 @@ import android.widget.EditText;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
+
 import it.prochilo.salvatore.trovaildecimo.Dati;
 import it.prochilo.salvatore.trovaildecimo.R;
 import it.prochilo.salvatore.datamodels.User;
@@ -36,8 +38,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 int ageText = Integer.valueOf(age.getText().toString());
                 String cityText = city.getText().toString();
                 String roleText = role.getText().toString();
-                Dati.user = new User(id, email, nameText, surnameText)
-                        .addProprietas(ageText, cityText, roleText);
+                Dati.user = User.Builder.create(id, email, nameText, surnameText)
+                        .build();
                 FirebaseDatabase.getInstance().getReference("users/" + id + "/")
                         .setValue(Dati.user);
                 Intent createAccountIntent = new Intent(CreateAccountActivity.this, MainActivity.class);
